@@ -4,6 +4,7 @@ const CourseSearch = () => {
     return (
         <div>
             < Cards />
+            
         </div>
     );
 }
