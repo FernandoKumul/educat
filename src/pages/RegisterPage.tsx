@@ -2,6 +2,11 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { Button, TextInput } from "@tremor/react";
 import { IRegisterUser } from "../assets/interfaces/IRegisterUser";
 import AuthService from "../services/AuthService";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { AxiosError } from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 const RegisterPage = () => {
@@ -12,12 +17,27 @@ const RegisterPage = () => {
     formState: { errors },
   } = useForm<IRegisterUser>()
 
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate();
+
   const onSubmit: SubmitHandler<IRegisterUser> = async (data) => {
     try {
       console.log(data)
-      AuthService.register()
+      toast.dismiss()
+      setLoading(true)
+      await AuthService.register({...data})
+      navigate("/email-send")
     } catch (error) {
       console.log(error)
+      if (error instanceof AxiosError) {
+        if(error.response?.data.message === "Error al registrar usuario: El correo ya está registrado en la base de datos.") {
+          return toast.error('El correo ya está registrado');  
+        }
+        
+        return toast.error('Oops... Ocurrió un error, Intentelo más tarde');
+      }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -104,7 +124,11 @@ const RegisterPage = () => {
             </p>
           </div>
           {errors.confirmedConsent && <small className="text-sm text-red-500">{errors.confirmedConsent.message}</small>}
-          <Button className="w-full h-12 mt-6 lg:w-auto lg:mx-auto lg:block lg:px-[10%] focus:outline focus:outline-current	" type="submit"><span className="text-base">Crear Cuenta</span></Button>
+          <div className="lg:flex lg:justify-center">            
+            <Button className="w-full h-12 mt-6 lg:w-auto lg:px-[10%] focus:outline focus:outline-current" type="submit" loading={loading}>
+              <span className="text-base">Crear Cuenta</span>
+            </Button>
+          </div>
         </form>
       </section>
       <section className="hidden px-[5%] w-1/2 md:flex md:items-center md:flex-col md:justify-center lg:px-[9%] xl:px-[12%]">
@@ -113,6 +137,11 @@ const RegisterPage = () => {
         </h2>
         <h4 className="text-xl text-center xl:text-2xl xl:tracking-wide  ">el sitio en el cual puedes aprender a tu ritmo<span className="text-details">!</span></h4>
       </section>
+      <ToastContainer 
+        className="text-sm"
+        position="top-right"
+        theme="dark"
+       />
     </main>
   );
 }
