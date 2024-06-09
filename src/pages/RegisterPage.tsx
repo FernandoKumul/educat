@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AxiosError } from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const RegisterPage = () => {
@@ -50,7 +50,7 @@ const RegisterPage = () => {
       <section className="bg-black-auth rounded-t-3xl px-8 pt-10 pb-8 flex-grow md:w-1/2 md:rounded-none lg:px-12 xl:px-28">
         <img className="hidden w-48 mx-auto mb-2 md:block" src="/src/assets/logo.svg" alt="logo" />
         <h1 className="text-[28px] font-medium text-center">Registro</h1>
-        <h3 className="text-center mb-3">¿Ya tienes una cuenta? <span className="underline underline-offset-[0.5px] cursor-pointer">Inicia sesión</span></h3>
+        <h3 className="text-center mb-3">¿Ya tienes una cuenta? <Link to={'/login'} className="underline underline-offset-[0.5px]">Inicia sesión</Link></h3>
         <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
 
           <div className="mb-4">
