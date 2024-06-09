@@ -25,7 +25,15 @@
     -moz-osx-font-smoothing: grayscale;
   }
   
-  * {
+* {
     margin: 0;
     box-sizing: border-box;
+}
+
+.icon-input-text-white .text-tremor-content-subtle {
+  color: #ffffff;
+}
+
+.icon-input-text-white .hover\:text-tremor-content:hover {
+  color: #c8b9c6;
 }

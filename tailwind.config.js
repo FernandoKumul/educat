@@ -46,6 +46,7 @@ export default {
       },
       'secundary-text': '#E3DFE7',
       'details': '#FF87DD',
+      'black-auth': '#312F35',
         tremor: {
           brand: {
             faint: '#0B1229',

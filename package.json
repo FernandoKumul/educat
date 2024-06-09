@@ -14,9 +14,12 @@
     "@headlessui/tailwindcss": "^0.2.0",
     "@remixicon/react": "^4.2.0",
     "@tremor/react": "^3.17.2",
+    "axios": "^1.7.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.23.1"
+    "react-hook-form": "^7.51.5",
+    "react-router-dom": "^6.23.1",
+    "react-toastify": "^10.0.5"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.7",
