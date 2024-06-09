@@ -12,7 +12,7 @@ const router = createBrowserRouter([
     element: <VerifyEmailPage />
   },
   {
-    path: "/email-send",
+    path: "/email-send/:email",
     element: <EmailSendPage />
   },
   {

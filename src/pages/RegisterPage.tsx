@@ -26,7 +26,7 @@ const RegisterPage = () => {
       toast.dismiss()
       setLoading(true)
       await AuthService.register({...data})
-      navigate("/email-send")
+      navigate("/email-send/" + data.email)
     } catch (error) {
       console.log(error)
       if (error instanceof AxiosError) {
@@ -61,7 +61,7 @@ const RegisterPage = () => {
                 maxLength: { value: 50, message: "El nombre no debe tener más de 50 caracteres" },
                 setValueAs: (value: string) => value.trim()
               })}
-              id="name" className={`bg-transparent ${errors.name || 'border-[#9D9D9D]'} hover:bg-gray-700`} />
+              id="name" className={`bg-transparent ${errors.name || 'border-[#9D9D9D]'} hover:bg-gray-700`} autoComplete="given-name" />
           </div>
 
           <div className="mb-4">
@@ -72,7 +72,7 @@ const RegisterPage = () => {
                 maxLength: { value: 50, message: "El apellido no debe tener más de 50 caracteres" },
                 setValueAs: (value: string) => value.trim()
               })}
-              id="lastName" className={`bg-transparent ${errors.lastName || 'border-[#9D9D9D]'} hover:bg-gray-700`} />
+              id="lastName" className={`bg-transparent ${errors.lastName || 'border-[#9D9D9D]'} hover:bg-gray-700`} autoComplete="family-name" />
           </div>
 
           <div className="mb-4">
@@ -92,7 +92,7 @@ const RegisterPage = () => {
               pattern: {value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,50}$/, message: "Contraseña inválida"},
               setValueAs: (value: string) => value.trim()
             })} type="password" name="password" id="password"
-              className={`bg-transparent ${errors.password || 'border-[#9D9D9D]'} hover:bg-gray-700 icon-input-text-white`} />
+              className={`bg-transparent ${errors.password || 'border-[#9D9D9D]'} hover:bg-gray-700 icon-input-text-white`} autoComplete="off" />
             <ul className="text-sm grid grid-cols-2 xl:grid-cols-3 mt-2">
               <li className="flex items-center gap-1">
                 <div className={`size-3 ${(passwordValue.trim().length >= 8 && passwordValue.trim().length <= 50) ? 'bg-green-400' : 'bg-white' } border border-white rounded-full`}></div>
