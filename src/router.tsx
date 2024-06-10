@@ -5,31 +5,60 @@ import ErrorPage from "./pages/ErrorPage";
 import RegisterPage from "./pages/RegisterPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import EmailSendPage from "./pages/EmailSendPage";
+import LoginPage from "./pages/LoginPage";
+import AuthProvider from "./contexts/AuthProvider";
+import UnAuthGuard from "./components/Guard/UnAuthGuard";
 
 const router = createBrowserRouter([
   {
-    path: "/verify-email",
-    element: <VerifyEmailPage />
-  },
-  {
-    path: "/email-send/:email",
-    element: <EmailSendPage />
-  },
-  {
-    path: "/register",
-    element: <RegisterPage />
-  },
-  {
-    path: "/",
-    element: <MainLayout />,
-    errorElement: <ErrorPage />,
+    path: '/',
+    element: <AuthProvider />,
     children: [
       {
+        path: "/verify-email",
+        
+        element: <VerifyEmailPage />
+      },
+      {
+        path: "/email-send/:email",
+        element: <EmailSendPage />
+      },
+      {
+        path: "/register",
+        element: <UnAuthGuard />,
+        children: [
+          {
+            path: '',
+            element: <RegisterPage />
+          }
+        ]
+      },
+      {
+        path: "/login",
+        element: <UnAuthGuard />,
+        children: [
+          {
+            path: '',
+            element: <LoginPage />
+          }
+        ]
+      },
+      {
         path: "/",
-        element: <HomePage />,
+        element: <MainLayout />,
+        children: [
+          {
+            path: "/",
+            element: <HomePage />,
+          },
+        ]
       },
     ]
   },
+  {
+    path: '*',
+    element: <ErrorPage />
+  }
 ]);
 
 export default router
