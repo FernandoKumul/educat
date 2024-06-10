@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import type { CourseSearchInterface } from '../interfaces/CourseSearchInterface';
 import service from '../services/CourseSearchService';
 
@@ -8,15 +9,21 @@ const CourseSearch = () => {
     const [courses, setCourses] = useState<CourseSearchInterface[]>([]);
     const [count, setCount] = useState(0);
 
+    const [params] = useSearchParams()
+
+    const pages = Math.ceil(count / 8)
+
     async function search(pageNumber: number, query: string , category: string) {
         const results = await service(pageNumber, query, category)
         console.log(results)
         setCount(results.count)
         setCourses(results.courses)
     }
+
     useEffect(() => {
-        search(1, 'undertale', 'all')
-    }, []);
+        search(1, params.get('q') || '', 'all')
+    }, [params]);
+
     return (
         <div className="flex items-center flex-col">
             <h1 className=" text-3xl m-5 ">Resultados de busqueda</h1>
