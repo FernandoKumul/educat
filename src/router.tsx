@@ -8,6 +8,8 @@ import EmailSendPage from "./pages/EmailSendPage";
 import LoginPage from "./pages/LoginPage";
 import AuthProvider from "./contexts/AuthProvider";
 import UnAuthGuard from "./components/Guard/UnAuthGuard";
+import InstructorGuard from "./components/Guard/InstructorGuard";
+import EditCourse from "./pages/EditCourse";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +42,16 @@ const router = createBrowserRouter([
           {
             path: '',
             element: <LoginPage />
+          }
+        ]
+      },
+      {
+        path: "/instructor/edit-course/:courseId",
+        element: <InstructorGuard />,
+        children: [
+          {
+            path: '',
+            element: <EditCourse />
           }
         ]
       },
