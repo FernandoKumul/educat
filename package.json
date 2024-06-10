@@ -14,6 +14,7 @@
     "@headlessui/tailwindcss": "^0.2.0",
     "@remixicon/react": "^4.2.0",
     "@tremor/react": "^3.17.2",
+    "axios": "^1.7.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.1"
