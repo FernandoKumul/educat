@@ -7,7 +7,7 @@ import { AxiosError } from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleIcon from "../components/Icons/GoogleIcon";
-import { ILoginUser } from "../assets/interfaces/ILoginUser";
+import { ILoginUser } from "../interfaces/ILoginUser";
 
 
 const LoginPage = () => {

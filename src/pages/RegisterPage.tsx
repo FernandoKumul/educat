@@ -1,6 +1,6 @@
 import { useForm, SubmitHandler } from "react-hook-form"
 import { Button, TextInput } from "@tremor/react";
-import { IRegisterUser } from "../assets/interfaces/IRegisterUser";
+import { IRegisterUser } from "../interfaces/IRegisterUser";
 import AuthService from "../services/AuthService";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
