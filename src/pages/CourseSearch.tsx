@@ -15,7 +15,7 @@ const CourseSearch = () => {
 
     const [params] = useSearchParams()
 
-    const pages = Math.ceil(count / 8)
+    const pages = Math.ceil(count / 12)
 
     async function search(pageNumber: number, query: string, category: string) {
         const results = await service(pageNumber, query, category)
