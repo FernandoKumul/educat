@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import type { CourseSearchInterface } from '../interfaces/CourseSearchInterface';
 import service from '../services/CourseSearchService';
 
+import ReactPaginate from 'react-paginate';
 import Cards from "../components/common/CardCourse";
 
 const CourseSearch = () => {
@@ -32,6 +33,19 @@ const CourseSearch = () => {
                     <Cards key={course.pkCourse} title={course.title} instructor={course.instructorName} price={String(course.price)} score={4.7} />
                 ))}
             </section>
+            <ReactPaginate
+                previousLabel={"<"}
+                nextLabel={">"}
+                breakLabel={"..."}
+                pageCount={pages}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={(data) => {
+                    search(data.selected + 1, params.get('q') || '', 'all')
+                }}
+                containerClassName={"pagination"}
+                activeClassName={"active"}
+            />
         </div>
     );
 }
