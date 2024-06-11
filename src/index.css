@@ -38,7 +38,7 @@
   gap: 1rem;
 }
 .pagination li {
-  border: 1px solid #6E7178;
+  border: 2px solid #6E7178;
   border-radius: 10px;
   width: 40px;
   height: 40px;
@@ -50,7 +50,7 @@
   }
 }
 .active {
-  border: 1px solid #845EC2 !important;
+  border: 2px solid #845EC2 !important;
   background-color: rgb(132, 94, 194, .2) ;
   color: #845EC2;
   border-radius: 10px;
