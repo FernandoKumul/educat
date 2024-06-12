@@ -7,7 +7,7 @@ const Header = () => {
   const { isUser, logout } = useContext(AuthContext);
 
   return (
-    <header>
+    <header className="bg-header">
       {isUser ?
         <>
           <p>{isUser.name}</p>

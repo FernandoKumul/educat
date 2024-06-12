@@ -4,7 +4,9 @@ const EditCourse = () => {
   const { courseId } = useParams()
 
   return (
-    <h1>{courseId}</h1>
+    <div className="min-h-screen">
+      <h1>{courseId}</h1>
+    </div>
   );
 }
 

@@ -1,6 +1,6 @@
 const HeaderInstructor = () => {
   return (
-    <header className="h-16">
+    <header className="h-16 bg-header">
       Aqui es el header
     </header>
   );

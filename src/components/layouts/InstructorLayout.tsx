@@ -1,13 +1,12 @@
 import { Outlet } from "react-router-dom";
 import HeaderInstructor from "./HeaderInstructor";
+import InstructorSidebar from "./InstructorSidebar";
 
 const InstructorLayout = () => {
   return ( 
-    <div className="flex min-h-screen">
-      <aside className="min-w-56">
-        Sidebar
-      </aside>
-      <div className="flex-grow">
+    <div className="flex h-screen">
+      <InstructorSidebar />
+      <div className="flex-grow overflow-auto">
         <HeaderInstructor />
         <Outlet />
       </div>
