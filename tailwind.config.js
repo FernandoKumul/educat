@@ -60,9 +60,9 @@ export default {
             inverted: "#FFF",
           },
           background: {
-            muted: '#131A2B',
+            muted: '#322E37',
             subtle: colors.gray[800],
-            DEFAULT: colors.gray[900],
+            DEFAULT: '#27222D',
             emphasis: colors.gray[300],
           },
           border: {
