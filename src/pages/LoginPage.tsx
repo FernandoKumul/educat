@@ -38,7 +38,7 @@ const LoginPage = () => {
           return toast.warn(error.response?.data.message)
         }
         
-        return toast.error('Oops... Ocurrió un error, Intentelo más tarde');
+        return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
       }
     } finally {
       setLoading(false)

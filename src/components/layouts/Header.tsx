@@ -1,4 +1,4 @@
-import { RiSearchLine } from '@remixicon/react'
+import { RiBriefcaseLine, RiMenuLine, RiSearchLine, RiShoppingCart2Line, RiUserAddLine, RiUserLine } from '@remixicon/react'
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthContext from '../../contexts/AuthContext';
@@ -9,7 +9,7 @@ const Header = () => {
   const { isUser, logout } = useContext(AuthContext);
 
 
-  useEffect(() => {
+  useEffect(() => { 
     const search = new URLSearchParams(window.location.search).get('q') || '';
     setValue(search);
   }, []);
@@ -23,20 +23,43 @@ const Header = () => {
   }
 
   return (
-    <header>
-      {isUser ?
-        <>
-          <p>{isUser.name}</p>
-          <Button onClick={logout}>Cerrar Sesión</Button>
-        </>
-        : 
-        <Link to={'/login'}>Registrate</Link>
-      }
+    <header className='flex items-center justify-between right-0 top-0 bg-[#3F3848] p-4'>
 
-      <form className='relative w-fit' onSubmit={handleSearch}>
-        <TextInput className="bg-[#27222D] hover:bg-[#322e37] w-60" type="text" name="s" id="s" placeholder="Buscar..." value={searchValue} onChange={event => setValue(event.target.value)} />
-        <button className='flex items-center px-[10px] bg-[#845EC2] rounded-br-[7.5px] rounded-tr-[7.5px] absolute right-0 top-0 h-full'><RiSearchLine /></button>
-      </form>
+      <div className='flex'>
+        <img src="/src/assets/Logo.svg" alt="logo" className='w-20' />
+
+        {/* Buscador */}
+        <form className='relative w-fit ml-10 hidden lg:block' onSubmit={handleSearch}>
+          <TextInput className="bg-[#27222D] hover:bg-[#322e37] w-60" type="text" name="s" id="s" placeholder="Buscar..." value={searchValue} onChange={event => setValue(event.target.value)} />
+          <button className='flex items-center px-[10px] bg-[#845EC2] rounded-br-[7.5px] rounded-tr-[7.5px] absolute right-0 top-0 h-full'><RiSearchLine/></button>
+        </form>
+      </div>
+
+      <div className='lg:hidden'>
+        <RiMenuLine className='text-white'/>
+      </div>
+
+        {isUser ?
+          <>
+            <p>{isUser.name}</p>
+            <Button onClick={logout}><RiUserLine/>Cerrar Sesión</Button>
+            <div className='flex'>
+            <Link className='flex' to={'/'}><RiBriefcaseLine/>Se instructor</Link>
+            <Link to={'/'}><RiShoppingCart2Line/></Link>
+            <Link to={'/'}><RiUserLine/></Link>
+          </div>
+          </> 
+          : 
+          <div className='flex'>
+            <div className='hidden lg:block'>
+              <Link className='flex' to={'/register'}><RiUserAddLine/>Registrate</Link>
+            </div>
+            <div className='hidden lg:block ml-10'>
+              <Link  className='flex' to={'/login'}><RiUserLine/>Login</Link>
+            </div>
+          </div>
+        }
+
     </header>
   );
 }
