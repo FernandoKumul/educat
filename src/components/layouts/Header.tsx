@@ -35,9 +35,7 @@ const Header = () => {
         </form>
       </div>
 
-      <div className='lg:hidden'>
-        <RiMenuLine className='text-white'/>
-      </div>
+
 
         {isUser ?
           <>
@@ -51,6 +49,9 @@ const Header = () => {
           </> 
           : 
           <div className='flex'>
+            <div className='lg:hidden'>
+              <RiMenuLine className='text-white'/>
+            </div>
             <div className='hidden lg:block'>
               <Link className='flex' to={'/register'}><RiUserAddLine/>Registrate</Link>
             </div>
