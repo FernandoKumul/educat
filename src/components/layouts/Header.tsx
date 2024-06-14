@@ -35,27 +35,28 @@ const Header = () => {
         </form>
       </div>
 
-
+      <div className='lg:hidden'>
+        <RiMenuLine className='text-white'/>
+      </div>
 
         {isUser ?
-          <>
+          <div className='hidden lg:flex lg:items-center'>
             <p>{isUser.name}</p>
-            <Button onClick={logout}><RiUserLine/>Cerrar Sesión</Button>
+            <Button onClick={logout}>
+              <div className='flex items-center'><RiUserLine/>Cerrar Sesión</div>
+            </Button>
             <div className='flex'>
-            <Link className='flex' to={'/'}><RiBriefcaseLine/>Se instructor</Link>
-            <Link to={'/'}><RiShoppingCart2Line/></Link>
-            <Link to={'/'}><RiUserLine/></Link>
-          </div>
-          </> 
-          : 
-          <div className='flex'>
-            <div className='lg:hidden'>
-              <RiMenuLine className='text-white'/>
+              <Link className='flex' to={'/'}><RiBriefcaseLine/>Se instructor</Link>
+              <Link to={'/'}><RiShoppingCart2Line/></Link>
+              <Link to={'/'}><RiUserLine/></Link>
             </div>
-            <div className='hidden lg:block'>
+          </div> 
+          : 
+          <div className='hidden lg:flex'>
+            <div className=''>
               <Link className='flex' to={'/register'}><RiUserAddLine/>Registrate</Link>
             </div>
-            <div className='hidden lg:block ml-10'>
+            <div className='ml-10'>
               <Link  className='flex' to={'/login'}><RiUserLine/>Login</Link>
             </div>
           </div>
