@@ -1,4 +1,3 @@
-import { Text } from "@tremor/react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
