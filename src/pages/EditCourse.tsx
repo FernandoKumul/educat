@@ -1,4 +1,4 @@
-import { RiAddBoxLine, RiArrowLeftLine, RiCloseCircleFill, RiCloseFill, RiCloseLine, RiEyeFill, RiImageAddLine, RiLoader4Line, RiSave3Fill, RiUploadCloudFill } from "@remixicon/react";
+import { RiAddBoxLine, RiArrowLeftLine, RiCloseCircleFill, RiCloseFill, RiCloseLine, RiEyeFill, RiImageAddLine, RiLoader4Line, RiSave3Fill, RiUploadCloudFill, RiVideoAddFill } from "@remixicon/react";
 import { Button, NumberInput, Select, SelectItem, TextInput, Textarea } from "@tremor/react";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -8,6 +8,7 @@ import { CourseEditOutDTO } from "../interfaces/ICourse";
 import { AxiosError } from "axios";
 import FileService from "../services/FileService";
 import { ToastContainer, toast } from "react-toastify";
+import PresentationVideo from "../components/course/PresentationVideo";
 
 interface ICourseInfoP1 {
   title: string;
@@ -48,6 +49,11 @@ const EditCourse = () => {
   const inputImgRef = useRef<HTMLInputElement>(null)
   const [isLoadingImg, setLoadingImg] = useState<boolean>(false)
   const [isCurrentImg, setCurrentImg] = useState<string | null>(null)
+
+  const inputVideoRef = useRef<HTMLInputElement>(null)
+  const [isLoadingVideo, setLoadingVideo] = useState<boolean>(false)
+  const [isVideoUrl, setVideoUrl] = useState<string | null>(null)
+
 
   //Learning
   const handleAddLearn = () => {
@@ -94,7 +100,7 @@ const EditCourse = () => {
   }
 
   useEffect(() => {
-    if(!isErrorTagRepeat) return
+    if (!isErrorTagRepeat) return
 
     const newTagLowerCase = isInputTag.trim().toLowerCase();
     const tagsLowerCase = istags.map(tag => tag.toLowerCase());
@@ -110,7 +116,7 @@ const EditCourse = () => {
   const handleSubmitImage = async (e: FormEvent<HTMLInputElement>) => {
     const target = e.currentTarget
     const files = target.files;
-  
+
     if (!files || files.length === 0) {
       //Mostrar toast
       console.error('No se seleccionó ningún archivo.');
@@ -120,16 +126,43 @@ const EditCourse = () => {
       const file = files[0];
       const formData = new FormData();
       formData.append('file', file);
-  
+
       setLoadingImg(true)
       const newUrl = await FileService.submitImage(formData)
       setCurrentImg(newUrl)
     } catch (error) {
       if (error instanceof AxiosError) {
-        toast.error('La imagen no se logró subir');  
+        toast.error('La imagen no se logró subir');
       }
     } finally {
       setLoadingImg(false)
+    }
+  };
+
+  //Video
+  const handleSubmitVideo = async (e: FormEvent<HTMLInputElement>) => {
+    const target = e.currentTarget
+    const files = target.files;
+
+    if (!files || files.length === 0) {
+      //Mostrar toast
+      console.error('No se seleccionó ningún archivo.');
+      return
+    }
+    try {
+      const file = files[0];
+      const formData = new FormData();
+      formData.append('video', file);
+
+      setLoadingVideo(true)
+      const newUrlVideo = (await FileService.submitVideo(formData)).url
+      setVideoUrl(newUrlVideo)
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.error('El video no se logró subir: ' + error.response?.data.message);
+      }
+    } finally {
+      setLoadingVideo(false)
     }
   };
 
@@ -140,10 +173,10 @@ const EditCourse = () => {
 
     //Buscar en el array su id
     let categoryId = null
-    if(isCategory !== '') {
+    if (isCategory !== '') {
       categoryId = CategoriesData.find(value => value.name === isCategory)?.id
-    } 
-    
+    }
+
     console.log('Editando...', isValid)
     data.fkCategory = categoryId ?? null
     data.price = isNaN(data.price!) ? null : data.price
@@ -174,8 +207,8 @@ const EditCourse = () => {
           </Button>
         </div>
       </div>
-      <div className="px-6 py-5">
-        <section>
+      <div className="px-6 py-5 lg:flex lg:gap-8 lg:items-start lg:px-12 lg:py-8">
+        <section className="flex-grow">
           <h2 className="bg-black-1 px-4 p-2 rounded-t-md text-lg">Datos del curso</h2>
           <section className="bg-black-2 p-4 rounded-b-md">
             <div className="mb-4">
@@ -268,22 +301,48 @@ const EditCourse = () => {
           </section>
         </section>
 
-        <section className="bg-black-2 p-4 rounded-md mt-8">
+        <section className="bg-black-2 p-4 rounded-md mt-8 lg:mt-0 lg:w-80">
+          <h3 className="mb-1">Video de presentación</h3>
+          {
+            isVideoUrl
+              ?
+              <div className="relative mb-4">
+                <PresentationVideo url={isVideoUrl} />
+                <span
+                  onClick={() => setVideoUrl(null)}
+                  className="cursor-pointer bg-slate-900/80 rounded-full p-1 hover:text-slate-400 transition-colors absolute top-1 right-1">
+                  <RiCloseLine />
+                </span>
+              </div>
+              :
+              <div className="mb-4">
+                <div className="border aspect-video rounded-md mb-1 relative border-secundary-text flex items-center justify-center">
+                  {isLoadingVideo
+                    ? <RiLoader4Line size={48} className="animate-spin" />
+                    : isVideoUrl ? null : <RiVideoAddFill size={48} onClick={() => inputVideoRef.current?.click()} />
+                  }
+                  <input type="file" ref={inputVideoRef} className="hidden" accept="video/*" onChange={handleSubmitVideo} />
+                </div>
+                <p className="text-secundary-text text-sm">Puedes subir hasta 100MB en cualquier formato de video. Suele tomar algunos minutos.</p>
+              </div>
+          }
+
+
           <h3 className="mb-1">Miniatura</h3>
           <div className="border aspect-video rounded-md relative border-secundary-text mb-4 flex items-center justify-center">
-            {isLoadingImg 
-            ? <RiLoader4Line size={48} className="animate-spin" />
-            : isCurrentImg ? null : <RiImageAddLine size={48} onClick={() => inputImgRef.current?.click()} />
+            {isLoadingImg
+              ? <RiLoader4Line size={48} className="animate-spin" />
+              : isCurrentImg ? null : <RiImageAddLine size={48} onClick={() => inputImgRef.current?.click()} />
             }
-            {isCurrentImg && 
-            <>            
-              <img src={isCurrentImg} className="h-full w-full object-cover rounded-md" />
-              <span 
-                onClick={() => setCurrentImg('')}
-                className="cursor-pointer bg-slate-900/80 rounded-full p-1 hover:text-slate-400 transition-colors absolute top-1 right-1">
-                <RiCloseLine />
-              </span>
-            </>
+            {isCurrentImg &&
+              <>
+                <img src={isCurrentImg} className="h-full w-full object-cover rounded-md" />
+                <span
+                  onClick={() => setCurrentImg('')}
+                  className="cursor-pointer bg-slate-900/80 rounded-full p-1 hover:text-slate-400 transition-colors absolute top-1 right-1">
+                  <RiCloseLine />
+                </span>
+              </>
             }
             <input type="file" ref={inputImgRef} className="hidden" accept="image/*" onChange={handleSubmitImage} />
           </div>
@@ -311,11 +370,11 @@ const EditCourse = () => {
         </section>
       </div>
       <h1>{courseId}</h1>
-      <ToastContainer 
+      <ToastContainer
         className="text-sm"
         position="top-right"
         theme="dark"
-       />
+      />
     </main>
   );
 }
