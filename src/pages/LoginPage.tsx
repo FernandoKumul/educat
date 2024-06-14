@@ -1,16 +1,27 @@
-import 'react-toastify/dist/ReactToastify.css';
-import { useForm, SubmitHandler } from "react-hook-form"
-import { Button, TextInput } from "@tremor/react";
-import AuthService from "../services/AuthService";
-import { ToastContainer, toast } from 'react-toastify';
+import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
-import { useState } from "react";
+import AuthService from "../services/AuthService";
 import { Link, useNavigate } from "react-router-dom";
-import GoogleIcon from "../components/Icons/GoogleIcon";
+import { useForm, SubmitHandler } from "react-hook-form"
+import { useGoogleLogin } from '@react-oauth/google'
 import { ILoginUser } from "../interfaces/ILoginUser";
+import { ToastContainer, toast } from 'react-toastify';
+import { Button, TextInput } from "@tremor/react";
+import GoogleIcon from "../components/Icons/GoogleIcon";
+import 'react-toastify/dist/ReactToastify.css';
+import GoogleService from "../services/GoogleService";
 
+interface User {
+  access_token: string;
+}
 
 const LoginPage = () => {
+  const [user, setUser] = useState<User | null>(null);
+
+    const loginGoogle = useGoogleLogin({
+        onSuccess: (codeResponse: User) => setUser(codeResponse),
+        onError: (error) => console.log('Login Failed:', error)
+    });
   const {
     register,
     handleSubmit,
@@ -25,25 +36,31 @@ const LoginPage = () => {
       console.log(data)
       toast.dismiss()
       setLoading(true)
-      await AuthService.login({...data})
+      await AuthService.login({ ...data })
       navigate("/")
     } catch (error) {
       console.log(error)
       if (error instanceof AxiosError) {
-        if(error.response?.data.message === 'Inicio de sesión exitoso') {
-          return toast.error(error.response.data.message);  
+        if (error.response?.data.message === 'Inicio de sesión exitoso') {
+          return toast.error(error.response.data.message);
         }
 
-        if(error.response?.data.message === 'Su cuenta existe, pero su correo no está verificado') {
+        if (error.response?.data.message === 'Su cuenta existe, pero su correo no está verificado') {
           return toast.warn(error.response?.data.message)
         }
-        
+
         return toast.error('Oops... Ocurrió un error, Intentelo más tarde');
       }
     } finally {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (user) {
+      GoogleService.TokenByGoogle(user.access_token)
+    }
+  }, [user])
 
   return (
     <main className="flex flex-col min-h-screen md:flex-row">
@@ -59,8 +76,8 @@ const LoginPage = () => {
         <img className="hidden w-48 mx-auto mb-2 md:block" src="/src/assets/logo.svg" alt="logo" />
         <h1 className="text-[28px] font-medium text-center">Iniciar sesión</h1>
         <h3 className="text-center mb-6">¿No tienes cuenta? <Link to={'/register'} className="underline underline-offset-[0.5px]">Regístrate aquí</Link></h3>
-        
-        <article className="bg-white flex justify-center gap-2 items-center h-12 rounded-full cursor-pointer hover:bg-slate-100">
+
+        <article onClick={() => loginGoogle()} className="bg-white flex justify-center gap-2 items-center h-12 rounded-full cursor-pointer hover:bg-slate-100">
           <GoogleIcon />
           <p className="text-gray-950">Continuar con Google</p>
         </article>
@@ -73,7 +90,7 @@ const LoginPage = () => {
             <label htmlFor="email" className="block mb-1">Correo</label>
             <TextInput placeholder="" errorMessage={errors.email?.message} error={!!errors.email} {...register("email", {
               required: "El email es requerido",
-              pattern: {value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, message: "Email inválido"},
+              pattern: { value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, message: "Email inválido" },
               setValueAs: (value: string) => value.trim()
             })} id="email" className={`bg-transparent ${errors.email || 'border-[#9D9D9D]'} hover:bg-gray-700`} autoComplete="email" />
           </div>
@@ -88,7 +105,7 @@ const LoginPage = () => {
             <Link to={'/recovery-password'} className="underline text-[#B5B5B5] text-sm text-right block mt-1">¿Olvidaste tu contraseña?</Link>
           </div>
 
-          <div className="lg:flex lg:justify-center">            
+          <div className="lg:flex lg:justify-center">
             <Button className="w-full h-12 mt-6 lg:w-auto lg:px-[10%] focus:outline focus:outline-current" type="submit" loading={loading}>
               <span className="text-base">Entrar</span>
             </Button>
@@ -96,7 +113,7 @@ const LoginPage = () => {
         </form>
       </section>
 
-      <ToastContainer 
+      <ToastContainer
         className="text-sm"
         position="top-right"
         theme="dark"
