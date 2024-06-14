@@ -32,7 +32,7 @@ const PresentationVideo = ({url, className = ''}: IProps) => {
 
   return (
     <article 
-    className={`bg-gradient-to-r from-purple-500 via-violet-600 to-indigo-400 h-[160px] 
+    className={`bg-gradient-to-r from-purple-500 via-violet-600 to-indigo-400 
     rounded-lg w-full aspect-video flex justify-center items-center ${className}`}>
       <span className="cursor-pointer bg-slate-800 rounded-full p-1 hover:text-slate-400 transition-colors" onClick={handleFullscreen}>
         <RiPlayFill size={28} className="text-primary-600" />

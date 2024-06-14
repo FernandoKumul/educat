@@ -1,6 +1,6 @@
-import { RiAddBoxLine, RiArrowLeftLine, RiCloseCircleFill, RiCloseFill, RiCloseLine, RiEyeFill, RiImageAddLine, RiLoader4Line, RiSave3Fill, RiUploadCloudFill, RiVideoAddFill } from "@remixicon/react";
+import { RiAddBoxLine, RiArrowLeftLine, RiCloseFill, RiCloseLine, RiEyeFill, RiImageAddLine, RiLoader4Line, RiSave3Fill, RiUploadCloudFill, RiVideoAddFill } from "@remixicon/react";
 import { Button, NumberInput, Select, SelectItem, TextInput, Textarea } from "@tremor/react";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import CategoriesData from "../data/CategoriesData";
@@ -9,6 +9,7 @@ import { AxiosError } from "axios";
 import FileService from "../services/FileService";
 import { ToastContainer, toast } from "react-toastify";
 import PresentationVideo from "../components/course/PresentationVideo";
+import TagInput from "../components/course/TagInput";
 
 interface ICourseInfoP1 {
   title: string;
@@ -40,8 +41,6 @@ const EditCourse = () => {
   const [isCategory, setCategory] = useState("")
 
   const [istags, setTags] = useState<string[]>([])
-  const [isInputTag, setInputTag] = useState<string>('')
-  const [isErrorTagRepeat, setErrorTagRepeat] = useState<boolean>(false)
 
   const [learningList, setLearningList] = useState<ILearning[]>([])
   const [isDirty, setDirty] = useState<boolean>(false)
@@ -73,45 +72,6 @@ const EditCourse = () => {
     setLearningList(currentInputs)
   }
 
-  //Tags
-  const handleAddTag = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    if (isInputTag.trim() === '') return
-
-
-    const newTagLowerCase = isInputTag.trim().toLowerCase();
-    const tagsLowerCase = istags.map(tag => tag.toLowerCase());
-
-    if (tagsLowerCase.includes(newTagLowerCase)) {
-      setErrorTagRepeat(true)
-      return
-    }
-
-    setTags([...istags, isInputTag.trim()])
-    setInputTag('')
-    setErrorTagRepeat(false)
-  }
-
-  const handleRemoveTag = (index: number) => {
-    const tags = [...istags]
-    tags.splice(index, 1)
-    setTags(tags)
-  }
-
-  useEffect(() => {
-    if (!isErrorTagRepeat) return
-
-    const newTagLowerCase = isInputTag.trim().toLowerCase();
-    const tagsLowerCase = istags.map(tag => tag.toLowerCase());
-
-    if (tagsLowerCase.includes(newTagLowerCase)) {
-      return
-    }
-
-    setErrorTagRepeat(false)
-  }, [isErrorTagRepeat, isInputTag, istags])
-
   //Imagen
   const handleSubmitImage = async (e: FormEvent<HTMLInputElement>) => {
     const target = e.currentTarget
@@ -131,6 +91,7 @@ const EditCourse = () => {
       const newUrl = await FileService.submitImage(formData)
       setCurrentImg(newUrl)
     } catch (error) {
+      console.log(error)
       if (error instanceof AxiosError) {
         toast.error('La imagen no se logró subir');
       }
@@ -158,6 +119,7 @@ const EditCourse = () => {
       const newUrlVideo = (await FileService.submitVideo(formData)).url
       setVideoUrl(newUrlVideo)
     } catch (error) {
+      console.log(error)
       if (error instanceof AxiosError) {
         toast.error('El video no se logró subir: ' + error.response?.data.message);
       }
@@ -181,6 +143,7 @@ const EditCourse = () => {
     data.fkCategory = categoryId ?? null
     data.price = isNaN(data.price!) ? null : data.price
     console.log(data)
+    console.log(istags)
   }
 
   return (
@@ -319,7 +282,11 @@ const EditCourse = () => {
                 <div className="border aspect-video rounded-md mb-1 relative border-secundary-text flex items-center justify-center">
                   {isLoadingVideo
                     ? <RiLoader4Line size={48} className="animate-spin" />
-                    : isVideoUrl ? null : <RiVideoAddFill size={48} onClick={() => inputVideoRef.current?.click()} />
+                    :    
+                    <>
+                      <RiVideoAddFill size={48} /> 
+                      <div className="size-full cursor-pointer absolute" onClick={() => inputVideoRef.current?.click()}></div>
+                    </>
                   }
                   <input type="file" ref={inputVideoRef} className="hidden" accept="video/*" onChange={handleSubmitVideo} />
                 </div>
@@ -332,7 +299,13 @@ const EditCourse = () => {
           <div className="border aspect-video rounded-md relative border-secundary-text mb-4 flex items-center justify-center">
             {isLoadingImg
               ? <RiLoader4Line size={48} className="animate-spin" />
-              : isCurrentImg ? null : <RiImageAddLine size={48} onClick={() => inputImgRef.current?.click()} />
+              : isCurrentImg 
+                ? null 
+                : 
+                <>
+                  <div className="size-full cursor-pointer absolute" onClick={() => inputImgRef.current?.click()}></div>
+                  <RiImageAddLine size={48} />
+                </>
             }
             {isCurrentImg &&
               <>
@@ -348,25 +321,14 @@ const EditCourse = () => {
           </div>
           <div className="mb-4">
             <label htmlFor="category" className="mb-1 block">Categoría</label>
-            <Select name="category" id="category" value={isCategory} onValueChange={value => setCategory(value)} >
+            <Select name="category" id="category" value={isCategory} placeholder="Escoja una categoría" onValueChange={value => setCategory(value)} >
               {CategoriesData.map((category) => (
                 <SelectItem key={category.id} value={category.name}>{category.name}</SelectItem>
               ))}
             </Select>
           </div>
-          <form onSubmit={handleAddTag}>
             <label htmlFor="newTag" className="mb-1 block">Etiquetas</label>
-            <TextInput errorMessage="No pueden haber etiquetas repetidas" autoComplete="off" error={isErrorTagRepeat} value={isInputTag}
-              id="newTag" name="newTag" placeholder="Escribe alguna etiqueta" onValueChange={value => setInputTag(value)} />
-            <div className="flex gap-2 flex-wrap mt-3">
-              {istags.map((item, index) => (
-                <span className="bg-slate-600 rounded-full px-3 py-1 text-[15px] flex gap-1" key={item}>
-                  {item}
-                  <RiCloseCircleFill className="cursor-pointer hover:text-slate-400 transition-colors" onClick={() => handleRemoveTag(index)} />
-                </span>
-              ))}
-            </div>
-          </form>
+            <TagInput name="newTag" id="newTag" value={istags} setTags={(tags) => setTags(tags)} />
         </section>
       </div>
       <h1>{courseId}</h1>
