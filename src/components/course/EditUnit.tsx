@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Accordion, AccordionBody, AccordionHeader, Button, TextInput } from "@tremor/react";
-import { IEditUnit } from "../../interfaces/IEditCourse";
+import { Accordion, AccordionBody, AccordionHeader, Button, Select, SelectItem, TextInput } from "@tremor/react";
+import { IEditUnit, typeLesson } from "../../interfaces/IEditCourse";
 import { RiAddBoxLine, RiArrowDownSLine, RiArrowUpSLine, RiDeleteBinLine } from "@remixicon/react";
 
 type IProps = {
@@ -17,15 +17,26 @@ const EditUnit = ({ unit, onValueChange, onItemRemove, onUnitDown, onUnitUp, tot
 
   const handleChangeTitle = (inputValue: string) => {
     setTitle(inputValue)
-    onValueChange({...unit, title: inputValue})
+    onValueChange({ ...unit, title: inputValue })
+  }
+
+  const handleChangeTypeLesson = (type: typeLesson, id: number) => {
+    const updateLessons = unit.lessons.map(lesson => {
+      if (lesson.pkLesson === id) {
+        return { ...lesson, type }
+      }
+      return lesson;
+    })
+
+    onValueChange({...unit, lessons: updateLessons})
   }
 
 
   return (
-    <Accordion>
+    <Accordion className="mb-4">
       <AccordionHeader>
         <p className="text-ellipsis whitespace-nowrap overflow-hidden">
-          {unit.order + '. ' + (unit.title ? unit.title : 'Sin título' )}
+          {unit.order + '. ' + (unit.title ? unit.title : 'Sin título')}
         </p>
       </AccordionHeader>
       <AccordionBody className="bg-black-2 py-4">
@@ -41,7 +52,7 @@ const EditUnit = ({ unit, onValueChange, onItemRemove, onUnitDown, onUnitUp, tot
               <RiArrowUpSLine />
             </button>
             <button onClick={() => onUnitDown(unit.pkUnit!, unit.order)} disabled={unit.order === totalUnits}
-               className={`border-gray-400 border p-2 rounded-md text-gray-400 
+              className={`border-gray-400 border p-2 rounded-md text-gray-400 
                 ${unit.order === totalUnits ? 'bg-gray-200/30 cursor-not-allowed' : 'hover:bg-primary-400 hover:text-white hover:border-white '}`}>
               <RiArrowDownSLine />
             </button>
@@ -52,7 +63,14 @@ const EditUnit = ({ unit, onValueChange, onItemRemove, onUnitDown, onUnitUp, tot
           </div>
         </section>
         {unit.lessons.map((item) => (
-          <p key={item.pkLesson}>{item.title}</p>
+          <div key={item.pkLesson}>
+            <div className="border-t-[2px] border-gray-400 my-4"></div>
+            <p>{item.title}</p>
+            <Select defaultValue="video" className="mt-2" value={item.type} onValueChange={(value) => handleChangeTypeLesson(value as typeLesson, item.pkLesson!)}>
+              <SelectItem value="video">Video</SelectItem>
+              <SelectItem value="text">Texto</SelectItem>
+            </Select>
+          </div>
         ))}
       </AccordionBody>
     </Accordion>

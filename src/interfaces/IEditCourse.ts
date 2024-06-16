@@ -31,10 +31,12 @@ export interface IEditLesson {
   pkLesson?: number;
   fkunit: number;
   title: string;
-  type: 'text' | 'video';
+  type: typeLesson;
   videoUrl: string | null;
   text: string | null;
   timeDuration: number;
   order: number;
   cretionDate: string;
 }
+
+export type typeLesson = 'text' | 'video'

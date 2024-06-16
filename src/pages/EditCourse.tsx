@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { AxiosError } from "axios";
 import { Controller, useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
-import { RiAddBoxLine, RiArrowLeftLine, RiCloseFill, RiCloseLine, RiEyeFill, RiImageAddLine, RiLoader4Line, RiSave3Fill, RiUploadCloudFill, RiVideoAddFill } from "@remixicon/react";
+import { RiAddBoxLine, RiArrowLeftLine, RiCloseFill, RiCloseLine, RiEyeFill, RiImageAddLine, RiLoader4Line, RiSave3Fill, RiUploadCloudFill } from "@remixicon/react";
 import { AccordionList, Button, NumberInput, Select, SelectItem, TextInput, Textarea } from "@tremor/react";
 import { IEditCourse, IEditUnit } from "../interfaces/IEditCourse";
 import CategoriesData from "../data/CategoriesData";
@@ -12,6 +12,7 @@ import PresentationVideo from "../components/course/PresentationVideo";
 import TagInput from "../components/course/TagInput";
 import units from "../data/UnitsData";
 import EditUnit from "../components/course/EditUnit";
+import UploadVideo from "../components/upload/UploadVideo";
 
 interface ICourseInfoP1 {
   title: string;
@@ -51,8 +52,6 @@ const EditCourse = () => {
   const [isLoadingImg, setLoadingImg] = useState<boolean>(false)
   const [isCurrentImg, setCurrentImg] = useState<string | null>(null)
 
-  const inputVideoRef = useRef<HTMLInputElement>(null)
-  const [isLoadingVideo, setLoadingVideo] = useState<boolean>(false)
   const [isVideoUrl, setVideoUrl] = useState<string | null>(null)
 
   const [isEditUnits, setEditUnits] = useState<IEditUnit[]>(units)
@@ -99,34 +98,6 @@ const EditCourse = () => {
       }
     } finally {
       setLoadingImg(false)
-    }
-  };
-
-  //Video
-  const handleSubmitVideo = async (e: FormEvent<HTMLInputElement>) => {
-    const target = e.currentTarget
-    const files = target.files;
-
-    if (!files || files.length === 0) {
-      //Mostrar toast
-      console.error('No se seleccionó ningún archivo.');
-      return
-    }
-    try {
-      const file = files[0];
-      const formData = new FormData();
-      formData.append('video', file);
-
-      setLoadingVideo(true)
-      const newUrlVideo = (await FileService.submitVideo(formData)).url
-      setVideoUrl(newUrlVideo)
-    } catch (error) {
-      console.log(error)
-      if (error instanceof AxiosError) {
-        toast.error('El video no se logró subir: ' + error.response?.data.message);
-      }
-    } finally {
-      setLoadingVideo(false)
     }
   };
 
@@ -211,6 +182,7 @@ const EditCourse = () => {
     console.log('Editando...', isValid)
     data.fkCategory = categoryId ?? null
     data.price = isNaN(data.price!) ? null : data.price
+    data.videoPresentation = isVideoUrl
     console.log(data)
     console.log(isEditUnits)
   }
@@ -368,20 +340,7 @@ const EditCourse = () => {
                 </span>
               </div>
               :
-              <div className="mb-4">
-                <div className="border aspect-video rounded-md mb-1 relative border-secundary-text flex items-center justify-center">
-                  {isLoadingVideo
-                    ? <RiLoader4Line size={48} className="animate-spin" />
-                    :
-                    <>
-                      <RiVideoAddFill size={48} />
-                      <div className="size-full cursor-pointer absolute" onClick={() => inputVideoRef.current?.click()}></div>
-                    </>
-                  }
-                  <input type="file" ref={inputVideoRef} className="hidden" accept="video/*" onChange={handleSubmitVideo} />
-                </div>
-                <p className="text-secundary-text text-sm">Puedes subir hasta 100MB en cualquier formato de video. Suele tomar algunos minutos.</p>
-              </div>
+              <UploadVideo className="mb-4" onUploadedVideo={(url) => setVideoUrl(url)} />
           }
 
 

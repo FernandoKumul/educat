@@ -41,3 +41,7 @@
 .tremor-AccordionHeader-children {
   overflow: hidden;
 }
+
+.tremor-Accordion-root {
+  overflow: visible;
+}
