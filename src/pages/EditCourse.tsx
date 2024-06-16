@@ -1,15 +1,17 @@
-import { RiAddBoxLine, RiArrowLeftLine, RiCloseFill, RiCloseLine, RiEyeFill, RiImageAddLine, RiLoader4Line, RiSave3Fill, RiUploadCloudFill, RiVideoAddFill } from "@remixicon/react";
-import { Button, NumberInput, Select, SelectItem, TextInput, Textarea } from "@tremor/react";
 import { FormEvent, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import CategoriesData from "../data/CategoriesData";
-import { CourseEditOutDTO } from "../interfaces/ICourse";
 import { AxiosError } from "axios";
-import FileService from "../services/FileService";
+import { Controller, useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
+import { RiAddBoxLine, RiArrowLeftLine, RiCloseFill, RiCloseLine, RiEyeFill, RiImageAddLine, RiLoader4Line, RiSave3Fill, RiUploadCloudFill, RiVideoAddFill } from "@remixicon/react";
+import { AccordionList, Button, NumberInput, Select, SelectItem, TextInput, Textarea } from "@tremor/react";
+import { IEditCourse, IEditUnit } from "../interfaces/IEditCourse";
+import CategoriesData from "../data/CategoriesData";
+import FileService from "../services/FileService";
 import PresentationVideo from "../components/course/PresentationVideo";
 import TagInput from "../components/course/TagInput";
+import units from "../data/UnitsData";
+import EditUnit from "../components/course/EditUnit";
 
 interface ICourseInfoP1 {
   title: string;
@@ -19,7 +21,6 @@ interface ICourseInfoP1 {
   price: number | null;
   requeriments: string | null;
   description: string | null;
-  fkCategory: number | null;
 }
 
 interface ILearning {
@@ -28,6 +29,7 @@ interface ILearning {
 }
 
 let learningId = 1
+let unitId = -1
 
 const EditCourse = () => {
   const { courseId } = useParams()
@@ -53,7 +55,7 @@ const EditCourse = () => {
   const [isLoadingVideo, setLoadingVideo] = useState<boolean>(false)
   const [isVideoUrl, setVideoUrl] = useState<string | null>(null)
 
-
+  const [isEditUnits, setEditUnits] = useState<IEditUnit[]>(units)
   //Learning
   const handleAddLearn = () => {
     setLearningList([...learningList, { id: learningId, text: '' }])
@@ -128,10 +130,77 @@ const EditCourse = () => {
     }
   };
 
+  //Units
+  const handleUpdateUnit = (newUnit: IEditUnit) => {
+    const updateUnits = isEditUnits.map(item =>
+      item.pkUnit === newUnit.pkUnit ? newUnit : item
+    );
+    setEditUnits(updateUnits);
+  };
+
+	const handleAddUnit = () => {
+		const newUnit: IEditUnit = {
+			pkUnit: unitId,
+			title: '',
+			fkCourse: parseInt(courseId ?? '0'),
+			lessons: [],
+			order: isEditUnits.length + 1
+		}
+
+		unitId--
+
+		setEditUnits([
+			...isEditUnits,
+			newUnit
+		])
+	}
+
+	const handleUpUnit = (id: number, order: number) => {
+		const newEditUnits = [...isEditUnits]
+		const findIndex = newEditUnits.findIndex(item => item.pkUnit === id)
+		
+		if (findIndex == -1) return
+	
+		const findIndexOther = newEditUnits.findIndex(item => item.order === order - 1)
+	
+		if (findIndexOther == -1) return
+	
+		newEditUnits[findIndex].order--
+		newEditUnits[findIndexOther].order++
+		newEditUnits.sort((a, b) => a.order - b.order);
+		setEditUnits(newEditUnits)
+	}
+	
+	const handleDownUnit = (id: number, order: number) => {
+		const newEditUnits = [...isEditUnits]
+		const findIndex = newEditUnits.findIndex(item => item.pkUnit === id)
+		
+		if (findIndex == -1) return
+	
+		const findIndexOther = newEditUnits.findIndex(item => item.order === order + 1)
+	
+		if (findIndexOther == -1) return
+	
+		newEditUnits[findIndex].order++
+		newEditUnits[findIndexOther].order--
+		newEditUnits.sort((a, b) => a.order - b.order);
+		setEditUnits(newEditUnits)
+	}
+
+	const handleRemoveUnit = (id: number, order: number) => {
+    let newUnits = isEditUnits.filter(item => item.pkUnit !== id);
+
+		newUnits = newUnits.map(item => {
+			if(item.order > order) item.order--
+			return item
+		})
+		setEditUnits(newUnits)
+  }
+
   const handleEditCourse = async () => {
     setDirty(true) //Para la sección de aprenderas
     const isValid = await trigger()
-    const data = getValues() as CourseEditOutDTO
+    const data = getValues() as IEditCourse
 
     //Buscar en el array su id
     let categoryId = null
@@ -143,7 +212,7 @@ const EditCourse = () => {
     data.fkCategory = categoryId ?? null
     data.price = isNaN(data.price!) ? null : data.price
     console.log(data)
-    console.log(istags)
+    console.log(isEditUnits)
   }
 
   return (
@@ -171,7 +240,7 @@ const EditCourse = () => {
         </div>
       </div>
       <div className="px-6 py-5 lg:flex lg:gap-8 lg:items-start lg:px-12 lg:py-8">
-        <section className="flex-grow">
+        <section className="flex-grow w-full min-w-0">
           <h2 className="bg-black-1 px-4 p-2 rounded-t-md text-lg">Datos del curso</h2>
           <section className="bg-black-2 p-4 rounded-b-md">
             <div className="mb-4">
@@ -262,6 +331,27 @@ const EditCourse = () => {
               </div>
             </article>
           </section>
+          <div className="flex justify-between items-center my-4">
+            <p>
+							<span>
+								{`${isEditUnits.length} ${isEditUnits.length === 1 ? 'Unidad' : 'Unidades'}`}
+							</span>
+            </p>
+						<Button onClick={handleAddUnit}>
+							<div className="flex gap-2">
+								<RiAddBoxLine />
+								<p className="text-base">
+									Nueva Unidad
+								</p>
+							</div>
+						</Button>
+          </div>
+          <AccordionList>
+            {isEditUnits.map(item => (
+              <EditUnit unit={item} key={item.pkUnit} onValueChange={handleUpdateUnit} totalUnits={isEditUnits.length}
+							onItemRemove={handleRemoveUnit} onUnitDown={handleDownUnit} onUnitUp={handleUpUnit} />
+            ))}
+          </AccordionList>
         </section>
 
         <section className="bg-black-2 p-4 rounded-md mt-8 lg:mt-0 lg:w-80">
@@ -282,9 +372,9 @@ const EditCourse = () => {
                 <div className="border aspect-video rounded-md mb-1 relative border-secundary-text flex items-center justify-center">
                   {isLoadingVideo
                     ? <RiLoader4Line size={48} className="animate-spin" />
-                    :    
+                    :
                     <>
-                      <RiVideoAddFill size={48} /> 
+                      <RiVideoAddFill size={48} />
                       <div className="size-full cursor-pointer absolute" onClick={() => inputVideoRef.current?.click()}></div>
                     </>
                   }
@@ -299,9 +389,9 @@ const EditCourse = () => {
           <div className="border aspect-video rounded-md relative border-secundary-text mb-4 flex items-center justify-center">
             {isLoadingImg
               ? <RiLoader4Line size={48} className="animate-spin" />
-              : isCurrentImg 
-                ? null 
-                : 
+              : isCurrentImg
+                ? null
+                :
                 <>
                   <div className="size-full cursor-pointer absolute" onClick={() => inputImgRef.current?.click()}></div>
                   <RiImageAddLine size={48} />
@@ -327,8 +417,8 @@ const EditCourse = () => {
               ))}
             </Select>
           </div>
-            <label htmlFor="newTag" className="mb-1 block">Etiquetas</label>
-            <TagInput name="newTag" id="newTag" value={istags} setTags={(tags) => setTags(tags)} />
+          <label htmlFor="newTag" className="mb-1 block">Etiquetas</label>
+          <TagInput name="newTag" id="newTag" value={istags} setTags={(tags) => setTags(tags)} />
         </section>
       </div>
       <h1>{courseId}</h1>
