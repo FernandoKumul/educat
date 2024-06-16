@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Accordion, AccordionBody, AccordionHeader, Button, Select, SelectItem, TextInput } from "@tremor/react";
+import { Accordion, AccordionBody, AccordionHeader, Button, Select, SelectItem, TextInput, Textarea } from "@tremor/react";
 import { IEditUnit, typeLesson } from "../../interfaces/IEditCourse";
 import { RiAddBoxLine, RiArrowDownSLine, RiArrowUpSLine, RiDeleteBinLine } from "@remixicon/react";
 
@@ -28,7 +28,29 @@ const EditUnit = ({ unit, onValueChange, onItemRemove, onUnitDown, onUnitUp, tot
       return lesson;
     })
 
-    onValueChange({...unit, lessons: updateLessons})
+    onValueChange({ ...unit, lessons: updateLessons })
+  }
+
+  const handleChangeTitleLesson = (title: string, id: number) => {
+    const updateLessons = unit.lessons.map(lesson => {
+      if (lesson.pkLesson === id) {
+        return { ...lesson, title }
+      }
+      return lesson;
+    })
+
+    onValueChange({ ...unit, lessons: updateLessons })
+  }
+
+  const handleChangeTextLesson = (text: string, id: number) => {
+    const updateLessons = unit.lessons.map(lesson => {
+      if (lesson.pkLesson === id) {
+        return { ...lesson, text }
+      }
+      return lesson;
+    })
+
+    onValueChange({ ...unit, lessons: updateLessons })
   }
 
 
@@ -62,14 +84,26 @@ const EditUnit = ({ unit, onValueChange, onItemRemove, onUnitDown, onUnitUp, tot
             </button>
           </div>
         </section>
-        {unit.lessons.map((item) => (
-          <div key={item.pkLesson}>
+        {unit.lessons.map((lesson) => (
+          <div key={lesson.pkLesson}>
             <div className="border-t-[2px] border-gray-400 my-4"></div>
-            <p>{item.title}</p>
-            <Select defaultValue="video" className="mt-2" value={item.type} onValueChange={(value) => handleChangeTypeLesson(value as typeLesson, item.pkLesson!)}>
-              <SelectItem value="video">Video</SelectItem>
-              <SelectItem value="text">Texto</SelectItem>
-            </Select>
+            <div>
+              <h4>Lección {lesson.order}</h4>
+              <h3>{lesson.title}</h3>
+            </div>
+            <div className="flex items-center gap-2 mt-2 mb-4">
+              <Select className="w-1/4" defaultValue="video" value={lesson.type} onValueChange={(value) => handleChangeTypeLesson(value as typeLesson, lesson.pkLesson!)}>
+                <SelectItem value="video">Video</SelectItem>
+                <SelectItem value="text">Texto</SelectItem>
+              </Select>
+              <TextInput value={lesson.title} className="Nombre de la lección" onValueChange={(value) => handleChangeTitleLesson(value, lesson.pkLesson!)} />
+            </div>
+            {lesson.type === 'video'
+            ? 
+            <h2>Tipo video</h2>
+            :
+            <Textarea rows={4} placeholder="Escribe tu lección" value={lesson.text ?? ''} onValueChange={value => handleChangeTextLesson(value, lesson.pkLesson!)} />
+            }
           </div>
         ))}
       </AccordionBody>
