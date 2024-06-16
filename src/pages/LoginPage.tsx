@@ -9,8 +9,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Button, TextInput } from "@tremor/react";
 import GoogleIcon from "../components/Icons/GoogleIcon";
 import 'react-toastify/dist/ReactToastify.css';
-import GoogleService from "../services/GoogleService";
-
 interface User {
   access_token: string;
 }
@@ -18,10 +16,11 @@ interface User {
 const LoginPage = () => {
   const [user, setUser] = useState<User | null>(null);
 
-    const loginGoogle = useGoogleLogin({
-        onSuccess: (codeResponse: User) => setUser(codeResponse),
-        onError: (error) => console.log('Login Failed:', error)
-    });
+  const loginGoogle = useGoogleLogin({
+    onSuccess: (codeResponse: User) => setUser(codeResponse),
+    onError: (error) => console.log('Login Failed:', error)
+  });
+
   const {
     register,
     handleSubmit,
@@ -57,14 +56,19 @@ const LoginPage = () => {
   }
 
   useEffect(() => {
-    if (user) {
-      GoogleService.TokenByGoogle(user.access_token)
+    const login = async () => {
+      if (user) {
+        await AuthService.TokenByGoogle(user.access_token)
+      }
     }
+    login()
   }, [user])
 
   return (
     <main className="flex flex-col min-h-screen md:flex-row">
-      <img className="w-56 mx-auto py-8 md:hidden" src="/src/assets/logo.svg" alt="logo" />
+      <Link to={'/'}>
+        <img className="w-56 mx-auto py-8 md:hidden" src="/src/assets/logo.svg" alt="logo" />
+      </Link>
 
       <section className="hidden px-[5%] w-1/2 md:flex md:items-center md:flex-col md:justify-center lg:px-[9%] xl:px-[12%]">
         <h2 className="text-5xl mb-1 text-center xl:text-6xl text-balance xl:tracking-wider xl:mb-2">
@@ -73,7 +77,9 @@ const LoginPage = () => {
         <h4 className="text-xl text-center xl:text-2xl xl:tracking-wide  ">el sitio en el cual puedes aprender a tu ritmo<span className="text-details">!</span></h4>
       </section>
       <section className="bg-black-auth rounded-t-3xl px-8 pt-10 pb-8 flex-grow md:w-1/2 md:rounded-none lg:px-12 xl:px-28">
-        <img className="hidden w-48 mx-auto mb-2 md:block" src="/src/assets/logo.svg" alt="logo" />
+        <Link to={'/'}>
+          <img className="hidden w-48 mx-auto mb-2 md:block" src="/src/assets/logo.svg" alt="logo" />
+        </Link>
         <h1 className="text-[28px] font-medium text-center">Iniciar sesión</h1>
         <h3 className="text-center mb-6">¿No tienes cuenta? <Link to={'/register'} className="underline underline-offset-[0.5px]">Regístrate aquí</Link></h3>
 
