@@ -1,8 +1,8 @@
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AxiosError } from "axios";
 import { Controller, useForm } from "react-hook-form";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { RiAddBoxLine, RiArrowLeftLine, RiCloseFill, RiCloseLine, RiEyeFill, RiImageAddLine, RiLoader4Line, RiSave3Fill, RiUploadCloudFill } from "@remixicon/react";
 import { AccordionList, Button, NumberInput, Select, SelectItem, TextInput, Textarea } from "@tremor/react";
 import { IEditCourse, IEditUnit } from "../interfaces/IEditCourse";
@@ -12,8 +12,8 @@ import PresentationVideo from "../components/course/PresentationVideo";
 import TagInput from "../components/course/TagInput";
 import EditUnit from "../components/course/EditUnit";
 import UploadVideo from "../components/upload/UploadVideo";
-import units from "../data/UnitsData";
 import { getFormatTime } from "../utils/TimeUtils";
+import CourseService from "../services/CourseService";
 
 interface ICourseInfoP1 {
   title: string;
@@ -40,23 +40,25 @@ const EditCourse = () => {
     control,
     formState: { errors },
     getValues,
+    setValue,
     handleSubmit,
     trigger
   } = useForm<ICourseInfoP1>()
+  const [isCourse, setCourse] = useState<IEditCourse | null>(null)
+  const [isLoading, setLoading] = useState<boolean>(true)
+
   const [isCategory, setCategory] = useState("")
-
   const [istags, setTags] = useState<string[]>([])
-
   const [learningList, setLearningList] = useState<ILearning[]>([])
   const [isDirty, setDirty] = useState<boolean>(false)
+  const [isCurrentImg, setCurrentImg] = useState<string | null>(null)
+  const [isVideoUrl, setVideoUrl] = useState<string | null>(null)
 
   const inputImgRef = useRef<HTMLInputElement>(null)
   const [isLoadingImg, setLoadingImg] = useState<boolean>(false)
-  const [isCurrentImg, setCurrentImg] = useState<string | null>(null)
 
-  const [isVideoUrl, setVideoUrl] = useState<string | null>(null)
-
-  const [isEditUnits, setEditUnits] = useState<IEditUnit[]>(units)
+  const [isEditUnits, setEditUnits] = useState<IEditUnit[]>([])
+  const hasFetchedData = useRef(false)
   //Learning
   const handleAddLearn = () => {
     setLearningList([...learningList, { id: learningId, text: '' }])
@@ -111,66 +113,64 @@ const EditCourse = () => {
     setEditUnits(updateUnits);
   };
 
-	const handleAddUnit = () => {
-		const newUnit: IEditUnit = {
-			pkUnit: unitId,
-			title: '',
-			fkCourse: parseInt(courseId ?? '0'),
-			lessons: [],
-			order: isEditUnits.length + 1
-		}
+  const handleAddUnit = () => {
+    const newUnit: IEditUnit = {
+      pkUnit: unitId,
+      title: '',
+      fkCourse: parseInt(courseId ?? '0'),
+      lessons: [],
+      order: isEditUnits.length + 1
+    }
 
-		unitId--
+    unitId--
 
-		setEditUnits([
-			...isEditUnits,
-			newUnit
-		])
-	}
-
-	const handleUpUnit = (id: number, order: number) => {
-		const newEditUnits = [...isEditUnits]
-		const findIndex = newEditUnits.findIndex(item => item.pkUnit === id)
-		
-		if (findIndex == -1) return
-	
-		const findIndexOther = newEditUnits.findIndex(item => item.order === order - 1)
-	
-		if (findIndexOther == -1) return
-	
-		newEditUnits[findIndex].order--
-		newEditUnits[findIndexOther].order++
-		newEditUnits.sort((a, b) => a.order - b.order);
-		setEditUnits(newEditUnits)
-	}
-	
-	const handleDownUnit = (id: number, order: number) => {
-		const newEditUnits = [...isEditUnits]
-		const findIndex = newEditUnits.findIndex(item => item.pkUnit === id)
-		
-		if (findIndex == -1) return
-	
-		const findIndexOther = newEditUnits.findIndex(item => item.order === order + 1)
-	
-		if (findIndexOther == -1) return
-	
-		newEditUnits[findIndex].order++
-		newEditUnits[findIndexOther].order--
-		newEditUnits.sort((a, b) => a.order - b.order);
-		setEditUnits(newEditUnits)
-	}
-
-	const handleRemoveUnit = (id: number, order: number) => {
-    let newUnits = isEditUnits.filter(item => item.pkUnit !== id);
-
-		newUnits = newUnits.map(item => {
-			if(item.order > order) item.order--
-			return item
-		})
-		setEditUnits(newUnits)
+    setEditUnits([
+      ...isEditUnits,
+      newUnit
+    ])
   }
 
+  const handleUpUnit = (id: number, order: number) => {
+    const newEditUnits = [...isEditUnits]
+    const findIndex = newEditUnits.findIndex(item => item.pkUnit === id)
 
+    if (findIndex == -1) return
+
+    const findIndexOther = newEditUnits.findIndex(item => item.order === order - 1)
+
+    if (findIndexOther == -1) return
+
+    newEditUnits[findIndex].order--
+    newEditUnits[findIndexOther].order++
+    newEditUnits.sort((a, b) => a.order - b.order);
+    setEditUnits(newEditUnits)
+  }
+
+  const handleDownUnit = (id: number, order: number) => {
+    const newEditUnits = [...isEditUnits]
+    const findIndex = newEditUnits.findIndex(item => item.pkUnit === id)
+
+    if (findIndex == -1) return
+
+    const findIndexOther = newEditUnits.findIndex(item => item.order === order + 1)
+
+    if (findIndexOther == -1) return
+
+    newEditUnits[findIndex].order++
+    newEditUnits[findIndexOther].order--
+    newEditUnits.sort((a, b) => a.order - b.order);
+    setEditUnits(newEditUnits)
+  }
+
+  const handleRemoveUnit = (id: number, order: number) => {
+    let newUnits = isEditUnits.filter(item => item.pkUnit !== id);
+
+    newUnits = newUnits.map(item => {
+      if (item.order > order) item.order--
+      return item
+    })
+    setEditUnits(newUnits)
+  }
 
   const getNumbersLessons = () => {
     let countLessons = 0
@@ -183,43 +183,43 @@ const EditCourse = () => {
   const getTimeByLessons = () => {
     let totalTime = 0
     isEditUnits.forEach(unit => {
-      unit.lessons.forEach(lesson => totalTime += lesson.timeDuration) 
+      unit.lessons.forEach(lesson => totalTime += lesson.timeDuration)
     });
     return getFormatTime(totalTime)
   }
-  
+
 
   const handleSaveCourse = async () => {
-    handleSubmit(() => {})()
+    handleSubmit(() => { })()
     const isValidTitle = await trigger('title')
-    setDirty(true) 
-    
-    if(!isValidTitle) {
+    setDirty(true)
+
+    if (!isValidTitle) {
       return toast.error('El título es obligatorio')
     }
 
-    for(const learning of learningList) {
-      if(learning.text.trim() === '') {
+    for (const learning of learningList) {
+      if (learning.text.trim() === '') {
         return toast.error('Un campo de la sección que aprenderán está vacío.')
       }
     }
 
-    for(const unit of isEditUnits) {
-      if(unit.title.trim() === '') {
+    for (const unit of isEditUnits) {
+      if (unit.title.trim() === '') {
         return toast.error(`El titulo de la unidad ${unit.order} está vacío.`)
       }
 
-      for(const lesson of unit.lessons) {
-        if(lesson.title.trim() === '') {
+      for (const lesson of unit.lessons) {
+        if (lesson.title.trim() === '') {
           return toast.error(`El titulo de la lección ${lesson.order} de la unidad ${unit.order} está vacío.`)
         }
 
-        if(lesson.type === 'text') {
-          if(!lesson.text?.trim()) {
+        if (lesson.type === 'text') {
+          if (!lesson.text?.trim()) {
             return toast.error(`El texto de la lección ${lesson.order} de la unidad ${unit.order} está vacío.`)
           }
         } else {
-          if(!lesson.videoUrl) {
+          if (!lesson.videoUrl) {
             return toast.error(`No has subido un video en la lección ${lesson.order} de la unidad ${unit.order}.`)
           }
         }
@@ -238,6 +238,69 @@ const EditCourse = () => {
     data.videoPresentation = isVideoUrl
     data.units = isEditUnits
     console.log(data)
+  }
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const numCourseId = parseInt(courseId ?? '')
+        const dataCourse = await CourseService.getCourseToEdit(numCourseId)
+        setCourse({ ...dataCourse, units: [] })
+        setEditUnits(dataCourse.units)
+        setValue('description', dataCourse.description ?? '')
+        setValue('difficulty', dataCourse.difficulty)
+        setValue('language', dataCourse.language)
+        setValue('price', dataCourse.price)
+        setValue('requeriments', dataCourse.requeriments ?? '')
+        setValue('summary', dataCourse.summary ?? '')
+        setValue('title', dataCourse.title)
+        setCategory(dataCourse.fkCategory?.toString() ?? '')
+        setTags(dataCourse.tags?.split(',') ?? [])
+        setCurrentImg(dataCourse.cover)
+        setVideoUrl(dataCourse.videoPresentation)
+        
+        const learningArray: ILearning[] = dataCourse.learnText?.split(',').map(text => {
+          const learn: ILearning = {id: learningId, text}
+          learningId++
+          return learn
+        }) ?? []
+        setLearningList(learningArray)
+        // const [learningList, setLearningList] = useState<ILearning[]>([])
+      } catch (error) {
+        console.log(error)
+        if (error instanceof AxiosError) {
+          if (error.response?.data.message) {
+            return toast.error(error.response?.data.message);
+          }
+
+          return toast.error('Oops... Ocurrió un error, Intentelo más tarde');
+        }
+      } finally {
+        setLoading(false)
+      }
+    }
+    if (!hasFetchedData.current) {
+      hasFetchedData.current = true
+      getData()
+    }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  if (isLoading) {
+    return (
+      <div className="flex-grow flex items-center justify-center">
+        <RiLoader4Line size={48} className="animate-spin" />
+      </div>
+    )
+  }
+
+  if (!isCourse) {
+    return (
+      <div className="flex-grow flex items-center justify-center">
+        <h1 className="text-lg">Curso no encontrado</h1>
+      </div>
+    )
   }
 
   return (
@@ -276,7 +339,7 @@ const EditCourse = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="summary" className="block mb-1">Resumen</label>
-              <Textarea id="summary"
+              <Textarea id="summary" className="text-tremor-content-emphasis"
                 {...register('summary', { setValueAs: (value: string) => value.trim() })}
                 placeholder="Habla un poco sobre tu curso" />
             </div>
@@ -331,15 +394,15 @@ const EditCourse = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="requeriments" className="block mb-1">Requerimientos</label>
-              <Textarea id="requeriments" rows={4}
+              <Textarea id="requeriments" rows={4} className="text-tremor-content-emphasis"
                 {...register('requeriments', { setValueAs: (value: string) => value.trim() })}
                 placeholder="Lo necesario para tu curso" />
             </div>
             <div className="mb-4">
               <label htmlFor="description" className="block mb-1">Descripción</label>
-              <Textarea id="description" rows={4}
+              <Textarea id="description" rows={4} className="text-tremor-content-emphasis"
                 {...register('description', { setValueAs: (value: string) => value.trim() })}
-                placeholder="Describe de que trata tu curso" />
+                placeholder="Describe de que trata tu curso" /> 
             </div>
             <article>
               <div className="flex items-center gap-2 mb-2">
@@ -358,25 +421,25 @@ const EditCourse = () => {
           </section>
           <div className="flex justify-between items-center my-4">
             <p>
-							<span>
-								{`${isEditUnits.length} ${isEditUnits.length === 1 ? 'Unidad' : 'Unidades'} | `}
-								{`${getNumbersLessons()} ${getNumbersLessons() === 1 ? 'Lección' : 'Lecciones'} | `}
-								{`${getTimeByLessons()}`}
-							</span>
+              <span>
+                {`${isEditUnits.length} ${isEditUnits.length === 1 ? 'Unidad' : 'Unidades'} | `}
+                {`${getNumbersLessons()} ${getNumbersLessons() === 1 ? 'Lección' : 'Lecciones'} | `}
+                {`${getTimeByLessons()}`}
+              </span>
             </p>
-						<Button onClick={handleAddUnit}>
-							<div className="flex gap-2">
-								<RiAddBoxLine />
-								<p className="text-base">
-									Nueva Unidad
-								</p>
-							</div>
-						</Button>
+            <Button onClick={handleAddUnit}>
+              <div className="flex gap-2">
+                <RiAddBoxLine />
+                <p className="text-base">
+                  Nueva Unidad
+                </p>
+              </div>
+            </Button>
           </div>
           <AccordionList>
             {isEditUnits.map(item => (
               <EditUnit unit={item} dirtyForm={isDirty} key={item.pkUnit} onValueChange={handleUpdateUnit} totalUnits={isEditUnits.length}
-							onItemRemove={handleRemoveUnit} onUnitDown={handleDownUnit} onUnitUp={handleUpUnit} />
+                onItemRemove={handleRemoveUnit} onUnitDown={handleDownUnit} onUnitUp={handleUpUnit} />
             ))}
           </AccordionList>
         </section>
@@ -427,7 +490,7 @@ const EditCourse = () => {
             <label htmlFor="category" className="mb-1 block">Categoría</label>
             <Select name="category" id="category" value={isCategory} placeholder="Escoja una categoría" onValueChange={value => setCategory(value)} >
               {CategoriesData.map((category) => (
-                <SelectItem key={category.id} value={category.name}>{category.name}</SelectItem>
+                <SelectItem key={category.id} value={category.id.toString()}>{category.name}</SelectItem>
               ))}
             </Select>
           </div>
@@ -435,12 +498,6 @@ const EditCourse = () => {
           <TagInput name="newTag" id="newTag" value={istags} setTags={(tags) => setTags(tags)} />
         </section>
       </div>
-      <h1>{courseId}</h1>
-      <ToastContainer
-        className="text-sm"
-        position="top-right"
-        theme="dark"
-      />
     </main>
   );
 }
