@@ -10,9 +10,9 @@ import CategoriesData from "../data/CategoriesData";
 import FileService from "../services/FileService";
 import PresentationVideo from "../components/course/PresentationVideo";
 import TagInput from "../components/course/TagInput";
-import units from "../data/UnitsData";
 import EditUnit from "../components/course/EditUnit";
 import UploadVideo from "../components/upload/UploadVideo";
+import units from "../data/UnitsData";
 import { getFormatTime } from "../utils/TimeUtils";
 
 interface ICourseInfoP1 {
@@ -40,6 +40,7 @@ const EditCourse = () => {
     control,
     formState: { errors },
     getValues,
+    handleSubmit,
     trigger
   } = useForm<ICourseInfoP1>()
   const [isCategory, setCategory] = useState("")
@@ -188,10 +189,42 @@ const EditCourse = () => {
   }
   
 
-  const handleEditCourse = async () => {
-    setDirty(true) //Para la sección de aprenderas
-    const isValid = await trigger()
-    const data = getValues() as IEditCourse
+  const handleSaveCourse = async () => {
+    handleSubmit(() => {})()
+    const isValidTitle = await trigger('title')
+    setDirty(true) 
+    
+    if(!isValidTitle) {
+      return toast.error('El título es obligatorio')
+    }
+
+    for(const learning of learningList) {
+      if(learning.text.trim() === '') {
+        return toast.error('Un campo de la sección que aprenderán está vacío.')
+      }
+    }
+
+    for(const unit of isEditUnits) {
+      if(unit.title.trim() === '') {
+        return toast.error(`El titulo de la unidad ${unit.order} está vacío.`)
+      }
+
+      for(const lesson of unit.lessons) {
+        if(lesson.title.trim() === '') {
+          return toast.error(`El titulo de la lección ${lesson.order} de la unidad ${unit.order} está vacío.`)
+        }
+
+        if(lesson.type === 'text') {
+          if(!lesson.text?.trim()) {
+            return toast.error(`El texto de la lección ${lesson.order} de la unidad ${unit.order} está vacío.`)
+          }
+        } else {
+          if(!lesson.videoUrl) {
+            return toast.error(`No has subido un video en la lección ${lesson.order} de la unidad ${unit.order}.`)
+          }
+        }
+      }
+    }
 
     //Buscar en el array su id
     let categoryId = null
@@ -199,12 +232,12 @@ const EditCourse = () => {
       categoryId = CategoriesData.find(value => value.name === isCategory)?.id
     }
 
-    console.log('Editando...', isValid)
+    const data = getValues() as IEditCourse
     data.fkCategory = categoryId ?? null
     data.price = isNaN(data.price!) ? null : data.price
     data.videoPresentation = isVideoUrl
+    data.units = isEditUnits
     console.log(data)
-    console.log(isEditUnits)
   }
 
   return (
@@ -213,7 +246,7 @@ const EditCourse = () => {
         <RiArrowLeftLine size={28} />
         <div className="flex gap-3 items-center">
           <Button icon={RiEyeFill} className="px-[10px]"></Button>
-          <Button className="px-[10px] lg:px-4 lg:py-2" onClick={handleEditCourse}>
+          <Button className="px-[10px] lg:px-4 lg:py-2" onClick={handleSaveCourse}>
             <div className="flex items-center gap-1">
               <RiSave3Fill size={20} />
               <span className="hidden lg:inline">
@@ -342,7 +375,7 @@ const EditCourse = () => {
           </div>
           <AccordionList>
             {isEditUnits.map(item => (
-              <EditUnit unit={item} key={item.pkUnit} onValueChange={handleUpdateUnit} totalUnits={isEditUnits.length}
+              <EditUnit unit={item} dirtyForm={isDirty} key={item.pkUnit} onValueChange={handleUpdateUnit} totalUnits={isEditUnits.length}
 							onItemRemove={handleRemoveUnit} onUnitDown={handleDownUnit} onUnitUp={handleUpUnit} />
             ))}
           </AccordionList>

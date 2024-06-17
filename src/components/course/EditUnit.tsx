@@ -9,6 +9,7 @@ import { getFormatTime } from "../../utils/TimeUtils";
 type IProps = {
   unit: IEditUnit,
   totalUnits: number,
+  dirtyForm: boolean,
   onValueChange: (unit: IEditUnit) => void;
   onItemRemove: (index: number, order: number) => void
   onUnitUp: (index: number, order: number) => void
@@ -17,7 +18,7 @@ type IProps = {
 
 let lessonId = -1
 
-const EditUnit = ({ unit, onValueChange, onItemRemove, onUnitDown, onUnitUp, totalUnits }: IProps) => {
+const EditUnit = ({ unit, onValueChange, onItemRemove, onUnitDown, onUnitUp, totalUnits, dirtyForm }: IProps) => {
   const [isTitle, setTitle] = useState(unit.title)
 
   const handleChangeTitle = (inputValue: string) => {
@@ -176,7 +177,7 @@ const EditUnit = ({ unit, onValueChange, onItemRemove, onUnitDown, onUnitUp, tot
       <AccordionBody className="bg-black-2 py-4">
         <section className="flex justify-between flex-wrap gap-y-2">
           <div className="flex lg:w-1/2 gap-2">
-            <TextInput placeholder="" value={isTitle} onValueChange={handleChangeTitle} />
+            <TextInput placeholder="" error={dirtyForm && unit.title.trim() === ''} value={isTitle} onValueChange={handleChangeTitle} />
             <Button icon={RiAddBoxLine} onClick={handleAddLesson}>Lección</Button>
           </div>
           <div className="flex gap-2">
@@ -224,7 +225,7 @@ const EditUnit = ({ unit, onValueChange, onItemRemove, onUnitDown, onUnitUp, tot
                 <SelectItem value="video">Video</SelectItem>
                 <SelectItem value="text">Texto</SelectItem>
               </Select>
-              <TextInput value={lesson.title} placeholder="Nombre de la lección"
+              <TextInput value={lesson.title} error={dirtyForm && lesson.title.trim() === ''} placeholder="Nombre de la lección"
                 onValueChange={(value) => handleChangeTitleLesson(value, lesson.pkLesson!)} />
             </div>
             {lesson.type === 'video'
@@ -246,7 +247,7 @@ const EditUnit = ({ unit, onValueChange, onItemRemove, onUnitDown, onUnitUp, tot
                 <UploadVideo className="mb-4 flex gap-2" classNameUpload="w-1/2 max-w-[200px] flex-shrink-0" onUploadedVideo={(url, duration) => handleAddVideoUrl(url, duration, unit.pkUnit!)} />
               :
               <>
-                <Textarea rows={4} placeholder="Escribe tu lección" value={lesson.text ?? ''}
+                <Textarea rows={4} placeholder="Escribe tu lección" error={dirtyForm && (lesson.text === null || lesson.text.trim() === '')} value={lesson.text ?? ''}
                   onBlur={() => handleChangeDurationTextLesson(lesson.text ?? '', lesson.pkLesson!)}
                   onValueChange={value => handleChangeTextLesson(value, lesson.pkLesson!)} />
                   <p className="mt-2 text-gray-300">Duración: {getFormatTime(lesson.timeDuration)}</p>
