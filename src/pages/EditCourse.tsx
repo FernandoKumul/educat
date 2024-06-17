@@ -13,6 +13,7 @@ import TagInput from "../components/course/TagInput";
 import units from "../data/UnitsData";
 import EditUnit from "../components/course/EditUnit";
 import UploadVideo from "../components/upload/UploadVideo";
+import { getFormatTime } from "../utils/TimeUtils";
 
 interface ICourseInfoP1 {
   title: string;
@@ -168,6 +169,25 @@ const EditCourse = () => {
 		setEditUnits(newUnits)
   }
 
+
+
+  const getNumbersLessons = () => {
+    let countLessons = 0
+    isEditUnits.forEach(unit => {
+      countLessons += unit.lessons.length
+    });
+    return countLessons
+  }
+
+  const getTimeByLessons = () => {
+    let totalTime = 0
+    isEditUnits.forEach(unit => {
+      unit.lessons.forEach(lesson => totalTime += lesson.timeDuration) 
+    });
+    return getFormatTime(totalTime)
+  }
+  
+
   const handleEditCourse = async () => {
     setDirty(true) //Para la sección de aprenderas
     const isValid = await trigger()
@@ -306,7 +326,9 @@ const EditCourse = () => {
           <div className="flex justify-between items-center my-4">
             <p>
 							<span>
-								{`${isEditUnits.length} ${isEditUnits.length === 1 ? 'Unidad' : 'Unidades'}`}
+								{`${isEditUnits.length} ${isEditUnits.length === 1 ? 'Unidad' : 'Unidades'} | `}
+								{`${getNumbersLessons()} ${getNumbersLessons() === 1 ? 'Lección' : 'Lecciones'} | `}
+								{`${getTimeByLessons()}`}
 							</span>
             </p>
 						<Button onClick={handleAddUnit}>

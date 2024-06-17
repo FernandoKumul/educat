@@ -5,11 +5,12 @@ import { toast } from "react-toastify";
 import { RiLoader4Line, RiVideoAddFill } from "@remixicon/react";
 
 type IProps = {
-  onUploadedVideo: (url: string) => void
-  className?: string
+  onUploadedVideo: (url: string, duration: number) => void
+  className?: string,
+  classNameUpload?: string
 }
 
-const UploadVideo = ({onUploadedVideo, className = ''} : IProps) => {
+const UploadVideo = ({onUploadedVideo, className = '', classNameUpload = ''} : IProps) => {
   const inputVideoRef = useRef<HTMLInputElement>(null)
   const [isLoadingVideo, setLoadingVideo] = useState<boolean>(false)
 
@@ -28,8 +29,8 @@ const UploadVideo = ({onUploadedVideo, className = ''} : IProps) => {
       formData.append('video', file);
 
       setLoadingVideo(true)
-      const newUrlVideo = (await FileService.submitVideo(formData)).url
-      onUploadedVideo(newUrlVideo)
+      const newUrlVideo = await FileService.submitVideo(formData)
+      onUploadedVideo(newUrlVideo.url, newUrlVideo.duration)
     } catch (error) {
       console.log(error)
       if (error instanceof AxiosError) {
@@ -42,7 +43,7 @@ const UploadVideo = ({onUploadedVideo, className = ''} : IProps) => {
 
   return (
     <article className={className}>
-      <div className="border aspect-video rounded-md mb-1 relative border-secundary-text flex items-center justify-center">
+      <div className={"border aspect-video rounded-md mb-1 relative border-secundary-text flex items-center justify-center " + classNameUpload}>
         {isLoadingVideo
           ? <RiLoader4Line size={48} className="animate-spin" />
           :

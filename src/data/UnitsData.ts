@@ -25,7 +25,7 @@ const units: IEditUnit[] = [
         type: "text",
         videoUrl: null,
         text: "Programming is the process of creating a set of instructions that tell a computer how to perform a task.",
-        timeDuration: 0,
+        timeDuration: 5,
         order: 2,
         cretionDate: "2024-06-14T12:00:00Z"
       }
@@ -55,7 +55,7 @@ const units: IEditUnit[] = [
         type: "text",
         videoUrl: null,
         text: "Data structures are ways of organizing and storing data so that they can be accessed and modified efficiently.",
-        timeDuration: 0,
+        timeDuration: 5,
         order: 2,
         cretionDate: "2024-06-16T12:00:00Z"
       }
