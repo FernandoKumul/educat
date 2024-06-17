@@ -55,33 +55,34 @@ const LoginPage = () => {
     }
   }
 
-  useEffect(() => {
-    const login = async () => {
-      if (user) {
-        try {
-          toast.dismiss()
-          setLoading(true)
-          await AuthService.TokenByGoogle(user.access_token)
-          navigate("/")
-        } catch (error) {
-          console.log(error)
-          if (error instanceof AxiosError) {
-            if (error.response?.data.message === 'Inicio de sesión exitoso') {
-              return toast.error(error.response.data.message);
-            }
-
-            if (error.response?.data.message === 'Su cuenta existe, pero su correo no está verificado') {
-              return toast.warn(error.response?.data.message)
-            }
-
-            return toast.error('Oops... Ocurrió un error, Intentelo más tarde');
+  const loginByGoogle = async () => {
+    if (user) {
+      try {
+        toast.dismiss()
+        setLoading(true)
+        await AuthService.TokenByGoogle(user.access_token)
+        navigate("/")
+      } catch (error) {
+        console.log(error)
+        if (error instanceof AxiosError) {
+          if (error.response?.data.message === 'Inicio de sesión exitoso') {
+            return toast.error(error.response.data.message);
           }
-        } finally {
-          setLoading(false)
+
+          if (error.response?.data.message === 'Su cuenta existe, pero su correo no está verificado') {
+            return toast.warn(error.response?.data.message)
+          }
+
+          return toast.error('Oops... Ocurrió un error, Intentelo más tarde');
         }
+      } finally {
+        setLoading(false)
       }
     }
-    login()
+  }
+
+  useEffect(() => {
+    loginByGoogle()
   }, [user])
 
   return (
