@@ -26,14 +26,12 @@ export default class AuthService {
     return response.data.data
   }
   static async TokenByGoogle(token: string) {
-    console.log(token)
     const userGoogle = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: 'application/json'
       }
     })
-    console.log('Token de google: ',userGoogle.data)
     const dataUser: IUserGoogle = {
       picture: userGoogle.data.picture,
       givenName: userGoogle.data.given_name,
@@ -42,7 +40,6 @@ export default class AuthService {
       emailVerified: userGoogle.data.verified_email
     }
     const response = await axios.post(`${BASE_URL}/auth/google`, dataUser)
-    console.log('token educat: ', response.data.data.token)
     localStorage.setItem('token', response.data.data.token)
   }
 }
