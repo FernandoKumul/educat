@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import type { CourseSearchInterface } from '../interfaces/CourseSearchInterface';
+import type { ICourseSearch } from '../interfaces/ICourseSearch';
 import service from '../services/CourseSearchService';
 import CategoriesData from "../data/CategoriesData";
 
@@ -9,7 +9,7 @@ import { Select, SelectItem } from '@tremor/react';
 import Cards from "../components/common/CardCourse";
 
 const CourseSearch = () => {
-    const [courses, setCourses] = useState<CourseSearchInterface[]>([]);
+    const [courses, setCourses] = useState<ICourseSearch[]>([]);
     const [count, setCount] = useState(0);
     const [category, setCategory] = useState('all');
 
