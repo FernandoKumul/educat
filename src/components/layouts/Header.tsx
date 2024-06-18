@@ -48,91 +48,49 @@ const Header = () => {
             <div className='flex gap-5'>
               <Link className='flex' to={'/'}><RiBriefcaseLine/>Se instructor</Link>
               <p>{isUser.name}</p>
+                            
               <Link to={'/'}><RiShoppingCart2Line/></Link>
 
               <svg onClick={logout} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 cursor-pointer">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
               </svg>
-
-              {/* 
               <Menu>
-                <MenuButton><RiUserLine/></MenuButton>
-                <MenuItems anchor="bottom">
+                <MenuButton><RiUserLine /></MenuButton>
+                <Transition
+                  enter="transition ease-out duration-75"
+                  enterFrom="opacity-0 scale-95"
+                  enterTo="opacity-100 scale-100"
+                  leave="transition ease-in duration-100"
+                  leaveFrom="opacity-100 scale-100"
+                  leaveTo="opacity-0 scale-95"
+                >
+                  <MenuItems anchor="bottom end" modal={false} className="bg-black-auth rounded-md mt-2">
 
-                  <MenuItem>
-                    <p>{isUser.name}</p>
-                  </MenuItem>
-                  <MenuItem>
-                    <a className="block data-[focus]:bg-blue-100" href="/settings">
-                      Settings
-                    </a>
-                  </MenuItem>
-                  <MenuItem>
-                    <a className="block data-[focus]:bg-blue-100" href="/support">
-                      Support
-                    </a>
-                  </MenuItem>
-                  <MenuItem>
-                    <a className="block data-[focus]:bg-blue-100" href="/license">
-                      License
-                    </a>
-                  </MenuItem>
-                  <MenuItem>            
-                    <Button variant='light' onClick={logout}>
-                      <div className='flex items-center'><RiUserLine/>Cerrar Sesión</div>
-                    </Button>
-                  </MenuItem>
-                  
-                </MenuItems>
-              </Menu> */}
+                    <MenuItem>
+                      <p className='px-3 py-1'>{isUser.name}</p>
+                    </MenuItem>
+                    <MenuItem>
+                      <a className="block data-[focus]:bg-gray-600 px-3 py-1" href="/settings">
+                        Settings
+                      </a>
+                    </MenuItem>
+                    <MenuItem>
+                      <a className="block data-[focus]:bg-gray-600 px-3 py-1" href="/support">
+                        Support
+                      </a>
+                    </MenuItem>
+                    <MenuItem>
+                      <a className="block data-[focus]:bg-gray-600 px-3 py-1" href="/license">
+                        License
+                      </a>
+                    </MenuItem>
+                    <MenuItem>
+                        <div className='flex items-center data-[focus]:bg-gray-600 px-3 py-1 cursor-pointer gap-2'><RiUserLine size={20} />Cerrar Sesión</div>
+                    </MenuItem>
 
-              {/* <div className="fixed top-24 w-52 text-right">
-                    <Menu>
-                      <MenuButton className="inline-flex items-center gap-2 rounded-md bg-gray-800 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-700 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white">
-                        Options
-                      </MenuButton>
-                      <Transition
-                        enter="transition ease-out duration-75"
-                        enterFrom="opacity-0 scale-95"
-                        enterTo="opacity-100 scale-100"
-                        leave="transition ease-in duration-100"
-                        leaveFrom="opacity-100 scale-100"
-                        leaveTo="opacity-0 scale-95"
-                      >
-                        <MenuItems
-                          anchor="bottom end"
-                          className="w-52 origin-top-right rounded-xl border border-white/5 bg-white/5 p-1 text-sm/6 text-white [--anchor-gap:var(--spacing-1)] focus:outline-none"
-                        >
-                          <MenuItem>
-                            <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-                              Edit
-                              <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-[focus]:inline">⌘E</kbd>
-                            </button>
-                          </MenuItem>
-                          <MenuItem>
-                            <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-                              Duplicate
-                              <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-[focus]:inline">⌘D</kbd>
-                            </button>
-                          </MenuItem>
-                          <div className="my-1 h-px bg-white/5" />
-                          <MenuItem>
-                            <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-                              Archive
-                              <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-[focus]:inline">⌘A</kbd>
-                            </button>
-                          </MenuItem>
-                          <MenuItem>
-                            <button className="group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
-                              Delete
-                              <kbd className="ml-auto hidden font-sans text-xs text-white/50 group-data-[focus]:inline">⌘D</kbd>
-                            </button>
-                          </MenuItem>
-                        </MenuItems>
-                      </Transition>
-                    </Menu>
-              </div> */}
-
+                  </MenuItems>
+                </Transition>
+              </Menu>
             </div>
             
           </div> 
