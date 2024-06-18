@@ -34,7 +34,7 @@ const RegisterPage = () => {
           return toast.error('El correo ya está registrado');  
         }
         
-        return toast.error('Oops... Ocurrió un error, Intentelo más tarde');
+        return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
       }
     } finally {
       setLoading(false)
@@ -104,11 +104,11 @@ const RegisterPage = () => {
               </li>
               <li className="flex items-center gap-1">
                 <div className={`size-3 ${/[A-Z]/.test(passwordValue) ? 'bg-green-400' : 'bg-white' } border border-white rounded-full`}></div>
-                Una mayuscula
+                Una mayúscula
               </li>
               <li className="flex items-center gap-1">
                 <div className={`size-3 ${/[a-z]/.test(passwordValue) ? 'bg-green-400' : 'bg-white' } border border-white rounded-full`}></div>
-                Una minuscula
+                Una minúscula
               </li>
               <li className="flex items-center gap-1">
                 <div className={`size-3 ${/[0-9]/.test(passwordValue) ? 'bg-green-400' : 'bg-white' } border border-white rounded-full`}></div>
@@ -120,7 +120,7 @@ const RegisterPage = () => {
           <div className="flex gap-2">
             <input className="text-primary-600 mt-1" type="checkbox" {...register('confirmedConsent', {required: 'Este campo es obligatorio'})} />
             <p className="text-[15px]">
-              Aceptas los <span className="underline cursor-pointer">términos y condiciones</span> del sitio para la creacion y uso de tus datos.
+              Aceptas los <span className="underline cursor-pointer">términos y condiciones</span> del sitio para la creación y uso de tus datos.
             </p>
           </div>
           {errors.confirmedConsent && <small className="text-sm text-red-500">{errors.confirmedConsent.message}</small>}

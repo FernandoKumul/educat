@@ -9,6 +9,9 @@ import EmailSendPage from "./pages/EmailSendPage";
 import LoginPage from "./pages/LoginPage";
 import AuthProvider from "./contexts/AuthProvider";
 import UnAuthGuard from "./components/Guard/UnAuthGuard";
+import InstructorGuard from "./components/Guard/InstructorGuard";
+import EditCourse from "./pages/EditCourse";
+import InstructorLayout from "./components/layouts/InstructorLayout";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +47,22 @@ const router = createBrowserRouter([
           }
         ]
       },
+      {
+        path: '/instructor',
+        element: <InstructorLayout />,
+        children: [
+          {
+            path: "edit-course/:courseId",
+            element: <InstructorGuard />,
+            children: [
+              {
+                path: '',
+                element: <EditCourse />
+              }
+            ]
+          },
+        ]
+      },      
       {
         path: "/",
         element: <MainLayout />,

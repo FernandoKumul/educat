@@ -30,11 +30,11 @@ const CourseSearch = () => {
 
     return (
         <div className="flex flex-col items-center select-none">
-            <h1 className=" text-3xl text-center m-5">Resultados de busqueda</h1>
+            <h1 className=" text-3xl text-center m-5">Resultados de la búsqueda</h1>
             <div className="flex px-32 w-full justify-end items-center">
                 <div className="w-[300px]">
                     <Select value={category} onValueChange={setCategory} >
-                        <SelectItem value="all">Todas las categorias</SelectItem>
+                        <SelectItem value="all">Todas las categorías</SelectItem>
                         {CategoriesData.map((category) => (
                             <SelectItem key={category.id} value={category.name}>{category.name}</SelectItem>
                         ))}
