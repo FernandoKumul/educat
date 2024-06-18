@@ -247,7 +247,7 @@ const EditUnit = ({ unit, onValueChange, onItemRemove, onUnitDown, onUnitUp, tot
                   <p className="mt-2 text-gray-300">Duración: {getFormatTime(lesson.timeDuration)}</p>
                 </div>
                 :
-                <UploadVideo className="mb-4 flex gap-2" classNameUpload="w-1/2 max-w-[200px] flex-shrink-0" onUploadedVideo={(url, duration) => handleAddVideoUrl(url, duration, unit.pkUnit!)} />
+                <UploadVideo className="mb-4 flex gap-2" classNameUpload="w-1/2 max-w-[200px] flex-shrink-0" onUploadedVideo={(url, duration) => handleAddVideoUrl(url, duration, lesson.pkLesson!)} />
               :
               <>
                 <Textarea rows={4} placeholder="Escribe tu lección" error={dirtyForm && (lesson.text === null || lesson.text.trim() === '')} value={lesson.text ?? ''}
