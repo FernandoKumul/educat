@@ -2,11 +2,12 @@ import axios from "axios"
 import { IRegisterUser } from "../interfaces/IRegisterUser"
 import { ILoginUser } from "../interfaces/ILoginUser"
 import { IUserAuth } from "../interfaces/IUserAuth"
+import { IUserGoogle } from "../interfaces/IUserGoogle"
 
 const BASE_URL = 'https://localhost:7245/api'
 
 export default class AuthService {
-  
+
   static async register(data: IRegisterUser) {
     await axios.post(`${BASE_URL}/auth/register`, data)
   }
@@ -23,5 +24,22 @@ export default class AuthService {
       }
     })
     return response.data.data
+  }
+  static async TokenByGoogle(token: string) {
+    const userGoogle = await axios.get(`https://www.googleapis.com/oauth2/v3/userinfo`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      }
+    })
+    const dataUser: IUserGoogle = {
+      picture: userGoogle.data.picture,
+      givenName: userGoogle.data.given_name,
+      familyName: userGoogle.data.family_name,
+      email: userGoogle.data.email,
+      emailVerified: userGoogle.data.verified_email
+    }
+    const response = await axios.post(`${BASE_URL}/auth/google`, dataUser)
+    localStorage.setItem('token', response.data.data.token)
   }
 }

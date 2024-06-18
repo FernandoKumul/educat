@@ -1,4 +1,4 @@
-export interface CourseSearchInterface {
+export interface ICourseSearch {
     pkCourse: number,
     title: string,
     difficulty: string,

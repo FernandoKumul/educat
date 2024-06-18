@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import type { CourseSearchInterface } from '../interfaces/CourseSearchInterface';
+import type { CourseSearchInterface } from '../interfaces/ICourseSearch';
 
 const baseUrl = 'https://localhost:7245/api/';
 
