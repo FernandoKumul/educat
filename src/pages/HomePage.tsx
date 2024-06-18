@@ -1,8 +1,51 @@
-import { RiBookReadLine, RiGroup2Line, RiSparklingLine } from "@remixicon/react";
+import { RiBookReadLine, RiGroup2Line, RiSparklingLine, RiUser2Fill } from "@remixicon/react";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
+import CardCourse from "../components/common/CardCourse";
 
 const HomePage = () => {
+
+  const settings = {
+    dots: false,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    initialSlide: 0,
+    focusOnSelect: true,
+    infinite: true,
+    swipeToSlide: true,
+    responsive: [
+      {
+        breakpoint: 1250,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true
+        }
+      },
+      {
+        breakpoint: 960,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2
+        }
+      },
+      {
+        breakpoint: 660,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
+  };
+
   return (
     <section>
+
       <div className="bg-[rgb(49,43,57)] flex flex-col py-20 px-12">
         <h1 className='
         text-3xl 
@@ -18,6 +61,7 @@ const HomePage = () => {
         <p className='my-3 text-sm md:text-base'>Habilidades para tú presente (y tú futuro). Da tus primeros pasos con nosotros.</p>
       </div>
 
+{/* ¿Por qué educat? */}
       <div className='px-14 my-5'>
         <h1 className='text-details flex justify-center text-xl md:text-2xl font-semibold mb-5 mt-20'>¿Por qué Educat?</h1>
         <div className="flex justify-between max-sm:flex-col gap-6">
@@ -49,17 +93,61 @@ const HomePage = () => {
 
       </div>
 
+{/* Más populares */}
       <div className='px-14 my-5'>
         <h1 className='text-details flex justify-center max-sm:text-xl md:text-2xl font-semibold mb-5 mt-20'>Más populares</h1>
-      </div>
+        {/* Slider */}
+        <div>
+          <Slider className="flex justify-center" {...settings}>
+            <div>
+              <CardCourse title="Título del curso 1" instructor="Nombre instructos" price="$150MX" score={4.5}></CardCourse>
+            </div>
+            <div>
+              <CardCourse title="Título del curso 2" instructor="Nombre instructos" price="$150MX" score={4.5}></CardCourse>
 
+            </div>
+            <div>
+              <CardCourse title="Título del curso 3" instructor="Nombre instructos" price="$150MX" score={4.5}></CardCourse>
+
+            </div>
+            <div>
+              <CardCourse title="Título del curso 4" instructor="Nombre instructos" price="$150MX" score={4.5}></CardCourse>
+
+            </div>
+            <div>
+              <CardCourse title="Título del curso 5" instructor="Nombre instructos" price="$150MX" score={4.5}></CardCourse>
+
+            </div>
+            <div>
+              <CardCourse title="Título del curso agivuhaeviaernacfahio" instructor="Nombre instructos" price="$150MX" score={4.5}></CardCourse>
+
+            </div>
+          </Slider>
+        </div>
+      </div>
+{/* Categorías */}
       <div className='px-14 my-5'>
         <h1 className='text-details flex justify-center max-sm:text-xl md:text-2xl font-semibold mb-5 mt-20'>Categorías</h1>
       </div>
 
+{/* Nuestro Equipo */}
       <div className='px-14 my-5'>
         <h1 className='text-details flex justify-center max-sm:text-xl md:text-2xl font-semibold mb-5 mt-20'>Nuestro equipo</h1>
+        <div className="flex justify-between">
+          <div>
+            <RiUser2Fill className="w-50 bg-gray-500 white rounded-full"/>
+          </div>
+          <div>
+            <RiUser2Fill className="w-50 bg-gray-500 white"/>
+          </div>
+          <div>
+            <RiUser2Fill className="w-50 bg-gray-500 white"/>
+          </div>
+          <div>
+            <RiUser2Fill className="w-50 bg-gray-500 white"/>
+          </div>
 
+        </div>
       </div>
 
 
