@@ -8,11 +8,11 @@
   }
 }
 
-#root {
+/* #root {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-}
+} */
 
 :root {
     line-height: 1.5;
@@ -64,4 +64,12 @@
 
 .icon-input-text-white .hover\:text-tremor-content:hover {
   color: #c8b9c6;
+}
+
+.tremor-AccordionHeader-children {
+  overflow: hidden;
+}
+
+.tremor-Accordion-root {
+  overflow: visible;
 }
