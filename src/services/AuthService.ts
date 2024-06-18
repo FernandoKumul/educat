@@ -35,10 +35,11 @@ export default class AuthService {
     const dataUser: IUserGoogle = {
       picture: userGoogle.data.picture,
       givenName: userGoogle.data.given_name,
-      familyName: userGoogle.data.family_name,
+      familyName: userGoogle.data.family_name ?? '',
       email: userGoogle.data.email,
-      emailVerified: userGoogle.data.verified_email
+      emailVerified: userGoogle.data.email_verified
     }
+    console.log({dataUser, userGoogle})
     const response = await axios.post(`${BASE_URL}/auth/google`, dataUser)
     localStorage.setItem('token', response.data.data.token)
   }

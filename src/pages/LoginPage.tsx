@@ -75,6 +75,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     loginByGoogle()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   return (
