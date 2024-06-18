@@ -1,4 +1,4 @@
-import { RiBookReadLine, RiGroup2Line, RiSparklingLine, RiUser2Fill } from "@remixicon/react";
+import { RiArrowRightLine, RiBookReadLine, RiGroup2Line, RiPencilRulerLine, RiSparklingLine, RiUserFill } from "@remixicon/react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
@@ -6,7 +6,7 @@ import CardCourse from "../components/common/CardCourse";
 
 const HomePage = () => {
 
-  const settings = {
+  const sliderSettings = {
     dots: false,
     speed: 500,
     slidesToShow: 4,
@@ -95,10 +95,10 @@ const HomePage = () => {
 
 {/* Más populares */}
       <div className='px-14 my-5'>
-        <h1 className='text-details flex justify-center max-sm:text-xl md:text-2xl font-semibold mb-5 mt-20'>Más populares</h1>
+        <h1 className='text-details flex justify-center text-xl md:text-2xl font-semibold mb-5 mt-20'>Más populares</h1>
         {/* Slider */}
         <div>
-          <Slider className="flex justify-center" {...settings}>
+          <Slider className="flex justify-center" {...sliderSettings}>
             <div>
               <CardCourse title="Título del curso 1" instructor="Nombre instructos" price="$150MX" score={4.5}></CardCourse>
             </div>
@@ -127,26 +127,110 @@ const HomePage = () => {
       </div>
 {/* Categorías */}
       <div className='px-14 my-5'>
-        <h1 className='text-details flex justify-center max-sm:text-xl md:text-2xl font-semibold mb-5 mt-20'>Categorías</h1>
+        <h1 className='text-details flex justify-center text-xl md:text-2xl font-semibold mb-5 mt-20'>Categorías</h1>
+        
+        <div className="flex flex-wrap flex-row  gap-5">
+
+          <div className="flex justify-between bg-[#312B39] w-1/3 p-3 rounded-sm">
+            <div className="flex">
+              <h1 className="white text-lg mr-5">Diseño</h1>
+              <RiArrowRightLine></RiArrowRightLine> 
+            </div>
+              <RiPencilRulerLine className="size-7"></RiPencilRulerLine>
+          </div>
+
+          <div className="flex justify-between bg-[#312B39] w-1/3 p-3 rounded-sm">
+            <div className="flex">
+              <h1 className="white text-lg mr-5">Diseño</h1>
+              <RiArrowRightLine></RiArrowRightLine> 
+            </div>
+              <RiPencilRulerLine className="size-7"></RiPencilRulerLine>
+          </div>
+          
+          <div className="flex justify-between bg-[#312B39] w-1/3 p-3 rounded-sm">
+            <div className="flex">
+              <h1 className="white text-lg mr-5">Diseño</h1>
+              <RiArrowRightLine></RiArrowRightLine> 
+            </div>
+              <RiPencilRulerLine className="size-7"></RiPencilRulerLine>
+          </div>
+
+          <div className="flex justify-between bg-[#312B39] w-1/3 p-3 rounded-sm">
+            <div className="flex">
+              <h1 className="white text-lg mr-5">Diseño</h1>
+              <RiArrowRightLine></RiArrowRightLine> 
+            </div>
+              <RiPencilRulerLine className="size-7"></RiPencilRulerLine>
+          </div>
+
+          <div className="flex justify-between bg-[#312B39] w-1/3 p-3 rounded-sm">
+            <div className="flex">
+              <h1 className="white text-lg mr-5">Diseño</h1>
+              <RiArrowRightLine></RiArrowRightLine> 
+            </div>
+              <RiPencilRulerLine className="size-7"></RiPencilRulerLine>
+          </div>
+
+          <div className="flex justify-between bg-[#312B39] w-1/3 p-3 rounded-sm">
+            <div className="flex">
+              <h1 className="white text-lg mr-5">Diseño</h1>
+              <RiArrowRightLine></RiArrowRightLine> 
+            </div>
+              <RiPencilRulerLine className="size-7"></RiPencilRulerLine>
+          </div>
+
+          <div className="flex justify-between bg-[#312B39] w-1/3 p-3 rounded-sm">
+            <div className="flex">
+              <h1 className="white text-lg mr-5">Diseño</h1>
+              <RiArrowRightLine></RiArrowRightLine> 
+            </div>
+              <RiPencilRulerLine className="size-7"></RiPencilRulerLine>
+          </div>
+
+          <div className="flex justify-between bg-[#312B39] w-1/3 p-3 rounded-sm">
+            <div className="flex">
+              <h1 className="white text-lg mr-5">Diseño</h1>
+              <RiArrowRightLine></RiArrowRightLine> 
+            </div>
+              <RiPencilRulerLine className="size-7"></RiPencilRulerLine>
+          </div>
+
+        </div>
       </div>
 
 {/* Nuestro Equipo */}
       <div className='px-14 my-5'>
-        <h1 className='text-details flex justify-center max-sm:text-xl md:text-2xl font-semibold mb-5 mt-20'>Nuestro equipo</h1>
-        <div className="flex justify-between">
+        <h1 className='text-details flex justify-center text-xl md:text-2xl font-semibold mb-5 mt-20'>Nuestro equipo</h1>
+        
+        <div className="flex mt-5 flex-wrap flex-row justify-between">
           <div>
-            <RiUser2Fill className="w-50 bg-gray-500 white rounded-full"/>
+            <div className="rounded-full bg-gray-400 p-3 flex justify-center">
+              <RiUserFill className="size-40 white"/>
+            </div>
+            <h1 className="flex justify-center">Kumul Herrera Jose</h1>
+            <h1 className="flex justify-center">Fernando</h1>
           </div>
           <div>
-            <RiUser2Fill className="w-50 bg-gray-500 white"/>
+            <div className="rounded-full bg-gray-400 p-3 flex justify-center">
+              <RiUserFill className="size-40 white"/>
+            </div>
+            <h1 className="flex justify-center">Gómez Flores Luis</h1>
+            <h1 className="flex justify-center">Enrique</h1>
           </div>
           <div>
-            <RiUser2Fill className="w-50 bg-gray-500 white"/>
+            <div className="rounded-full bg-gray-400 p-3 flex justify-center">
+              <RiUserFill className="size-40 white"/>
+            </div>
+            <h1 className="flex justify-center">Un Hernández Noemi</h1>
+            <h1 className="flex justify-center">Elizabeth</h1>
           </div>
           <div>
-            <RiUser2Fill className="w-50 bg-gray-500 white"/>
+            <div className="rounded-full bg-gray-400 p-3 flex justify-center">
+              <RiUserFill className="size-40 white"/>
+            </div>
+            <h1 className="flex justify-center">Morales García Ana</h1>
+            <h1 className="flex justify-center">Teresa</h1>
           </div>
-
         </div>
       </div>
 

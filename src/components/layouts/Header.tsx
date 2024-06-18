@@ -24,25 +24,26 @@ const Header = () => {
   }
 
   return (
-    <header className='flex items-center right-0 top-0 bg-[#3F3848] p-4'>
+    <header className='max-md:justify-between flex items-center right-0 top-0 bg-[#3F3848] p-4'>
 
     {/* Buscador y logo */}
       <div className='flex w-2/3'>
         <img src="/src/assets/Logo.svg" alt="logo" className='w-20' />
 
-        <form className='relative ml-10 hidden lg:block w-3/4' onSubmit={handleSearch}>
+        <form className='relative ml-10 hidden md:block w-3/4' onSubmit={handleSearch}>
           <TextInput className="bg-[#27222D] hover:bg-[#322e37] w-full" type="text" name="s" id="s" placeholder="Buscar..." value={searchValue} onChange={event => setValue(event.target.value)} />
           <button className='flex items-center px-[10px] bg-[#845EC2] rounded-br-[7.5px] rounded-tr-[7.5px] absolute right-0 top-0 h-full'><RiSearchLine/></button>
         </form>
       </div>
 
     {/* menú hamburguesa */}
-      <div className='lg:hidden'>
+      <div className='md:hidden'>
         <RiMenuLine className='text-white'/>
       </div>
 
+  {/* condicionador, si estas registrado o no */}
         {isUser ?
-          <div className='hidden lg:flex lg:items-center w-1/3 justify-end' >
+          <div className='hidden md:flex md:items-center w-1/3 justify-end' >
 
             <div className='flex gap-5'>
               <Link className='flex' to={'/'}><RiBriefcaseLine/>Se instructor</Link>
@@ -136,7 +137,7 @@ const Header = () => {
             
           </div> 
           : 
-          <div className='hidden lg:flex'>
+          <div className='hidden md:flex justify-end w-1/3'>
             <div className=''>
               <Link className='flex' to={'/register'}><RiUserAddLine/>Registrate</Link>
             </div>
