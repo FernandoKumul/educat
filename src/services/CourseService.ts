@@ -14,4 +14,14 @@ export default class CourseService {
     })
     return response.data.data
   }
+
+  static async saveDraft(courseId: number, course: IEditCourse) {
+    const token = localStorage.getItem('token')
+
+    await axios.put(`${BASE_URL}/course/save-draft/${courseId}`, course , {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+  }
 }

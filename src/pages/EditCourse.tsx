@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AxiosError } from "axios";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -35,6 +35,7 @@ let unitId = -1
 
 const EditCourse = () => {
   const { courseId } = useParams()
+  const navigate = useNavigate()
   const {
     register,
     control,
@@ -46,6 +47,7 @@ const EditCourse = () => {
   } = useForm<ICourseInfoP1>()
   const [isCourse, setCourse] = useState<IEditCourse | null>(null)
   const [isLoading, setLoading] = useState<boolean>(true)
+  const [isLoadingSave, setLoadingSave] = useState<boolean>(false)
 
   const [isCategory, setCategory] = useState("")
   const [istags, setTags] = useState<string[]>([])
@@ -226,65 +228,88 @@ const EditCourse = () => {
       }
     }
 
-    //Buscar en el array su id
-    let categoryId = null
-    if (isCategory !== '') {
-      categoryId = CategoriesData.find(value => value.name === isCategory)?.id
-    }
-
-    const data = getValues() as IEditCourse
-    data.fkCategory = categoryId ?? null
-    data.price = isNaN(data.price!) ? null : data.price
+    const dataForm = getValues()
+    console.log({ dataForm })
+    const data: IEditCourse = { ...isCourse } as IEditCourse
+    data.fkCategory = parseInt(isCategory) ?? null
+    data.title = dataForm.title
+    data.summary = dataForm.summary
+    data.language = dataForm.language
+    data.difficulty = dataForm.difficulty
+    data.price = isNaN(dataForm.price!) ? null : dataForm.price
     data.videoPresentation = isVideoUrl
+    data.cover = isCurrentImg
+    data.requeriments = dataForm.requeriments
+    data.description = dataForm.description
+    data.tags = istags.join(',')
+    data.learnText = learningList.map(item => item.text).join(',')
     data.units = isEditUnits
-    console.log(data)
+    console.log({ data })
+
+    try {
+      setLoadingSave(true)
+      await CourseService.saveDraft(isCourse?.pkCourse ?? 0, data)
+      toast.success('Curso actualizado con exito', {pauseOnHover: false, autoClose: 3000})
+      getData()
+      setLoading(true)
+    } catch (error) {
+      console.log(error)
+      if (error instanceof AxiosError) {
+        if (error.response?.data.message) {
+          return toast.error(error.response?.data.message);
+        }
+
+        return toast.error('Oops... Ocurrió un error, Intentelo más tarde');
+      }
+    } finally {
+      setLoadingSave(false)
+    }
+  }
+
+  const getData = async () => {
+    try {
+      const numCourseId = parseInt(courseId ?? '')
+      const dataCourse = await CourseService.getCourseToEdit(numCourseId)
+      setCourse({ ...dataCourse, units: [] })
+      setEditUnits(dataCourse.units)
+      setValue('description', dataCourse.description ?? '')
+      setValue('difficulty', dataCourse.difficulty)
+      setValue('language', dataCourse.language)
+      setValue('price', dataCourse.price)
+      setValue('requeriments', dataCourse.requeriments ?? '')
+      setValue('summary', dataCourse.summary ?? '')
+      setValue('title', dataCourse.title)
+      setCategory(dataCourse.fkCategory?.toString() ?? '')
+      setTags(dataCourse.tags?.split(',') ?? [])
+      setCurrentImg(dataCourse.cover)
+      setVideoUrl(dataCourse.videoPresentation)
+
+      const learningArray: ILearning[] = dataCourse.learnText?.split(',').map(text => {
+        const learn: ILearning = { id: learningId, text }
+        learningId++
+        return learn
+      }) ?? []
+      setLearningList(learningArray)
+    } catch (error) {
+      console.log(error)
+      if (error instanceof AxiosError) {
+        if (error.response?.data.message) {
+          return toast.error(error.response?.data.message);
+        }
+
+        return toast.error('Oops... Ocurrió un error, Intentelo más tarde');
+      }
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const numCourseId = parseInt(courseId ?? '')
-        const dataCourse = await CourseService.getCourseToEdit(numCourseId)
-        setCourse({ ...dataCourse, units: [] })
-        setEditUnits(dataCourse.units)
-        setValue('description', dataCourse.description ?? '')
-        setValue('difficulty', dataCourse.difficulty)
-        setValue('language', dataCourse.language)
-        setValue('price', dataCourse.price)
-        setValue('requeriments', dataCourse.requeriments ?? '')
-        setValue('summary', dataCourse.summary ?? '')
-        setValue('title', dataCourse.title)
-        setCategory(dataCourse.fkCategory?.toString() ?? '')
-        setTags(dataCourse.tags?.split(',') ?? [])
-        setCurrentImg(dataCourse.cover)
-        setVideoUrl(dataCourse.videoPresentation)
-        
-        const learningArray: ILearning[] = dataCourse.learnText?.split(',').map(text => {
-          const learn: ILearning = {id: learningId, text}
-          learningId++
-          return learn
-        }) ?? []
-        setLearningList(learningArray)
-        // const [learningList, setLearningList] = useState<ILearning[]>([])
-      } catch (error) {
-        console.log(error)
-        if (error instanceof AxiosError) {
-          if (error.response?.data.message) {
-            return toast.error(error.response?.data.message);
-          }
-
-          return toast.error('Oops... Ocurrió un error, Intentelo más tarde');
-        }
-      } finally {
-        setLoading(false)
-      }
-    }
     if (!hasFetchedData.current) {
       hasFetchedData.current = true
       getData()
     }
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (isLoading) {
@@ -309,8 +334,8 @@ const EditCourse = () => {
         <RiArrowLeftLine size={28} />
         <div className="flex gap-3 items-center">
           <Button icon={RiEyeFill} className="px-[10px]"></Button>
-          <Button className="px-[10px] lg:px-4 lg:py-2" onClick={handleSaveCourse}>
-            <div className="flex items-center gap-1">
+          <Button className="px-[10px] lg:px-4 lg:py-2" onClick={handleSaveCourse} loading={isLoadingSave}>
+            <div className="flex items-center gap-1" >
               <RiSave3Fill size={20} />
               <span className="hidden lg:inline">
                 Guardar
@@ -339,9 +364,16 @@ const EditCourse = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="summary" className="block mb-1">Resumen</label>
-              <Textarea id="summary" className="text-tremor-content-emphasis"
-                {...register('summary', { setValueAs: (value: string) => value.trim() })}
-                placeholder="Habla un poco sobre tu curso" />
+              <Controller
+                name='summary'
+                defaultValue={null}
+                control={control}
+                render={({ field }) => (
+                  <Textarea id="summary" {...field} value={field.value ?? ''} className="text-tremor-content-emphasis"
+                    onChange={field.onChange}
+                    placeholder="Habla un poco sobre tu curso" />
+                )}
+              />
             </div>
             <div className="md:flex md:gap-2">
               <div className="mb-4 md:flex-grow">
@@ -372,7 +404,6 @@ const EditCourse = () => {
                   render={({ field }) => (
                     <Select
                       {...field}
-
                       placeholder="Escoja la dificultad"
                       onValueChange={field.onChange}
                       value={field.value ?? ""}
@@ -394,15 +425,31 @@ const EditCourse = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="requeriments" className="block mb-1">Requerimientos</label>
-              <Textarea id="requeriments" rows={4} className="text-tremor-content-emphasis"
-                {...register('requeriments', { setValueAs: (value: string) => value.trim() })}
-                placeholder="Lo necesario para tu curso" />
+              <Controller
+                name='requeriments'
+                defaultValue={null}
+                control={control}
+                render={({ field }) => (
+                  <Textarea id="requeriments" rows={4} {...field} value={field.value ?? ''}
+                    className="text-tremor-content-emphasis"
+                    onChange={field.onChange}
+                    placeholder="Lo necesario para tu curso" />
+                )}
+              />
             </div>
             <div className="mb-4">
               <label htmlFor="description" className="block mb-1">Descripción</label>
-              <Textarea id="description" rows={4} className="text-tremor-content-emphasis"
-                {...register('description', { setValueAs: (value: string) => value.trim() })}
-                placeholder="Describe de que trata tu curso" /> 
+              <Controller
+                name='description'
+                defaultValue={null}
+                control={control}
+                render={({ field }) => (
+                  <Textarea id="description" rows={4} {...field} value={field.value ?? ''}
+                    className="text-tremor-content-emphasis"
+                    onChange={field.onChange}
+                    placeholder="Describe de que trata tu curso" />
+                )}
+              />
             </div>
             <article>
               <div className="flex items-center gap-2 mb-2">
