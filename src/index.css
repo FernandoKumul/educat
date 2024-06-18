@@ -30,6 +30,34 @@
     box-sizing: border-box;
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+.pagination li {
+  border: 2px solid #6E7178;
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  a {
+    width: 100%;
+  }
+}
+.active {
+  border: 2px solid #845EC2 !important;
+  background-color: rgb(132, 94, 194, .2) ;
+  color: #845EC2;
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+}
+
 .icon-input-text-white .text-tremor-content-subtle {
   color: #ffffff;
 }

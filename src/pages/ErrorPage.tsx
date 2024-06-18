@@ -3,7 +3,7 @@ const ErrorPage = () => {
   return (
     <div className="flex flex-grow justify-center items-center flex-col">
       <h1>Oops!</h1>
-      <p>{"Sorry, página no encotrada :(."}</p>
+      <p>{"No se encontró la página solicitada (っ °Д °;)っ."}</p>
     </div>
   );
 }
