@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { AxiosError } from "axios";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -35,9 +35,9 @@ let unitId = -1
 
 const EditCourse = () => {
   const { courseId } = useParams()
-  const navigate = useNavigate()
   const {
     register,
+    reset,
     control,
     formState: { errors },
     getValues,
@@ -228,6 +228,14 @@ const EditCourse = () => {
       }
     }
 
+
+    const updateUnits = isEditUnits.map(({ pkUnit, ...unit }) => {
+      if (pkUnit! <= -1) {
+        return { ...unit }
+      }
+      return { ...unit, pkUnit }
+    })
+
     const dataForm = getValues()
     console.log({ dataForm })
     const data: IEditCourse = { ...isCourse } as IEditCourse
@@ -243,15 +251,17 @@ const EditCourse = () => {
     data.description = dataForm.description
     data.tags = istags.join(',')
     data.learnText = learningList.map(item => item.text).join(',')
-    data.units = isEditUnits
+    data.units = updateUnits
     console.log({ data })
 
     try {
       setLoadingSave(true)
       await CourseService.saveDraft(isCourse?.pkCourse ?? 0, data)
-      toast.success('Curso actualizado con exito', {pauseOnHover: false, autoClose: 3000})
-      getData()
+      toast.success('Curso actualizado con éxito', { pauseOnHover: false, autoClose: 3000 })
+      setDirty(false)
+      reset()
       setLoading(true)
+      getData()
     } catch (error) {
       console.log(error)
       if (error instanceof AxiosError) {
@@ -270,6 +280,7 @@ const EditCourse = () => {
     try {
       const numCourseId = parseInt(courseId ?? '')
       const dataCourse = await CourseService.getCourseToEdit(numCourseId)
+      dataCourse.units.sort((a, b) => a.order - b.order);
       setCourse({ ...dataCourse, units: [] })
       setEditUnits(dataCourse.units)
       setValue('description', dataCourse.description ?? '')
@@ -375,7 +386,7 @@ const EditCourse = () => {
                 )}
               />
             </div>
-            <div className="md:flex md:gap-2">
+            <div className="md:flex md:gap-2 md:flex-wrap">
               <div className="mb-4 md:flex-grow">
                 <label htmlFor="language" className="block mb-1">Idioma</label>
                 <Controller
@@ -466,7 +477,7 @@ const EditCourse = () => {
               </div>
             </article>
           </section>
-          <div className="flex justify-between items-center my-4">
+          <div className="flex justify-between items-center my-4 flex-wrap gap-y-2">
             <p>
               <span>
                 {`${isEditUnits.length} ${isEditUnits.length === 1 ? 'Unidad' : 'Unidades'} | `}
@@ -492,46 +503,50 @@ const EditCourse = () => {
         </section>
 
         <section className="bg-black-2 p-4 rounded-md mt-8 lg:mt-0 lg:w-80">
-          <h3 className="mb-1">Video de presentación</h3>
-          {
-            isVideoUrl
-              ?
-              <div className="relative mb-4">
-                <PresentationVideo url={isVideoUrl} />
-                <span
-                  onClick={() => setVideoUrl(null)}
-                  className="cursor-pointer bg-slate-900/80 rounded-full p-1 hover:text-slate-400 transition-colors absolute top-1 right-1">
-                  <RiCloseLine />
-                </span>
+          <div className="sm:flex sm:gap-2 lg:block">
+            <div className="sm:w-1/2 lg:w-auto">
+              <h3 className="mb-1">Video de presentación</h3>
+              {
+                isVideoUrl
+                  ?
+                  <div className="relative mb-4">
+                    <PresentationVideo url={isVideoUrl} />
+                    <span
+                      onClick={() => setVideoUrl(null)}
+                      className="cursor-pointer bg-slate-900/80 rounded-full p-1 hover:text-slate-400 transition-colors absolute top-1 right-1">
+                      <RiCloseLine />
+                    </span>
+                  </div>
+                  :
+                  <UploadVideo className="mb-4" onUploadedVideo={(url) => setVideoUrl(url)} />
+              }
+            </div>
+            <div className="sm:w-1/2 lg:w-auto">
+              <h3 className="mb-1">Miniatura</h3>
+              <div className="border aspect-video rounded-md relative border-secundary-text mb-4 flex items-center justify-center">
+                {isLoadingImg
+                  ? <RiLoader4Line size={48} className="animate-spin" />
+                  : isCurrentImg
+                    ? null
+                    :
+                    <>
+                      <div className="size-full cursor-pointer absolute" onClick={() => inputImgRef.current?.click()}></div>
+                      <RiImageAddLine size={48} />
+                    </>
+                }
+                {isCurrentImg &&
+                  <>
+                    <img src={isCurrentImg} className="h-full w-full object-cover rounded-md" />
+                    <span
+                      onClick={() => setCurrentImg('')}
+                      className="cursor-pointer bg-slate-900/80 rounded-full p-1 hover:text-slate-400 transition-colors absolute top-1 right-1">
+                      <RiCloseLine />
+                    </span>
+                  </>
+                }
+                <input type="file" ref={inputImgRef} className="hidden" accept="image/*" onChange={handleSubmitImage} />
               </div>
-              :
-              <UploadVideo className="mb-4" onUploadedVideo={(url) => setVideoUrl(url)} />
-          }
-
-
-          <h3 className="mb-1">Miniatura</h3>
-          <div className="border aspect-video rounded-md relative border-secundary-text mb-4 flex items-center justify-center">
-            {isLoadingImg
-              ? <RiLoader4Line size={48} className="animate-spin" />
-              : isCurrentImg
-                ? null
-                :
-                <>
-                  <div className="size-full cursor-pointer absolute" onClick={() => inputImgRef.current?.click()}></div>
-                  <RiImageAddLine size={48} />
-                </>
-            }
-            {isCurrentImg &&
-              <>
-                <img src={isCurrentImg} className="h-full w-full object-cover rounded-md" />
-                <span
-                  onClick={() => setCurrentImg('')}
-                  className="cursor-pointer bg-slate-900/80 rounded-full p-1 hover:text-slate-400 transition-colors absolute top-1 right-1">
-                  <RiCloseLine />
-                </span>
-              </>
-            }
-            <input type="file" ref={inputImgRef} className="hidden" accept="image/*" onChange={handleSubmitImage} />
+            </div>
           </div>
           <div className="mb-4">
             <label htmlFor="category" className="mb-1 block">Categoría</label>

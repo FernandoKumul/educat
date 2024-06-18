@@ -29,7 +29,10 @@ const EditUnit = ({ unit, onValueChange, onItemRemove, onUnitDown, onUnitUp, tot
   const handleChangeTypeLesson = (type: typeLesson, id: number) => {
     const updateLessons = unit.lessons.map(lesson => {
       if (lesson.pkLesson === id) {
-        return { ...lesson, type }
+        if(type === 'text') {
+          return { ...lesson, type, videoUrl:null, timeDuration: 0 }
+        }
+        return { ...lesson, type, timeDuration: 0, text: null }
       }
       return lesson;
     })
