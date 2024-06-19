@@ -12,6 +12,7 @@ import UnAuthGuard from "./components/Guard/UnAuthGuard";
 import InstructorGuard from "./components/Guard/InstructorGuard";
 import EditCourse from "./pages/EditCourse";
 import InstructorLayout from "./components/layouts/InstructorLayout";
+import InstructorProfile from "./pages/InstructorProfile";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
                 element: <EditCourse />
               }
             ]
+          },
+          {
+            path: "profile",
+            element: <InstructorProfile />,
           },
         ]
       },      
