@@ -281,6 +281,7 @@ const EditCourse = () => {
       const numCourseId = parseInt(courseId ?? '')
       const dataCourse = await CourseService.getCourseToEdit(numCourseId)
       dataCourse.units.sort((a, b) => a.order - b.order);
+      dataCourse.units.forEach(unit => unit.lessons.sort((a, b) => a.order - b.order))
       setCourse({ ...dataCourse, units: [] })
       setEditUnits(dataCourse.units)
       setValue('description', dataCourse.description ?? '')
