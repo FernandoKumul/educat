@@ -5,7 +5,7 @@ import service from '../services/CourseSearchService';
 import CategoriesData from "../data/CategoriesData";
 
 import ReactPaginate from 'react-paginate';
-import { Select, SelectItem } from '@tremor/react';
+import { Select, SelectItem, Button } from '@tremor/react';
 import Cards from "../components/common/CardCourse";
 
 const CourseSearch = () => {
@@ -27,12 +27,32 @@ const CourseSearch = () => {
     useEffect(() => {
         search(1, params.get('q') || '', category)
     }, [category, params]);
-
+    
+    if (courses.length === 0) {
+        if (category !== 'all') {
+            return (
+                <div className="flex flex-col items-center select-none p-5">
+                    <h1 className=" text-3xl text-center my-5">No se encontraron resultados con esa categoría</h1>
+                    <Button onClick={() => {
+                        setCategory('all')
+                    }}>Ver todas las categorias</Button>
+                </div>
+            )
+        }
+        return (
+            <div className="flex flex-col items-center select-none p-5">
+                <h1 className=" text-3xl text-center my-5">No se encontraron resultados</h1>
+                <Button onClick={() => {
+                    search(1, '', 'all')
+                }}>Ver todos los cursos</Button>
+            </div>
+        )
+    }
     return (
-        <div className="flex flex-col items-center select-none">
-            <h1 className=" text-3xl text-center m-5">Resultados de la búsqueda</h1>
-            <div className="flex px-32 w-full justify-end items-center">
-                <div className="w-[300px]">
+        <div className="flex flex-col items-center select-none p-5">
+            <div className="flex flex-col xl:flex-row w-5/6 justify-between items-center">
+                <h1 className=" text-3xl text-center my-5">Resultados de la búsqueda</h1>
+                <div className="w-[200px]">
                     <Select value={category} onValueChange={setCategory} >
                         <SelectItem value="all">Todas las categorías</SelectItem>
                         {CategoriesData.map((category) => (
