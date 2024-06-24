@@ -1,5 +1,6 @@
 import axios from "axios"
 import { IEditCourse } from "../interfaces/IEditCourse"
+import { ICoursePublic } from "../interfaces/ICoursePublic"
 
 const BASE_URL = 'https://localhost:7245/api'
 
@@ -12,6 +13,11 @@ export default class CourseService {
         'Authorization': `Bearer ${token}`
       }
     })
+    return response.data.data
+  }
+
+  static async getCoursePublic(courseId: number): Promise<ICoursePublic> {
+    const response = await axios.get(`${BASE_URL}/course/public/${courseId}`)
     return response.data.data
   }
 
