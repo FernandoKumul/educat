@@ -64,7 +64,13 @@ const router = createBrowserRouter([
           },
           {
             path: "profile",
-            element: <InstructorProfile />,
+            element: <InstructorGuard />,
+            children: [
+              {
+                path: '',
+                element: <InstructorProfile />,
+              }
+            ]
           },
         ]
       },      
