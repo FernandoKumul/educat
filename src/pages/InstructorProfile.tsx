@@ -22,11 +22,11 @@ const InstructorProfile = () => {
     }, [])
 
     return (
-        <div className="select-none p-10 flex flex-col md:flex-row h-full justify-around items-center">
-            <section className="relative bg-black-auth p-10 rounded-md gap-y-5 text-center flex flex-col items-center max-w-sm">
+        <div className="select-none p-10 flex flex-col h-full items-center justify-center gap-y-5 xl:flex-row xl:justify-around">
+            <section className="relative bg-black-auth p-5 rounded-md gap-y-5  max-w-sm text-center flex flex-col items-center max-sm:w-full sm:p-10">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
                     <img
-                        className=" w-44 h-44 rounded-full object-cover"
+                        className="size-28 sm:size-44 rounded-full object-cover"
                         src={instructor?.avatarUrl || userDefault} 
                         alt="user image"
                     />
@@ -53,14 +53,14 @@ const InstructorProfile = () => {
                     </div>
                 </div>
             </section>
-            <section className="bg-black-auth rounded-md flex flex-col xl:w-[375px] xl:h-[408px] xl:p-10 xl:justify-between">
-                <p className="text-white text-xl xl:mb-2">Descripción</p>
-                <p className="text-secundary-text xl:mb-5 xl:flex-grow">{instructor?.description}</p>
-                <div className="flex justify-center xl:gap-x-5">
-                    <RiYoutubeFill className="cursor-pointer xl:size-10" />
-                    <RiFacebookCircleFill className="cursor-pointer xl:size-10" />
-                    <RiTwitterXLine className="cursor-pointer xl:size-10" />
-                    <RiLinkedinFill className="cursor-pointer xl:size-10" />
+            <section className="bg-black-auth rounded-md flex flex-col w-full p-5 sm:w-[375px] sm:p-10 xl:h-[408px] xl:justify-between">
+                <p className="text-white text-xl mb-2">Descripción</p>
+                <p className="text-secundary-text mb-5 xl:flex-grow">{instructor?.description}</p>
+                <div className="flex justify-center gap-x-5">
+                    <RiYoutubeFill className="cursor-pointer size-7 sm:size-10" />
+                    <RiFacebookCircleFill className="cursor-pointer size-7 sm:size-10" />
+                    <RiTwitterXLine className="cursor-pointer size-7 sm:size-10" />
+                    <RiLinkedinFill className="cursor-pointer size-7 sm:size-10" />
                 </div>
             </section>
         </div>
