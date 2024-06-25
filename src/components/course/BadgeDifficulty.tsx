@@ -9,7 +9,7 @@ const BadgeDifficulty = ({ value }: IProps) => {
 
   return (
     <div className={`${infoDifficulty?.color ?? 'bg-white'} text-black rounded-full py-1 px-4 w-fit`}>
-      {infoDifficulty?.text ?? 'Sin categoría'}
+      {infoDifficulty?.text ?? 'Sin dificultad'}
     </div>
   );
 }
