@@ -4,11 +4,10 @@ import { IInstructorInfo } from "../interfaces/IInstructorInfo";
 import { RiFacebookCircleFill, RiYoutubeFill, RiLinkedinFill, RiTwitterXLine } from "@remixicon/react";
 import userDefault from '../assets/userDefault.svg'
 
-
 const InstructorProfile = () => {
     const [instructor, setInstructor] = useState<IInstructorInfo | null>();
 
-    const redirectUrl = (url: string) => () => {
+    const redirectUrl = (url: string | undefined) => () => {
         window.open(url, '_blank')
     }
 
@@ -57,10 +56,10 @@ const InstructorProfile = () => {
                 <p className="text-white text-xl mb-2">Descripción</p>
                 <p className="text-secundary-text mb-5 xl:flex-grow">{instructor?.description}</p>
                 <div className="flex justify-center gap-x-5">
-                    <RiYoutubeFill className="cursor-pointer size-7 sm:size-10" />
-                    <RiFacebookCircleFill className="cursor-pointer size-7 sm:size-10" />
-                    <RiTwitterXLine className="cursor-pointer size-7 sm:size-10" />
-                    <RiLinkedinFill className="cursor-pointer size-7 sm:size-10" />
+                    <RiYoutubeFill onClick={redirectUrl(instructor?.youtubeUser)} className="cursor-pointer size-7 sm:size-10" />
+                    <RiFacebookCircleFill onClick={redirectUrl(instructor?.facebookUser)} className="cursor-pointer size-7 sm:size-10" />
+                    <RiTwitterXLine onClick={redirectUrl(instructor?.twitterUser)} className="cursor-pointer size-7 sm:size-10" />
+                    <RiLinkedinFill onClick={redirectUrl(instructor?.linkediId)} className="cursor-pointer size-7 sm:size-10" />
                 </div>
             </section>
         </div>

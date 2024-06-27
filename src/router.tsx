@@ -13,6 +13,7 @@ import InstructorGuard from "./components/Guard/InstructorGuard";
 import EditCourse from "./pages/EditCourse";
 import InstructorLayout from "./components/layouts/InstructorLayout";
 import InstructorProfile from "./pages/InstructorProfile";
+import InstructorEdit from "./pages/InstructorEdit";
 
 const router = createBrowserRouter([
   {
@@ -72,6 +73,16 @@ const router = createBrowserRouter([
               }
             ]
           },
+          {
+            path: "profile/edit",
+            element: <InstructorGuard />,
+            children: [
+              {
+                path: '',
+                element: <InstructorEdit />,
+              }
+            ]
+          }
         ]
       },      
       {

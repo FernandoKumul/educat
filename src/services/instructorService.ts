@@ -10,7 +10,13 @@ export default class InstructorService{
                 'Authorization': `Bearer ${token}`
             }
         })
-        console.log(response.data.data)
         return response.data.data
     }
+    static async updateInstructor(token: string, instructor: IInstructorInfo): Promise<void>{
+        await axios.put(`${BASE_URL}/Instructor/edit`, instructor, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+    }   
 }

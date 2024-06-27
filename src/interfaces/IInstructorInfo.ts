@@ -7,11 +7,9 @@ export interface IInstructorInfo {
     linkediId: string,
     twitterUser: string,
     emailPaypal: string,
-    creationDate: string,
     name: string,
     lastName: string,
     email: string,
     avatarUrl: string | null,
     description: string,
-    validatedEmail: boolean,
 }
