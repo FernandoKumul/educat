@@ -31,16 +31,15 @@ const InstructorEdit = () => {
             [name]: value
         })
     }
-    const submitInstructorUpdate = () => {
+    const submitInstructorUpdate = async () => {
         try {
             console.log(user)
             toast.dismiss()
             setLoading(true)
             const token = localStorage.getItem('token');
             if (token) {
-                InstructorService.updateInstructor(token, user).then(() => {
-                    toast.success('Perfil actualizado correctamente')
-                })
+                await InstructorService.updateInstructor(token, user)
+                toast.success('Cambios guardados correctamente');
             }
         }
         catch (error) {
@@ -53,13 +52,24 @@ const InstructorEdit = () => {
         }
     }
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            InstructorService.getInstructorProfile(token).then((data) => {
-                setUser(data);
-            })
+    const getData = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (token) {
+                const data = await InstructorService.getInstructorProfile(token);
+                setUser(data)
+            }
         }
+        catch (error) {
+            console.log(error)
+            if (error instanceof AxiosError) {
+                return console.log('Oops... Ocurrió un error, Intentelo más tarde');
+            }
+        }
+    }
+
+    useEffect(() => {
+        getData()
     }, [])
 
     return (

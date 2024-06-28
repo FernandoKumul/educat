@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AxiosError } from "axios";
 import InstructorService from "../services/instructorService";
 import { IInstructorInfo } from "../interfaces/IInstructorInfo";
 import { RiFacebookCircleFill, RiYoutubeFill, RiLinkedinFill, RiTwitterXLine } from "@remixicon/react";
@@ -11,13 +12,24 @@ const InstructorProfile = () => {
         window.open(url, '_blank')
     }
 
-    useEffect(() => {
-        const token = localStorage.getItem('token')
-        if (token) {
-            InstructorService.getInstructorProfile(token).then((data) => {
+    const getData = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (token) {
+                const data = await InstructorService.getInstructorProfile(token);
                 setInstructor(data)
-            })
+            }
         }
+        catch (error) {
+            console.log(error)
+            if (error instanceof AxiosError) {
+                return console.log('Oops... Ocurrió un error, Intentelo más tarde');
+            }
+        }
+    }
+
+    useEffect(() => {
+        getData()
     }, [])
 
     return (
