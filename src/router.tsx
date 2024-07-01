@@ -14,6 +14,7 @@ import EditCourse from "./pages/EditCourse";
 import InstructorLayout from "./components/layouts/InstructorLayout";
 import InstructorProfile from "./pages/InstructorProfile";
 import InstructorEdit from "./pages/InstructorEdit";
+import CoursePage from "./pages/CoursePage";
 
 const router = createBrowserRouter([
   {
@@ -96,6 +97,10 @@ const router = createBrowserRouter([
           {
             path: "/search",
             element: <CourseSearch />,
+          },
+          {
+            path: "/course/:courseId",
+            element: <CoursePage />,
           },
         ]
       },
