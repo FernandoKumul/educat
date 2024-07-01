@@ -13,7 +13,7 @@ const InstructorSidebar = () => {
     setPath(window.location.pathname.split('/')[2]);
   }, [path]);
   return (
-    <aside className="min-w-56 bg-black-1 h-screen hidden lg:block">
+    <aside className="min-w-56 flex-shrink-0 bg-black-1 h-screen hidden lg:block">
       <div className="flex flex-col py-5 px-10 gap-y-5">
         <Link to={'/'} className="flex items-center justify-center mb-5">
           <img src={logo} alt="logo educat" className="w-44"/>

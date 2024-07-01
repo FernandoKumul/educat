@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef, FormEvent } from "react";
 import { AxiosError } from "axios";
+import { useForm } from "react-hook-form";
 import { Button, TextInput, Textarea } from "@tremor/react";
 import { ToastContainer, toast } from 'react-toastify';
-import { IInstructorInfo } from "../interfaces/IInstructorInfo";
 import InstructorService from "../services/instructorService";
 import FileService from "../services/FileService";
+import { IInstructorInfo } from "../interfaces/IInstructorInfo";
 import 'react-toastify/dist/ReactToastify.css';
-import userDefault from '../assets/userDefault.svg'
 import { RiImageEditLine, RiLoader4Line } from "@remixicon/react";
-import { useForm } from "react-hook-form";
+import userDefault from '../assets/userDefault.svg';
 
 const InstructorEdit = () => {
     const [loading, setLoading] = useState(false)
@@ -36,6 +36,7 @@ const InstructorEdit = () => {
     const {
         register,
         handleSubmit,
+        setValue,
         formState: { errors }
     } = useForm<IInstructorInfo>()
 
@@ -46,6 +47,7 @@ const InstructorEdit = () => {
             [name]: value
         })
     }
+
     const handleSubmitImage = async (e: FormEvent<HTMLInputElement>) => {
         const target = e.currentTarget
         const files = target.files;
@@ -100,6 +102,9 @@ const InstructorEdit = () => {
             if (token) {
                 const data = await InstructorService.getInstructorProfile(token);
                 setUser(data)
+                setValue('name', data.name)
+                setValue('lastName', data.lastName)
+                setValue('email', data.email)
                 setImgUrl(data.avatarUrl)
             }
         }
@@ -202,11 +207,7 @@ const InstructorEdit = () => {
                         <div className="flex max-sm:flex-col max-sm:gap-y-3 max-sm:mb-3 xl:gap-x-10 xl:justify-center">
                             <div className="xl:w-[45%]">
                                 <p className="my-3">Correo electrónico</p>
-                                <TextInput {...register("emailPaypal", {
-                                    required: "El email es requerido",
-                                    pattern: { value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, message: "Email inválido" },
-                                    setValueAs: (value: string) => value.trim()
-                                })} error={!!errors.emailPaypal} errorMessage={errors.emailPaypal?.message} placeholder="usuario@example.com" name="emailPaypal" value={user.emailPaypal} onChange={handleChange} />
+                                <TextInput placeholder="usuario@example.com" name="emailPaypal" value={user.emailPaypal} onChange={handleChange} />
                             </div>
                             <div className="xl:w-[45%] xl:flex xl:items-center">
                                 <p className="text-secundary-text font-light italic max-sm:text-sm max-sm:text-center">Nota: Recuerda que debe ser el mismo correo que el de tu cuenta de paypal ya que sera al correo que se envien los pagos de tus cursos</p>
