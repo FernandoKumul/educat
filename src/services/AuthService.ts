@@ -26,7 +26,7 @@ export default class AuthService {
     return response.data.data
   }
   static async TokenByGoogle(token: string) {
-    const userGoogle = await axios.get(`https://www.googleapis.com/oauth2/v3/userinfo`, {
+    const userGoogle = await axios.get(`https://www.googleapivi.com/oauth2/v3/userinfo`, {
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: 'application/json'

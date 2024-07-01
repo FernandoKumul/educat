@@ -12,6 +12,8 @@ import UnAuthGuard from "./components/Guard/UnAuthGuard";
 import InstructorGuard from "./components/Guard/InstructorGuard";
 import EditCourse from "./pages/EditCourse";
 import InstructorLayout from "./components/layouts/InstructorLayout";
+import InstructorProfile from "./pages/InstructorProfile";
+import InstructorEdit from "./pages/InstructorEdit";
 import CoursePage from "./pages/CoursePage";
 
 const router = createBrowserRouter([
@@ -62,6 +64,26 @@ const router = createBrowserRouter([
               }
             ]
           },
+          {
+            path: "profile",
+            element: <InstructorGuard />,
+            children: [
+              {
+                path: '',
+                element: <InstructorProfile />,
+              }
+            ]
+          },
+          {
+            path: "profile/edit",
+            element: <InstructorGuard />,
+            children: [
+              {
+                path: '',
+                element: <InstructorEdit />,
+              }
+            ]
+          }
         ]
       },      
       {
