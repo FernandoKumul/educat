@@ -68,10 +68,10 @@ const InstructorProfile = () => {
                 <p className="text-white text-xl mb-2">Descripción</p>
                 <p className="text-secundary-text mb-5 xl:flex-grow">{instructor?.description}</p>
                 <div className="flex justify-center gap-x-5">
-                    <RiYoutubeFill onClick={redirectUrl(instructor?.youtubeUser)} className="cursor-pointer size-7 sm:size-10 hover:opacity-75 hover:transition-opacity" />
-                    <RiFacebookCircleFill onClick={redirectUrl(instructor?.facebookUser)} className="cursor-pointer size-7 sm:size-10 hover:opacity-75 hover:transition-opacity" />
-                    <RiTwitterXLine onClick={redirectUrl(instructor?.twitterUser)} className="cursor-pointer size-7 sm:size-10 hover:opacity-75 hover:transition-opacity" />
-                    <RiLinkedinFill onClick={redirectUrl(instructor?.linkediId)} className="cursor-pointer size-7 sm:size-10 hover:opacity-75 hover:transition-opacity" />
+                    { instructor?.youtubeUser && <RiYoutubeFill onClick={redirectUrl(instructor?.youtubeUser)} className="cursor-pointer size-7 sm:size-10 hover:opacity-75 hover:transition-opacity" /> }
+                    { instructor?.facebookUser && <RiFacebookCircleFill onClick={redirectUrl(instructor?.facebookUser)} className="cursor-pointer size-7 sm:size-10 hover:opacity-75 hover:transition-opacity" /> }
+                    { instructor?.twitterUser && <RiTwitterXLine onClick={redirectUrl(instructor?.twitterUser)} className="cursor-pointer size-7 sm:size-10 hover:opacity-75 hover:transition-opacity" /> }
+                    { instructor?.linkediId && <RiLinkedinFill onClick={redirectUrl(instructor?.linkediId)} className="cursor-pointer size-7 sm:size-10 hover:opacity-75 hover:transition-opacity" /> }
                 </div>
             </section>
         </div>

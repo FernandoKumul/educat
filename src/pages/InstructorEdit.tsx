@@ -8,6 +8,7 @@ import FileService from "../services/FileService";
 import 'react-toastify/dist/ReactToastify.css';
 import userDefault from '../assets/userDefault.svg'
 import { RiImageEditLine, RiLoader4Line } from "@remixicon/react";
+import { useForm } from "react-hook-form";
 
 const InstructorEdit = () => {
     const [loading, setLoading] = useState(false)
@@ -32,6 +33,12 @@ const InstructorEdit = () => {
         description: "",
     });
 
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }
+    } = useForm<IInstructorInfo>()
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setUser({
@@ -39,7 +46,6 @@ const InstructorEdit = () => {
             [name]: value
         })
     }
-
     const handleSubmitImage = async (e: FormEvent<HTMLInputElement>) => {
         const target = e.currentTarget
         const files = target.files;
@@ -66,7 +72,7 @@ const InstructorEdit = () => {
         }
     };
 
-    const submitInstructorUpdate = async () => {
+    const onSubmit = async () => {
         try {
             console.log(user)
             toast.dismiss()
@@ -87,7 +93,7 @@ const InstructorEdit = () => {
             setLoading(false)
         }
     }
-
+    
     const getData = async () => {
         try {
             const token = localStorage.getItem('token');
@@ -115,7 +121,7 @@ const InstructorEdit = () => {
                 <section className="bg-black-auth p-5 rounded-t-md">
                     <p className="xl:text-2xl max-sm:text-center">Mi perfil</p>
                 </section>
-                <section className="bg-black-2 p-5 rounded-b-md">
+                <form autoComplete="off" onSubmit={handleSubmit(onSubmit)} className="bg-black-2 p-5 rounded-b-md">
                     <p className="max-sm:text-center xl:text-xl xl:mt-8 mb-3">Información personal</p>
                     <div className="relative">
                         <div className=" z-10 absolute max-sm:size-28 max-sm:translate-x-1/2 max-sm:-left-3 xl:size-52 rounded-full cursor-pointer xl:translate-x-1/2 xl:-bottom-2 xl:right-16 flex justify-center items-center" onClick={() => inputImgRef.current?.click()}>
@@ -134,21 +140,31 @@ const InstructorEdit = () => {
                         <div className="flex max-sm:flex-col max-sm:gap-y-3 max-sm:mb-3 xl:gap-x-10 xl:justify-center">
                             <div className="xl:w-[45%]">
                                 <p className="my-3">Nombre</p>
-                                <TextInput name="name" value={user.name} onChange={handleChange} />
+                                <TextInput {...register("name", {
+                                    required: "El nombre es requerido",
+                                    setValueAs: (value: string) => value.trim()
+                                })} error={!!errors.name} errorMessage={errors.name?.message} placeholder="Nombre(s)" name="name" value={user.name} onChange={handleChange} />
                             </div>
                             <div className="xl:w-[45%]">
                                 <p className="my-3">Apellidos</p>
-                                <TextInput name="lastName" value={user.lastName} onChange={handleChange} />
+                                <TextInput {...register("lastName", {
+                                    required: "Los apellidos son requeridos",
+                                    setValueAs: (value: string) => value.trim()
+                                })} error={!!errors.lastName} errorMessage={errors.lastName?.message} placeholder="Apellidos" name="lastName" value={user.lastName} onChange={handleChange} />
                             </div>
                         </div>
                         <div className="flex max-sm:flex-col max-sm:gap-y-3 max-sm:mb-3 xl:gap-x-10 xl:justify-center">
                             <div className="xl:w-[45%]">
                                 <p className="my-3">Correo electrónico</p>
-                                <TextInput name="email" value={user.email} onChange={handleChange} />
+                                <TextInput {...register("email", {
+                                    required: "El email es requerido",
+                                    pattern: { value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, message: "Email inválido" },
+                                    setValueAs: (value: string) => value.trim()
+                                })} error={!!errors.email} errorMessage={errors.email?.message} placeholder="usuario@example.com" name="email" value={user.email} onChange={handleChange} />
                             </div>
                             <div className="xl:w-[45%]">
                                 <p className="my-3">Ocupación</p>
-                                <TextInput name="occupation" value={user.occupation} onChange={handleChange} />
+                                <TextInput placeholder="" name="occupation" value={user.occupation} onChange={handleChange} />
                             </div>
                         </div>
                     </div>
@@ -157,27 +173,27 @@ const InstructorEdit = () => {
                         <div className="flex max-sm:mb-3 xl:justify-center">
                             <div className="max-sm:w-full xl:w-[93%]">
                                 <p className="my-3">Descripción</p>
-                                <Textarea name="description" value={user.description} onChange={handleChange} />
+                                <Textarea placeholder="" name="description" value={user.description} onChange={handleChange} />
                             </div>
                         </div>
                         <div className="flex max-sm:flex-col max-sm:gap-y-3 max-sm:mb-3 xl:gap-x-10 xl:justify-center">
                             <div className="xl:w-[45%]">
                                 <p className="my-3">Youtube</p>
-                                <TextInput name="youtubeUser" value={user.youtubeUser} onChange={handleChange} />
+                                <TextInput placeholder="https://www.youtube.com/channel/..." name="youtubeUser" value={user.youtubeUser} onChange={handleChange} />
                             </div>
                             <div className="xl:w-[45%]">
                                 <p className="my-3">Facebook</p>
-                                <TextInput name="facebookUser" value={user.facebookUser} onChange={handleChange} />
+                                <TextInput placeholder="https://www.facebook.com/profile.php?id=..." name="facebookUser" value={user.facebookUser} onChange={handleChange} />
                             </div>
                         </div>
                         <div className="xl:flex xl:gap-x-10 xl:justify-center">
                             <div className="xl:w-[45%]">
                                 <p className="my-3">LinkedIn</p>
-                                <TextInput name="linkediId" value={user.linkediId} onChange={handleChange} />
+                                <TextInput placeholder="https://www.linkedin.com/in/..." name="linkediId" value={user.linkediId} onChange={handleChange} />
                             </div>
                             <div className="xl:w-[45%]">
                                 <p className="my-3">Twitter / X</p>
-                                <TextInput name="twitterUser" value={user.twitterUser} onChange={handleChange} />
+                                <TextInput placeholder="https://x.com/..." name="twitterUser" value={user.twitterUser} onChange={handleChange} />
                             </div>
                         </div>
                     </div>
@@ -186,7 +202,11 @@ const InstructorEdit = () => {
                         <div className="flex max-sm:flex-col max-sm:gap-y-3 max-sm:mb-3 xl:gap-x-10 xl:justify-center">
                             <div className="xl:w-[45%]">
                                 <p className="my-3">Correo electrónico</p>
-                                <TextInput name="emailPaypal" value={user.emailPaypal} onChange={handleChange} />
+                                <TextInput {...register("emailPaypal", {
+                                    required: "El email es requerido",
+                                    pattern: { value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, message: "Email inválido" },
+                                    setValueAs: (value: string) => value.trim()
+                                })} error={!!errors.emailPaypal} errorMessage={errors.emailPaypal?.message} placeholder="usuario@example.com" name="emailPaypal" value={user.emailPaypal} onChange={handleChange} />
                             </div>
                             <div className="xl:w-[45%] xl:flex xl:items-center">
                                 <p className="text-secundary-text font-light italic max-sm:text-sm max-sm:text-center">Nota: Recuerda que debe ser el mismo correo que el de tu cuenta de paypal ya que sera al correo que se envien los pagos de tus cursos</p>
@@ -195,12 +215,12 @@ const InstructorEdit = () => {
                     </div>
                     <div>
                         <div className="flex mt-8 mb-3 max-sm:justify-center xl:justify-end">
-                            <Button onClick={submitInstructorUpdate} loading={loading} >
+                            <Button type="submit" loading={loading} >
                                 <span className="text-base">Guardar cambios</span>
                             </Button>
                         </div>
                     </div>
-                </section>
+                </form>
             </div>
             <ToastContainer
                 className="text-sm"
