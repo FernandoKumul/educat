@@ -33,7 +33,7 @@ const InstructorProfile = () => {
     }, [])
 
     return (
-        <div className="select-none p-10 flex flex-col h-full items-center justify-center gap-y-5 max-sm:mt-10 xl:flex-row xl:justify-around">
+        <div className="select-none p-10 flex flex-col h-full items-center justify-center gap-y-5 max-sm:mt-14 xl:flex-row xl:justify-around">
             <section className="relative bg-black-auth p-5 rounded-md gap-y-5  max-w-sm text-center flex flex-col items-center max-sm:w-full sm:p-10">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
                     <img
