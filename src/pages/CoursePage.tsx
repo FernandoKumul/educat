@@ -1,36 +1,47 @@
 import { useParams } from "react-router-dom";
-import Rating from "../components/common/Rating";
+import { AccordionList, Button } from "@tremor/react";
 import { useContext, useEffect, useRef, useState } from "react";
-import { ICoursePublic } from "../interfaces/ICoursePublic";
 import { RiCheckboxCircleLine, RiGlobalLine, RiGraduationCapFill, 
   RiGroupFill, RiHeartLine, RiLoader4Line, RiTimeLine, RiVideoLine } from "@remixicon/react";
 import CourseService from "../services/CourseService";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { formatDate } from "../utils/DateUtils";
 import CategoriesData from "../data/CategoriesData";
-import PresentationVideo from "../components/course/PresentationVideo";
-import { CurrencyFormat } from "../utils/CurrencyUtils";
-import { AccordionList, Button } from "@tremor/react";
-import Avatar from "../components/common/Avatar";
-import BadgeDifficulty from "../components/course/BadgeDifficulty";
-import { getFormatTime } from "../utils/TimeUtils";
-import UnitCard from "../components/course/UnitCard";
+import { ICoursePublic } from "../interfaces/ICoursePublic";
+import { ICommentUser } from "../interfaces/ICommentUser";
 import AuthContext from "../contexts/AuthContext";
+import CommentService from "../services/CommentService";
+import UnitCard from "../components/course/UnitCard";
+import BadgeDifficulty from "../components/course/BadgeDifficulty";
+import Avatar from "../components/common/Avatar";
+import PresentationVideo from "../components/course/PresentationVideo";
+import Rating from "../components/common/Rating";
+import { formatDate } from "../utils/DateUtils";
+import { CurrencyFormat } from "../utils/CurrencyUtils";
+import { getFormatTime } from "../utils/TimeUtils";
+import ReviewList from "../components/Comment/ReviewList";
 
 const CoursePage = () => {
   const { courseId } = useParams()
-  const dataFetch = useRef<boolean>(false)
   const [isCourse, setCourse] = useState<null | ICoursePublic>(null)
+  const [isTotalReviews, setTotalReviews] = useState<number>(0)
+  const [isReviews, setReviews] = useState<ICommentUser[]>([])
   const [isLoading, setLoading] = useState<boolean>(true)
-
+  const dataFetch = useRef<boolean>(false)
+  
   const { isUser } = useContext(AuthContext);
 
   useEffect(() => {
     const getCourse = async () => {
       dataFetch.current = true
+      const courseIdInt = parseInt(courseId ?? '0')
       try {
-        const dataCourse = await CourseService.getCoursePublic(parseInt(courseId ?? '0'))
+        const dataCourse = await CourseService.getCoursePublic(courseIdInt)
+        const {result, count} = await CommentService.getReviewsByCourse(courseIdInt, 1, 12)
+        console.log(result, count)
+        setReviews(result)
+        setTotalReviews(count)
+        dataCourse.rating = Math.round(dataCourse.rating * 100) / 100
         setCourse(dataCourse)
       } catch (error) {
         console.log(error)
@@ -118,7 +129,7 @@ const CoursePage = () => {
           <div className="lg:flex lg:gap-4 lg:items-center">
             <div className="flex gap-2 mb-3">
               <Rating score={isCourse.rating} />
-              <p className="pt-[2px]">{isCourse.rating} (100 Reseñas)</p>
+              <p className="pt-[2px]">{isCourse.rating} ({isTotalReviews} Reseñas)</p>
             </div>
             <div className="flex gap-2 mb-3 text-[15px]">
               <RiGroupFill size={20} />
@@ -204,7 +215,7 @@ const CoursePage = () => {
         </div>
       </div>
       <section className="px-8 lg:px-24  xl:px-36 mb-10">
-        <h2 className="font-semibold text-xl mb-1">Reseñas de los estudiantes</h2>
+				<ReviewList initReviews={isReviews} rating={isCourse.rating} total={isTotalReviews} courseId={parseInt(courseId ?? '0')} />
       </section>
     </section>
   );
