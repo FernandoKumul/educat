@@ -120,6 +120,11 @@ const CoursePage = () => {
     return `${totalHours} Horas de contenido`
   }
 
+  const handleRefreshReviews = (rating: number, count: number) => {
+    setTotalReviews(count)
+    setCourse({...isCourse, rating})
+  }
+
   return (
     <section>
       <header className="bg-header px-8 py-6 lg:flex lg:px-24 lg:py-10 lg:gap-4 xl:px-36">
@@ -162,15 +167,21 @@ const CoursePage = () => {
           <h3 className="font-semibold text-xl mb-2">
             {CurrencyFormat(isCourse.price ?? 0)} MXN
           </h3>
-          <div className="flex gap-3">
-            <Button className="grow" disabled={isUser?.pkUser === isCourse.instructor.pkUser}>
-              <span className="text-base">Añadir al carrito</span>
-            </Button>
-            <div className="size-11 flex items-center justify-center rounded-full 
-            bg-[#50475C] hover:scale-110 transition-transform cursor-pointer hover:bg-[#645971] active:scale-95">
-              <RiHeartLine size={30} className="text-secundary-text" />
+          {
+            isCourse.purchased 
+            ?
+            <Button className="w-full"><span className="text-base">Continuar</span></Button>
+            :
+            <div className="flex gap-3">
+              <Button className="grow" disabled={isUser?.pkUser === isCourse.instructor.pkUser}>
+                <span className="text-base">Añadir al carrito</span>
+              </Button>
+              <div className="size-11 flex items-center justify-center rounded-full 
+          bg-[#50475C] hover:scale-110 transition-transform cursor-pointer hover:bg-[#645971] active:scale-95">
+                <RiHeartLine size={30} className="text-secundary-text" />
+              </div>
             </div>
-          </div>
+          }
         </div>
       </header>
       {/* Informacion detallada del curso */}
@@ -215,7 +226,9 @@ const CoursePage = () => {
         </div>
       </div>
       <section className="px-8 lg:px-24  xl:px-36 mb-10">
-				<ReviewList initReviews={isReviews} rating={isCourse.rating} total={isTotalReviews} courseId={parseInt(courseId ?? '0')} />
+				<ReviewList initReviews={isReviews} rating={isCourse.rating} purchased={isCourse.purchased} 
+        onRefresh={(rating, count) => handleRefreshReviews(rating, count)}
+        total={isTotalReviews} courseId={parseInt(courseId ?? '0')} />
       </section>
     </section>
   );

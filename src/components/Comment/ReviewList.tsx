@@ -1,45 +1,71 @@
-import { Button, Textarea } from "@tremor/react";
+import { Button } from "@tremor/react";
 import { ICommentUser } from "../../interfaces/ICommentUser";
-import { FormEvent, useEffect, useState } from "react";
+import {useEffect, useState } from "react";
 import CommentService from "../../services/CommentService";
 import Avatar from "../common/Avatar";
 import { formatDate } from "../../utils/DateUtils";
-import { RiStarFill, RiThumbUpLine } from "@remixicon/react";
+import { RiLoader4Line, RiStarFill, RiThumbUpLine } from "@remixicon/react";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import AddRating from "./AddRating";
+import UserReviewEditor from "./UserReviewEditor";
 
 type IProps = {
   initReviews: ICommentUser[]
   total: number,
   courseId: number,
-  rating: number
+  rating: number,
+  purchased: boolean,
+  onRefresh: (rating: number, count: number) => void
 }
 
 const LIMIT = 12
 
-const ReviewList = ({ initReviews, total, courseId, rating }: IProps) => {
+const ReviewList = ({ initReviews, total, courseId, rating, purchased, onRefresh }: IProps) => {
   const [isReviews, setReviews] = useState<ICommentUser[]>(initReviews)
   const [isPage, setPage] = useState<number>(1)
   const [isTotalPage] = useState<number>(Math.ceil(total / LIMIT))
+  const [isLoadingMore, setLoadingMore] = useState(false)
   const [isLoading, setLoading] = useState(false)
-  const [isLoadingAddReview, setLoadingAddReview] = useState(false)
-  const [isTextReview, setTextReview] = useState('')
-  const [isErrorText, setErroText] = useState(false)
-  const [isScore, setScore] = useState(5)
+  const [isReviewByUser, setReviewByUser] = useState<null | ICommentUser>(null)
 
-  const handleAddReview = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const text = isTextReview.trim()
-    if(!text) {
-      setErroText(true)
-      return toast.warning('No puedes dejar una reseña vacía')
+  const handleRefreshReviews = async () => {
+    try {
+      setLoading(true)
+      const { result, count, rating } = await CommentService.getReviewsByCourse(courseId, 1, LIMIT)
+      setReviews(result)
+      setPage(1)
+      const reviewByUser = await CommentService.GetCourseReviewByUser(courseId)
+      setReviewByUser(reviewByUser)
+      const ratingRound = Math.round(rating * 100) / 100
+      onRefresh(count, ratingRound)
+      //Refresh en el curso y enviar la cantidad de cursos y obtener rating :D
+    } catch (error) {
+      console.log(error)
+      setReviews([])
+      if (error instanceof AxiosError) {
+        if (error.response?.data.message) {
+          return toast.error(error.response?.data.message);
+        }
+
+        return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
+      }
+    } finally {
+      setTimeout(() => {
+        setLoading(false)
+      }, 1000);
+    }
+  }
+
+  const handleNextPage = async (page: number) => {
+    if (page === 1) {
+      return
     }
 
     try {
-      setLoadingAddReview(true)
-      await CommentService.createReview({courseId, text: isTextReview, score: isScore})
-      toast.success('Reseña agregada correctamente');
+      setLoadingMore(true)
+      const { result } = await CommentService.getReviewsByCourse(courseId, page, LIMIT)
+      setReviews([...isReviews, ...result])
+      setPage(page)
     } catch (error) {
       console.log(error)
       if (error instanceof AxiosError) {
@@ -50,43 +76,48 @@ const ReviewList = ({ initReviews, total, courseId, rating }: IProps) => {
         return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
       }
     } finally {
-      setLoadingAddReview(false)
-      setErroText(false)
+      setLoadingMore(false)
     }
-
   }
 
   useEffect(() => {
-    if (isPage === 1) {
-      return
-    }
-
-    const getReviews = async () => {
+    const getReviewUser = async () => {
       try {
-        setLoading(true)
-        const { result } = await CommentService.getReviewsByCourse(courseId, isPage, LIMIT)
-        setReviews([...isReviews, ...result])
+        const reviewByUser = await CommentService.GetCourseReviewByUser(courseId)
+        setReviewByUser(reviewByUser)
       } catch (error) {
         console.log(error)
+        if (error instanceof AxiosError) {
+          if (error.response?.data.message) {
+            return toast.error(error.response?.data.message);
+          }
+          
+          return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
+        }
       } finally {
         setLoading(false)
       }
     }
-    getReviews()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPage])
+
+    getReviewUser()
+    //Revisar que no se repita
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  if(isLoading) {
+    return (
+      <div className="min-h-[50vh] flex-grow flex items-center justify-center">
+        <RiLoader4Line size={48} className="animate-spin" />
+        <h1>Cargando reseñas...</h1>
+      </div>
+    )
+  }
+
   return (
     <div>
       <h2 className="font-semibold text-xl mb-1">Reseñas de los estudiantes</h2>
       <p className="mb-3 text-secundary-text">{rating} de puntuación | {total} reseñas</p>
-      <form className="mb-6" onSubmit={handleAddReview}>
-        <Textarea placeholder="Escribe tu reseña del curso" error={isErrorText && !isTextReview.trim()}
-        rows={4} onValueChange={value => setTextReview(value)} value={isTextReview} />
-        <div className="mt-2 flex justify-between">
-          <AddRating defaultScore={isScore} onScoreChange={value => setScore(value)} />
-          <Button className="focus:outline focus:outline-current" loading={isLoadingAddReview}>Enviar</Button>
-        </div>
-      </form>
+      <UserReviewEditor courseId={courseId} purchased={purchased} reviewByUser={isReviewByUser} onRefreshReviews={handleRefreshReviews} />
       <div className="grid align-top mb-4 gap-4 lg:grid-cols-3 sm:grid-cols-2 lg:gap-x-10 lg:gap-y-8">
         {isReviews.map(review => (
           <article key={review.pkComment} className="bg-header rounded-md p-4 min-h-64 flex flex-col gap-2 lg:px-5">
@@ -113,8 +144,8 @@ const ReviewList = ({ initReviews, total, courseId, rating }: IProps) => {
           </article>
         ))}
       </div>
-      <Button className="focus:outline focus:outline-current" loading={isLoading} 
-        disabled={isPage === isTotalPage} onClick={() => setPage(prev => prev + 1)}>Cargar más</Button>
+      <Button className="focus:outline focus:outline-current" loading={isLoadingMore} 
+        disabled={isPage === isTotalPage} onClick={() => handleNextPage(isPage + 1)}>Cargar más</Button>
     </div>
   );
 }

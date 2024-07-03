@@ -6,7 +6,8 @@ const BASE_URL = 'https://localhost:7245/api'
 
 type IResponseGetReviewsByCourse = {
   result: ICommentUser[],
-  count: number
+  count: number,
+  rating: number
 }
 
 export default class CommentService {
@@ -30,5 +31,29 @@ export default class CommentService {
       }
     })
     return response.data.data
+  }
+
+  static async GetCourseReviewByUser(courseId: number): Promise<ICommentUser | null> {
+    const token = localStorage.getItem('token')
+
+    if(!token) return null
+
+    const response = await axios.get(`${BASE_URL}/comment/review/course/${courseId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    return response.data.data
+  }
+
+  static async deleteComment(commentId: number) {
+    const token = localStorage.getItem('token')
+
+    await axios.delete(`${BASE_URL}/comment/${commentId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    return
   }
 }
