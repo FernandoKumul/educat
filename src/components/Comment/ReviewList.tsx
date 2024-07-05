@@ -2,12 +2,11 @@ import { Button } from "@tremor/react";
 import { ICommentUser } from "../../interfaces/ICommentUser";
 import {useEffect, useState } from "react";
 import CommentService from "../../services/CommentService";
-import Avatar from "../common/Avatar";
-import { formatDate } from "../../utils/DateUtils";
-import { RiLoader4Line, RiStarFill, RiThumbUpLine } from "@remixicon/react";
+import { RiLoader4Line } from "@remixicon/react";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import UserReviewEditor from "./UserReviewEditor";
+import ReviewCard from "./ReviewCard";
 
 type IProps = {
   initReviews: ICommentUser[]
@@ -79,6 +78,27 @@ const ReviewList = ({ initReviews, total, courseId, rating, purchased, onRefresh
     }
   }
 
+  const handleToggleLike = (commentId: number, hasLiked: boolean) => {
+    const updateReviews = isReviews.map(review => {
+      if(review.pkComment === commentId) {
+        const likes =  hasLiked ? review.likes + 1 : review.likes - 1
+        const newReview = {...review, hasLiked, likes}
+        
+        if (isReviewByUser && isReviewByUser?.pkComment === commentId) {
+          setReviewByUser({...isReviewByUser, likes})
+        }
+
+        return newReview
+      }
+
+      return review
+    })
+
+    setReviews(updateReviews)
+
+
+  }
+
   useEffect(() => {
     const getReviewUser = async () => {
       try {
@@ -119,28 +139,7 @@ const ReviewList = ({ initReviews, total, courseId, rating, purchased, onRefresh
       <UserReviewEditor courseId={courseId} purchased={purchased} reviewByUser={isReviewByUser} onRefreshReviews={handleRefreshReviews} />
       <div className="grid align-top mb-4 gap-4 lg:grid-cols-3 sm:grid-cols-2 lg:gap-x-10 lg:gap-y-8">
         {isReviews.map(review => (
-          <article key={review.pkComment} className="bg-header rounded-md p-4 min-h-64 flex flex-col gap-2 lg:px-5">
-            <header className="flex gap-2">
-              <Avatar className="size-10" url={review.user.avatarUrl} />
-              <div className="flex-grow min-w-0">
-                <p className="overflow-hidden text-nowrap text-ellipsis">{review.user.name + " " + review.user.lastName}</p>
-                <p className="text-sm text-gray-400">{formatDate(review.cretionDate)}</p>
-              </div>
-            </header>
-            <div className="flex-grow">
-              <p className="text-secundary-text">{review.text}</p>
-            </div>
-            <footer className="flex justify-between items-center">
-              <div className="bg-[#50475C] rounded-full items-center py-1 cursor-pointer px-4 flex gap-2 select-none">
-                <RiThumbUpLine size={20} />
-                {review.likes}
-              </div>
-              <p>
-                {review.score}
-                <RiStarFill size={20} className="text-yellow-300 inline ml-1 mb-1" />
-              </p>
-            </footer>
-          </article>
+          <ReviewCard review={review} key={review.pkComment} onToggleLike={handleToggleLike} />
         ))}
       </div>
       <Button className="focus:outline focus:outline-current" loading={isLoadingMore} 

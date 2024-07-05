@@ -143,9 +143,9 @@ const UserReviewEditor = ({ purchased, reviewByUser, courseId, onRefreshReviews 
               </>
             :
               <>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   <Rating score={reviewByUser.score!} />
-                  <div className="bg-[#50475C] rounded-full items-center py-1 px-4 flex gap-2 select-none">
+                  <div className="items-center flex gap-2 select-none">
                     <RiThumbUpLine size={20} />
                     {reviewByUser.likes}
                   </div>

@@ -13,7 +13,12 @@ type IResponseGetReviewsByCourse = {
 
 export default class CommentService {
   static async getReviewsByCourse(courseId: number, page: number, limit: number): Promise<IResponseGetReviewsByCourse> {
+    const token = localStorage.getItem('token')
+
     const response = await axios.get(`${BASE_URL}/comment/review`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
       params: {
         course: courseId,
         page,
