@@ -1,6 +1,7 @@
 import axios from "axios"
 import { ICommentUser } from "../interfaces/ICommentUser"
 import { IAddReview } from "../interfaces/IAddReview"
+import { IEditReview } from "../interfaces/IEditReview"
 
 const BASE_URL = 'https://localhost:7245/api'
 
@@ -54,6 +55,15 @@ export default class CommentService {
         'Authorization': `Bearer ${token}`
       }
     })
-    return
+  }
+
+  static async editReview(commentId: number, reviewData: IEditReview) {
+    const token = localStorage.getItem('token')
+
+    await axios.put(`${BASE_URL}/comment/review/${commentId}`, reviewData ,{
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
   }
 }

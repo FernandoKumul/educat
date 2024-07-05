@@ -38,7 +38,6 @@ const ReviewList = ({ initReviews, total, courseId, rating, purchased, onRefresh
       setReviewByUser(reviewByUser)
       const ratingRound = Math.round(rating * 100) / 100
       onRefresh(count, ratingRound)
-      //Refresh en el curso y enviar la cantidad de cursos y obtener rating :D
     } catch (error) {
       console.log(error)
       setReviews([])

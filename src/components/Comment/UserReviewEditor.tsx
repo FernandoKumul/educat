@@ -1,4 +1,4 @@
-import { Button, Textarea } from "@tremor/react"
+import { Button, Dialog, DialogPanel, Textarea } from "@tremor/react"
 import { ICommentUser } from "../../interfaces/ICommentUser"
 import AddRating from "./AddRating"
 import { FormEvent, useState } from "react"
@@ -9,6 +9,7 @@ import { RiThumbUpLine } from "@remixicon/react"
 import { formatDate } from "../../utils/DateUtils"
 import Rating from "../common/Rating"
 import CommentService from "../../services/CommentService"
+import { IEditReview } from "../../interfaces/IEditReview"
 
 type IProps = {
   purchased: boolean,
@@ -23,8 +24,11 @@ const UserReviewEditor = ({ purchased, reviewByUser, courseId, onRefreshReviews 
   const [isErrorText, setErroText] = useState(false)
   const [isScore, setScore] = useState(5)
   const [isEditing, setEditing] = useState(false)
+  const [isLoadingEditReview, setLoadingEditReview] = useState(false)
   const [isLoadingAddReview, setLoadingAddReview] = useState(false)
   const [isLoadingDeleteReview, setLoadingDeleteReview] = useState(false)
+
+  const [isOpen, setOpen] = useState(false)
 
   const handleAddReview = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -75,6 +79,31 @@ const UserReviewEditor = ({ purchased, reviewByUser, courseId, onRefreshReviews 
     }
   }
 
+  const handleEditReview = async (data: IEditReview) => {
+    if (!data.text.trim()) {
+      setErroText(true)
+      return toast.warning('No puedes dejar una reseña vacía')
+    }
+
+    try {
+      setLoadingEditReview(true)
+      await CommentService.editReview(reviewByUser?.pkComment ?? 0, data)
+      toast.success("Reseña Editada exitosamente")
+      onRefreshReviews()
+    }  catch (error) {
+      console.log(error)
+      if (error instanceof AxiosError) {
+        if (error.response?.data.message) {
+          return toast.error(error.response?.data.message);
+        }
+
+        return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
+      }
+    } finally {
+      setLoadingEditReview(false)
+    }
+  }
+
   const handleChangeToEdit = () => {
     setEditing(true)
     setTextReview(reviewByUser?.text ?? '')
@@ -108,8 +137,8 @@ const UserReviewEditor = ({ purchased, reviewByUser, courseId, onRefreshReviews 
                   <AddRating defaultScore={reviewByUser.score!} onScoreChange={value => setScore(value)} />
                 </div>
                 <div className="flex gap-4">
-                  <Button onClick={() => setEditing(false)}>Cancelar</Button>
-                  <Button>Guardar</Button>
+                  <Button className="focus-visible:outline focus-visible:outline-current" onClick={() => setEditing(false)}>Cancelar</Button>
+                  <Button className="focus-visible:outline focus-visible:outline-current" loading={isLoadingEditReview} onClick={() => handleEditReview({score: isScore, text: isTextReview})}>Guardar</Button>
                 </div>
               </>
             :
@@ -122,13 +151,26 @@ const UserReviewEditor = ({ purchased, reviewByUser, courseId, onRefreshReviews 
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <Button loading={isLoadingDeleteReview} onClick={handleDeleteReview}>Borrar</Button>
-                  <Button onClick={handleChangeToEdit}>Editar</Button>
+                  <Button className="focus-visible:outline focus-visible:outline-current" onClick={() => setOpen(true)}>Borrar</Button>
+                  <Button className="focus-visible:outline focus-visible:outline-current" onClick={handleChangeToEdit}>Editar</Button>
                 </div>
               </>
           }
           </footer>
         </div>
+        <Dialog open={isOpen} onClose={(val) => setOpen(val)} static={true}>
+          <DialogPanel>
+            <h3 className="text-lg font-semibold text-tremor-content-strong">
+              ¿Estás seguro de borrar tu reseña?
+            </h3>
+            <footer className="mt-8 flex justify-end gap-4">
+              <Button variant="secondary" onClick={() => setOpen(false)}>Cancelar</Button>
+              <Button className="" loading={isLoadingDeleteReview} onClick={handleDeleteReview}>
+                Borrar
+              </Button>
+            </footer>
+          </DialogPanel>
+        </Dialog>
       </article>
     )
   } else {
