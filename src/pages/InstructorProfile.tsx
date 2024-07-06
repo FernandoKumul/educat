@@ -44,7 +44,7 @@ const InstructorProfile = () => {
                 </div>
                 <div className="mt-14">
                     <p className="text-2xl text-white">{instructor?.name + ' ' + instructor?.lastName}</p>
-                    <p className="text-sm text-secondary-text">{'Instructor | ' + instructor?.occupation}</p>
+                    { instructor?.occupation ? <p className="text-sm text-secondary-text">{'Instructor | ' + instructor?.occupation}</p> : <p className="text-sm text-secondary-text">Sin ocupación</p> }
                 </div>
                 <div className="border-b border-black-2 w-full pb-5">
                     <p className="text-white">3.7 (100 Reseñas)</p>
