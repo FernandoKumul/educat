@@ -158,7 +158,7 @@ const CoursePage = () => {
         </div>
         {/* Info card shop */}
         <div className="lg:w-[300px] flex-shrink-0">
-          <PresentationVideo className="mb-4" url={'isCourse.videoPresentation'!} />
+          <PresentationVideo className="mb-4" url={isCourse.videoPresentation!} />
           <div className="flex gap-2 items-center">
             <Avatar url={isCourse.instructor.avatarUrl} className="min-w-8" />
             <p>Creado por {isCourse.instructor.name + ' ' + isCourse.instructor.lastName}</p>
