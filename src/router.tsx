@@ -75,7 +75,7 @@ const router = createBrowserRouter([
             ]
           },
           {
-            path: "profile/edit",
+            path: "edit",
             element: <InstructorGuard />,
             children: [
               {

@@ -33,7 +33,7 @@ const InstructorProfile = () => {
     }, [])
 
     return (
-        <div className="select-none p-10 flex flex-col h-full items-center justify-center gap-y-5 max-sm:mt-10 xl:flex-row xl:justify-around">
+        <div className="select-none p-10 flex flex-col h-full items-center justify-center gap-y-5 max-sm:mt-14 xl:flex-row xl:justify-around">
             <section className="relative bg-black-auth p-5 rounded-md gap-y-5  max-w-sm text-center flex flex-col items-center max-sm:w-full sm:p-10">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
                     <img
@@ -68,10 +68,10 @@ const InstructorProfile = () => {
                 <p className="text-white text-xl mb-2">Descripción</p>
                 <p className="text-secundary-text mb-5 xl:flex-grow">{instructor?.description}</p>
                 <div className="flex justify-center gap-x-5">
-                    <RiYoutubeFill onClick={redirectUrl(instructor?.youtubeUser)} className="cursor-pointer size-7 sm:size-10 hover:opacity-75 hover:transition-opacity" />
-                    <RiFacebookCircleFill onClick={redirectUrl(instructor?.facebookUser)} className="cursor-pointer size-7 sm:size-10 hover:opacity-75 hover:transition-opacity" />
-                    <RiTwitterXLine onClick={redirectUrl(instructor?.twitterUser)} className="cursor-pointer size-7 sm:size-10 hover:opacity-75 hover:transition-opacity" />
-                    <RiLinkedinFill onClick={redirectUrl(instructor?.linkediId)} className="cursor-pointer size-7 sm:size-10 hover:opacity-75 hover:transition-opacity" />
+                    { instructor?.youtubeUser && <RiYoutubeFill onClick={redirectUrl(instructor?.youtubeUser)} className="cursor-pointer size-7 sm:size-10 hover:opacity-75 hover:transition-opacity" /> }
+                    { instructor?.facebookUser && <RiFacebookCircleFill onClick={redirectUrl(instructor?.facebookUser)} className="cursor-pointer size-7 sm:size-10 hover:opacity-75 hover:transition-opacity" /> }
+                    { instructor?.twitterUser && <RiTwitterXLine onClick={redirectUrl(instructor?.twitterUser)} className="cursor-pointer size-7 sm:size-10 hover:opacity-75 hover:transition-opacity" /> }
+                    { instructor?.linkediId && <RiLinkedinFill onClick={redirectUrl(instructor?.linkediId)} className="cursor-pointer size-7 sm:size-10 hover:opacity-75 hover:transition-opacity" /> }
                 </div>
             </section>
         </div>
