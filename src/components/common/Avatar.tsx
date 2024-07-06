@@ -12,7 +12,7 @@ const Avatar = ({url, alt = '', className = ''}: IProps) => {
   }
 
   return (
-    <img className={"size-8 bg-white " + className} src={url} alt={alt} />
+    <img className={"size-8 bg-white rounded-full " + className} src={url} alt={alt} />
   );
 }
  

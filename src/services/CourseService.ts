@@ -17,7 +17,13 @@ export default class CourseService {
   }
 
   static async getCoursePublic(courseId: number): Promise<ICoursePublic> {
-    const response = await axios.get(`${BASE_URL}/course/public/${courseId}`)
+    const token = localStorage.getItem('token')
+
+    const response = await axios.get(`${BASE_URL}/course/public/${courseId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
     return response.data.data
   }
 

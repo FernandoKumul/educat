@@ -17,6 +17,7 @@ export interface ICoursePublic {
   tags: string | null;
   rating: number;
   numberStudents: number;
+  purchased: boolean;
   active: boolean;
   cretionDate: string;
   updateDate: string;
