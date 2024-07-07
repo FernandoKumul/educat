@@ -14,7 +14,6 @@ const CartProvider = ({children}: {children: ReactNode}) => {
         setLoading(true)
         const items = await CartService.getUserCart()
         setCartItems(items);
-        console.log(items)
       } catch (error) {
         console.log(error)
         setCartItems([])        
@@ -24,12 +23,16 @@ const CartProvider = ({children}: {children: ReactNode}) => {
     }
   };
 
+  const handleSetItems = (items: ICartItemCourse[]) => {
+    setCartItems(items)
+  }
+
   useEffect(() => {
     getItems();
   }, []); 
 
   return (
-    <CartContext.Provider value={{ getItems, isCartItems, isLoading }}>
+    <CartContext.Provider value={{ getItems, isCartItems, isLoading, setItems: handleSetItems }}>
       {children}
     </CartContext.Provider>
   );
