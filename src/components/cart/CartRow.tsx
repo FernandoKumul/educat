@@ -19,7 +19,7 @@ const CartRow = ({ item, onDelete }: IProps) => {
   return (
     <tr className="border-b border-[#787081]">
       <td className="py-4 px-6">
-        <div className="bg-gradient-to-r from-purple-500 via-violet-600 to-indigo-400 w-40 aspect-video rounded-md">
+        <div className="w-32 bg-gradient-to-r from-purple-500 via-violet-600 to-indigo-400 lg:w-40 aspect-video rounded-md">
           {item.course.cover &&
             <img className="w-full h-full rounded-md object-cover" src={item.course.cover} alt={item.course.title} />
           }

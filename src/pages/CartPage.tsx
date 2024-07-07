@@ -70,7 +70,7 @@ const CartPage = () => {
   }, [])
 
   return ( 
-    <section className="w-[80%] mx-auto flex-grow pb-4">
+    <section className="w-[90%] lg:w-[80%] mx-auto flex-grow pb-8">
       <h1 className="text-3xl font-medium text-center mt-10">Carrito de compras</h1>
       {isLoading
       ?
@@ -83,27 +83,28 @@ const CartPage = () => {
         <h2 className="text-center mt-8 text-xl">El carrito está vacío</h2>
         :
         <>
-        
-          <table className="w-full mt-8">
-            <thead className="bg-header rounded-sm text-xl">
-              <tr>
-                <th className="w-[260px]"></th>
-                <th className="py-3 font-semibold">Curso</th>
-                <th className="py-3 font-semibold w-48">Precio</th>
-                <th className="py-3 w-[92px]"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {isCartItems.map(item => (
-                <CartRow key={item.pkCartWishList} item={item} onDelete={handleDelete} />
-              ))}
-            </tbody>
-          </table>
-          <div className="flex justify-end mt-4 gap-4 items-center">
-            <h3 className="text-xl font-medium">Total</h3>
-            <p>{CurrencyFormat(totalPrice())} MXN</p>
-            <Button className="px-12">
-              <Link to={"/"} className="text-base">Pagar</Link>
+          <div className="w-full overflow-auto">
+            <table className="w-full mt-8">
+              <thead className="bg-header rounded-sm text-xl">
+                <tr>
+                  <th className="w-[260px]"></th>
+                  <th className="py-3 font-semibold min-w-[12 0px]">Curso</th>
+                  <th className="py-3 font-semibold min-w-[150px] w-48">Precio</th>
+                  <th className="py-3 min-w-[92px] w-[92px]"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {isCartItems.map(item => (
+                  <CartRow key={item.pkCartWishList} item={item} onDelete={handleDelete} />
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="flex flex-col justify-end mt-4 gap-3 items-center lg:flex-row lg:gap-4">
+            <h3 className="text-2xl lg:text-xl font-medium">Total</h3>
+            <p className="text-lg lg:text-base">{CurrencyFormat(totalPrice())} MXN</p>
+            <Button className="px-12 w-full lg:w-fit">
+              <Link to={"/checkout"} className="text-base">Continuar</Link>
             </Button>
           </div>
         </>
