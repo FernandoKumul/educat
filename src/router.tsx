@@ -15,6 +15,8 @@ import InstructorLayout from "./components/layouts/InstructorLayout";
 import InstructorProfile from "./pages/InstructorProfile";
 import InstructorEdit from "./pages/InstructorEdit";
 import CoursePage from "./pages/CoursePage";
+import CartPage from "./pages/CartPage";
+import ProtectedRoute from "./components/Guard/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -101,6 +103,16 @@ const router = createBrowserRouter([
           {
             path: "/course/:courseId",
             element: <CoursePage />,
+          },
+          {
+            path: "cart",
+            element: <ProtectedRoute />,
+            children: [
+              {
+                path: '',
+                element: <CartPage />,
+              }
+            ]
           },
         ]
       },
