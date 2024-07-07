@@ -4,10 +4,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import AuthContext from '../../contexts/AuthContext';
 import { Button, TextInput } from '@tremor/react';
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
+import CartContext from '../../contexts/CartContext';
 
 const Header = () => {
   const [searchValue, setValue] = useState('');
   const { isUser, logout } = useContext(AuthContext);
+  const {isCartItems} = useContext(CartContext);
 
 
   useEffect(() => { 
@@ -47,7 +49,14 @@ const Header = () => {
             <div className='flex gap-5'>
               <Link className='flex' to={'/'}><RiBriefcaseLine/>Se instructor</Link>
               <p>{isUser.name}</p>
-              <Link to={'/'}><RiShoppingCart2Line/></Link>
+              <Link to={'/cart'} className='relative'>
+                <RiShoppingCart2Line/>
+                {isCartItems.length > 0 &&
+                  <span className='size-6 bg-primary-600 text-white rounded-full absolute -right-3 -top-3 flex justify-center items-center '>
+                    <p className='mt-[2px] text-sm'>{isCartItems.length}</p>
+                  </span>
+                }
+              </Link>
 
               <svg onClick={logout} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 cursor-pointer">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />

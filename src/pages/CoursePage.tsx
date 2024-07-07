@@ -20,6 +20,8 @@ import { formatDate } from "../utils/DateUtils";
 import { CurrencyFormat } from "../utils/CurrencyUtils";
 import { getFormatTime } from "../utils/TimeUtils";
 import ReviewList from "../components/Comment/ReviewList";
+import CartService from "../services/CartService";
+import CartContext from "../contexts/CartContext";
 
 const CoursePage = () => {
   const { courseId } = useParams()
@@ -27,9 +29,11 @@ const CoursePage = () => {
   const [isTotalReviews, setTotalReviews] = useState<number>(0)
   const [isReviews, setReviews] = useState<ICommentUser[]>([])
   const [isLoading, setLoading] = useState<boolean>(true)
+  const [isLoadingCart, setLoadingCart] = useState<boolean>(false)
   const dataFetch = useRef<boolean>(false)
   
   const { isUser } = useContext(AuthContext);
+  const { getItems, isCartItems } = useContext(CartContext)
 
   useEffect(() => {
     const getCourse = async () => {
@@ -120,6 +124,30 @@ const CoursePage = () => {
     return `${totalHours} Horas de contenido`
   }
 
+  const handleAddCart = async () => {
+    if(!isUser) {
+      return toast.info("Necesitas iniciar sesión para usar el carrito")
+    }
+
+    try {
+      setLoadingCart(true)
+      await CartService.createCartItem(parseInt(courseId ?? ''))
+      toast.success("Articulo añadido al carrito")
+      getItems()
+    } catch (error) {
+      console.log(error)
+      if (error instanceof AxiosError) {
+        if (error.response?.data.message) {
+          return toast.error(error.response?.data.message);
+        }
+
+        return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
+      }
+    } finally {
+      setLoadingCart(false)
+    }
+  }
+
   const handleRefreshReviews = (rating: number, count: number) => {
     setTotalReviews(count)
     setCourse({...isCourse, rating})
@@ -173,9 +201,17 @@ const CoursePage = () => {
             <Button className="w-full"><span className="text-base">Continuar</span></Button>
             :
             <div className="flex gap-3">
-              <Button className="grow" disabled={isUser?.pkUser === isCourse.instructor.pkUser}>
+              {isCartItems.find(item => item.fkCourse === parseInt(courseId ?? '0')) 
+              ? 
+              <Button className="grow" disabled={true}>
+                <span className="text-base">Curso en el carrito</span>
+              </Button> 
+              : 
+              <Button className="grow" loading={isLoadingCart} onClick={handleAddCart}
+               disabled={isUser?.pkUser === isCourse.instructor.pkUser}>
                 <span className="text-base">Añadir al carrito</span>
               </Button>
+              }
               <div className="size-11 flex items-center justify-center rounded-full 
           bg-[#50475C] hover:scale-110 transition-transform cursor-pointer hover:bg-[#645971] active:scale-95">
                 <RiHeartLine size={30} className="text-secundary-text" />
