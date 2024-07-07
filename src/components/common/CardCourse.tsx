@@ -2,13 +2,15 @@ import { RiStarFill } from '@remixicon/react'
 interface CardsProps {
     title: string;
     instructor: string;
+    image: string;
     price: string;
     score: number;
 }
-const CardCourse = ({ title, instructor, price, score }: CardsProps) => {
+const CardCourse = ({ title, instructor, price, score, image }: CardsProps) => {
+    const backgroundImage = image ? { backgroundImage: `url(${image})` } : {};
     return (
         <div className="size-[280px]">
-            <div className="bg-gradient-to-r from-purple-500 via-violet-600 to-indigo-400 h-[160px] rounded-lg">
+            <div style={backgroundImage} className={`${image ? 'bg-fixed object-cover' : 'bg-gradient-to-r from-purple-500 via-violet-600 to-indigo-400'} h-[160px] rounded-lg`}>
                 <div className="bg-white text-neutral-950 rounded-tl-lg rounded-br-lg w-[65px] h-[30px] flex justify-center items-center gap-1">
                     <p className='text-base'>{score}</p>
                     <RiStarFill
