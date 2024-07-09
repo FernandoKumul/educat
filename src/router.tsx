@@ -18,6 +18,7 @@ import CoursePage from "./pages/CoursePage";
 import CartPage from "./pages/CartPage";
 import ProtectedRoute from "./components/Guard/ProtectedRoute";
 import CheckoutPage from "./pages/CheckoutPage";
+import TakingCourse from "./pages/TakingCourse";
 
 const router = createBrowserRouter([
   {
@@ -104,6 +105,16 @@ const router = createBrowserRouter([
           {
             path: "/course/:courseId",
             element: <CoursePage />,
+          },
+          {
+            path: "/course/lesson/:lessonId",
+            element: <ProtectedRoute />,
+            children: [
+              {
+                path: '',
+                element: <TakingCourse />,
+              }
+            ]
           },
           {
             path: "cart",
