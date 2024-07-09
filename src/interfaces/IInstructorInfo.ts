@@ -1,0 +1,15 @@
+export interface IInstructorInfo {
+    pkInstructor : number,
+    fkUser: number,
+    occupation: string,
+    facebookUser: string,
+    youtubeUser: string,
+    linkediId: string,
+    twitterUser: string,
+    emailPaypal: string,
+    name: string,
+    lastName: string,
+    email: string,
+    avatarUrl: string | null,
+    description: string,
+}

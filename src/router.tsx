@@ -12,7 +12,12 @@ import UnAuthGuard from "./components/Guard/UnAuthGuard";
 import InstructorGuard from "./components/Guard/InstructorGuard";
 import EditCourse from "./pages/EditCourse";
 import InstructorLayout from "./components/layouts/InstructorLayout";
+import InstructorProfile from "./pages/InstructorProfile";
+import InstructorEdit from "./pages/InstructorEdit";
 import CoursePage from "./pages/CoursePage";
+import CartPage from "./pages/CartPage";
+import ProtectedRoute from "./components/Guard/ProtectedRoute";
+import CheckoutPage from "./pages/CheckoutPage";
 
 const router = createBrowserRouter([
   {
@@ -62,6 +67,26 @@ const router = createBrowserRouter([
               }
             ]
           },
+          {
+            path: "profile",
+            element: <InstructorGuard />,
+            children: [
+              {
+                path: '',
+                element: <InstructorProfile />,
+              }
+            ]
+          },
+          {
+            path: "edit",
+            element: <InstructorGuard />,
+            children: [
+              {
+                path: '',
+                element: <InstructorEdit />,
+              }
+            ]
+          }
         ]
       },      
       {
@@ -79,6 +104,26 @@ const router = createBrowserRouter([
           {
             path: "/course/:courseId",
             element: <CoursePage />,
+          },
+          {
+            path: "cart",
+            element: <ProtectedRoute />,
+            children: [
+              {
+                path: '',
+                element: <CartPage />,
+              }
+            ]
+          },
+          {
+            path: "checkout",
+            element: <ProtectedRoute />,
+            children: [
+              {
+                path: '',
+                element: <CheckoutPage />,
+              }
+            ]
           },
         ]
       },
