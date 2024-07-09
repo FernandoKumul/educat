@@ -1,5 +1,6 @@
 import { PayPalButtons, PayPalScriptProvider, ReactPayPalScriptOptions } from "@paypal/react-paypal-js";
 import { useState } from "react";
+import PayPalservice from "../services/PayPalService";
 
 const CheckoutPage = () => {
   const initialOptions: ReactPayPalScriptOptions = {
@@ -9,10 +10,19 @@ const CheckoutPage = () => {
     currency: "MXN",
     "data-page-type": "course-details",
     components: "buttons",
-
   }
 
   const [message, setMessage] = useState("")
+
+  const handleCreateOrder = async () => {
+    try {
+      const orderId = await PayPalservice.createOrder()
+
+      return orderId
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <section>
@@ -24,43 +34,7 @@ const CheckoutPage = () => {
             color: 'silver',
             layout: "vertical",
           }}
-          createOrder={async () => {
-            try {
-              const response = await fetch("/api/orders", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                // use the "body" param to optionally pass additional order information
-                // like product ids and quantities
-                body: JSON.stringify({
-                  cart: [
-                    {
-                      id: "YOUR_PRODUCT_ID",
-                      quantity: "YOUR_PRODUCT_QUANTITY",
-                    },
-                  ],
-                }),
-              });
-
-              const orderData = await response.json();
-
-              if (orderData.id) {
-                //Retornar el id de la orden
-                return orderData.id;
-              } else {
-                const errorDetail = orderData?.details?.[0];
-                const errorMessage = errorDetail
-                  ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
-                  : JSON.stringify(orderData);
-
-                throw new Error(errorMessage);
-              }
-            } catch (error) {
-              console.error(error);
-              setMessage(`Could not initiate PayPal Checkout...${error}`);
-            }
-          }}
+          createOrder={() => 2}
           onApprove={async (data, actions) => {
             try {
               const response = await fetch(
