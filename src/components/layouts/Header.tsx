@@ -1,4 +1,4 @@
-import { RiBriefcaseLine, RiMenuLine, RiSearchLine, RiShoppingCart2Line, RiUserAddLine, RiUserLine } from '@remixicon/react'
+import { RiBook3Line, RiBriefcaseLine, RiHeart3Line, RiMenuLine, RiSearchLine, RiShoppingCart2Line, RiUserAddLine, RiUserLine } from '@remixicon/react'
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthContext from '../../contexts/AuthContext';
@@ -8,6 +8,13 @@ import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/r
 const Header = () => {
   const [searchValue, setValue] = useState('');
   const { isUser, logout } = useContext(AuthContext);
+  const [ open, setOpen] = useState(false);
+
+
+  // para el menú hambuerguesa
+  const handleClick = () =>{
+    setOpen(!open);
+  }
 
 
   useEffect(() => { 
@@ -28,17 +35,23 @@ const Header = () => {
 
     {/* Buscador y logo */}
       <div className='flex w-2/3'>
-        <img src="/src/assets/Logo.svg" alt="logo" className='w-20' />
+      <Link to={'/'}>
+        <img src="/src/assets/Logo.svg" alt="logo" className='w-20'/>
+      </Link>
 
         <form className='relative ml-10 hidden md:block w-3/4' onSubmit={handleSearch}>
           <TextInput className="bg-[#27222D] hover:bg-[#322e37] w-full" type="text" name="s" id="s" placeholder="Buscar..." value={searchValue} onChange={event => setValue(event.target.value)} />
-          <button className='flex items-center px-[10px] bg-[#845EC2] rounded-br-[7.5px] rounded-tr-[7.5px] absolute right-0 top-0 h-full'><RiSearchLine/></button>
+          <button className='flex items-center px-[10px] bg-[#845EC2] rounded-br-[7.5px] rounded-tr-[7.5px] absolute right-0 top-0 h-full'><RiSearchLine className='text-[#27222D]'/></button>
         </form>
       </div>
 
     {/* menú hamburguesa */}
-      <div className='md:hidden'>
-        <RiMenuLine className='text-white'/>
+      <div className='md:hidden ' >
+        <Button variant='light' open={open} handleClick={handleClick}><RiMenuLine className='text-white'/></Button>
+
+        <div open={open} className='bg-black'>
+          {/* <h1>hola</h1> */}
+        </div>
       </div>
 
   {/* condicionador, si estas registrado o no */}
@@ -46,16 +59,13 @@ const Header = () => {
           <div className='hidden md:flex md:items-center w-1/3 justify-end' >
 
             <div className='flex gap-5'>
-              <Link className='flex' to={'/'}><RiBriefcaseLine/>Se instructor</Link>
-              <p>{isUser.name}</p>
-                            
-              <Link to={'/'}><RiShoppingCart2Line/></Link>
+              <Link className='flex hover:text-details' to={'/'}><RiBriefcaseLine/>Se instructor</Link>
+              <Link className='hover:text-details' to={'/'}><RiShoppingCart2Line/></Link>
 
-              <svg onClick={logout} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 cursor-pointer">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
-              </svg>
+              {/* <p>{isUser.name}</p> */}                 
+
               <Menu>
-                <MenuButton><RiUserLine /></MenuButton>
+                <MenuButton className="hover:text-details"><RiUserLine /></MenuButton>
                 <Transition
                   enter="transition ease-out duration-75"
                   enterFrom="opacity-0 scale-95"
@@ -70,27 +80,36 @@ const Header = () => {
                       <p className='px-3 py-1'>{isUser.name}</p>
                     </MenuItem>
                     <MenuItem>
-                      <a className="block data-[focus]:bg-gray-600 px-3 py-1" href="/settings">
-                        Settings
-                      </a>
+                      <div className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
+                        <RiUserLine/>
+                          <a className="bloc px-3 py-1" href="/">Perfil</a>
+                      </div>
                     </MenuItem>
                     <MenuItem>
-                      <a className="block data-[focus]:bg-gray-600 px-3 py-1" href="/support">
-                        Support
-                      </a>
+                      <div className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
+                        <RiHeart3Line/>
+                          <a className="block px-3 py-1" href="/">Lista de deseos</a>
+                      </div>
                     </MenuItem>
                     <MenuItem>
-                      <a className="block data-[focus]:bg-gray-600 px-3 py-1" href="/license">
-                        License
-                      </a>
+                    <div className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
+                        <RiBook3Line/>
+                          <a className="block px-3 py-1" href="/">Mis cursos</a>
+                      </div>
                     </MenuItem>
                     <MenuItem>
-                        <div className='flex items-center data-[focus]:bg-gray-600 px-3 py-1 cursor-pointer gap-2'><RiUserLine size={20} />Cerrar Sesión</div>
+                        <div className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>              
+                          <svg onClick={logout} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 cursor-pointer">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                          </svg>
+                          Cerrar Sesión
+                        </div>
                     </MenuItem>
 
                   </MenuItems>
                 </Transition>
               </Menu>
+
             </div>
             
           </div> 
