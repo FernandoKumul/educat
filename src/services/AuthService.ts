@@ -24,8 +24,8 @@ export default class AuthService {
     })
     return response.data.data
   }
-  static async TokenByGoogle(access_Token: string) {
-    const response = await axios.post(`${BASE_URL}/auth/google`, {accessToken: access_Token})
+  static async TokenByGoogle(accessToken: string) {
+    const response = await axios.post(`${BASE_URL}/auth/google?accessToken=${accessToken}`)
     localStorage.setItem('token', response.data.data.token)
   }
 }
