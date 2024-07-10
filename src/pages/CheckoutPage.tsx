@@ -1,6 +1,8 @@
 import { PayPalButtons, PayPalScriptProvider, ReactPayPalScriptOptions } from "@paypal/react-paypal-js";
 import { useState } from "react";
 import PayPalservice from "../services/PayPalService";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 const CheckoutPage = () => {
   const initialOptions: ReactPayPalScriptOptions = {
@@ -8,7 +10,6 @@ const CheckoutPage = () => {
     "enable-funding": "paylater,venmo",
     "data-sdk-integration-source": "integrationbuilder_sc",
     currency: "MXN",
-    "data-page-type": "course-details",
     components: "buttons",
   }
 
@@ -17,10 +18,20 @@ const CheckoutPage = () => {
   const handleCreateOrder = async () => {
     try {
       const orderId = await PayPalservice.createOrder()
-
       return orderId
     } catch (error) {
       console.log(error)
+      if (error instanceof AxiosError) {
+        if (error.response?.data.message === 'Su cuenta existe, pero su correo no está verificado') {
+          toast.warn(error.response?.data.message)
+          throw error
+        }
+        console.log(error)
+        toast.error('Oops... Ocurrió un error, Intentelo más tarde');
+        throw error
+      }
+      console.log(error)
+      throw error
     }
   }
 
@@ -31,10 +42,10 @@ const CheckoutPage = () => {
         <PayPalButtons
           style={{
             shape: "rect",
-            color: 'silver',
+            color: 'black',
             layout: "vertical",
           }}
-          createOrder={() => 2}
+          createOrder={handleCreateOrder}
           onApprove={async (data, actions) => {
             try {
               const response = await fetch(
@@ -85,6 +96,7 @@ const CheckoutPage = () => {
               );
             }
           }}
+          
         />
       </PayPalScriptProvider>
       <h3>{message}</h3>
