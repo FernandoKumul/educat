@@ -56,6 +56,7 @@ const LoginPage = () => {
       try {
         toast.dismiss()
         setLoading(true)
+        console.log(user.access_token)
         await AuthService.TokenByGoogle(user.access_token)
         navigate("/")
       } catch (error) {
