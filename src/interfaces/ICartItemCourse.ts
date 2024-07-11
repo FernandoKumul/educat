@@ -1,4 +1,5 @@
 import { ICourseMin } from "./ICourseMin";
+import { IUserMin } from "./IUserMin";
 
 export interface ICartItemCourse {
   pkCartWishList: number;
@@ -7,4 +8,5 @@ export interface ICartItemCourse {
   type: 'cart' | 'wish';
   creationDate: string;
   course: ICourseMin;
+  instructor: IUserMin;
 }
