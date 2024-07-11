@@ -12,7 +12,7 @@ export default class WishlistService {
                 'Authorization': `Bearer ${token}`
             }
         })
-        return response.data.data    
+        return response.data.data
     }
     static async createWishlistItem(courseId: number): Promise<ICartWish> {
         const token = localStorage.getItem('token')
