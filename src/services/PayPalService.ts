@@ -16,4 +16,18 @@ export default class PayPalservice {
 
     return orderData.id
   }
+
+  static async captureOrder(ordenId: string): Promise<any> {
+    const token = localStorage.getItem("token")
+
+    const response = await axios.post(`${BASE_URL}/payment/order/${ordenId}/capture`, null, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+
+    const orderData = response.data.data
+
+    return orderData
+  }
 }
