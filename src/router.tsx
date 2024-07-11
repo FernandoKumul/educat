@@ -18,6 +18,7 @@ import CoursePage from "./pages/CoursePage";
 import CartPage from "./pages/CartPage";
 import ProtectedRoute from "./components/Guard/ProtectedRoute";
 import CheckoutPage from "./pages/CheckoutPage";
+import UserCourses from "./pages/UserCourses";
 
 const router = createBrowserRouter([
   {
@@ -125,6 +126,14 @@ const router = createBrowserRouter([
               }
             ]
           },
+          {
+            path: "my-courses",
+            element: <ProtectedRoute />,
+            children: [{
+              path: '',
+              element: <UserCourses />,
+            }]
+          }
         ]
       },
     ]

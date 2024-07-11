@@ -4,7 +4,7 @@ export interface ICartItemCourse {
   pkCartWishList: number;
   fkCourse: number;
   fkUser: number;
-  type: 'cart';
+  type: 'cart' | 'wish';
   creationDate: string;
   course: ICourseMin;
 }

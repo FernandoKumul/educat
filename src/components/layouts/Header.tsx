@@ -96,10 +96,10 @@ const Header = () => {
                       </div>
                     </MenuItem>
                     <MenuItem>
-                      <div className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
+                      <Link to={'/my-courses'} className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
                         <RiHeart3Line/>
                           <a className="block px-3 py-1" href="/">Lista de deseos</a>
-                      </div>
+                      </Link>
                     </MenuItem>
                     <MenuItem>
                     <div className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
