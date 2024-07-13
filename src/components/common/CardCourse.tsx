@@ -2,10 +2,10 @@ import { RiStarFill } from '@remixicon/react'
 import { Link } from 'react-router-dom';
 import { CurrencyFormat } from '../../utils/CurrencyUtils';
 interface CardsProps {
-    id: string;
+    id: number;
     title: string;
-    instructor: string;
-    image: string;
+    instructor: string | null;
+    image: string | null;
     price: string;
     score: number;
 }

@@ -16,7 +16,6 @@ export default class CartService {
 
     return response.data.data
   }
-
   static async createCartItem(courseId: number): Promise<ICartWish> {
     const token = localStorage.getItem('token')
 
