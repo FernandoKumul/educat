@@ -18,6 +18,7 @@ import CoursePage from "./pages/CoursePage";
 import CartPage from "./pages/CartPage";
 import ProtectedRoute from "./components/Guard/ProtectedRoute";
 import CheckoutPage from "./pages/CheckoutPage";
+import SuccessPaymentPage from "./pages/SuccessfulpaymentPage";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "/email-send/:email",
         element: <EmailSendPage />
+      },
+      {
+        path: "/pago-exitoso",
+        element: <SuccessPaymentPage />
       },
       {
         path: "/register",

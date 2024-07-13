@@ -37,15 +37,15 @@ const CheckoutPage = () => {
       console.log(error)
       if (error instanceof AxiosError) {
         const errorDetail = error.response?.data?.data?.details[0];
-        if(errorDetail) {
+        if (errorDetail) {
           toast.error(`${errorDetail.issue} ${errorDetail.description}`)
           throw error
         }
 
-        if(error.response?.data?.data?.name) {
+        if (error.response?.data?.data?.name) {
           toast.error(error.response?.data.data.name)
         }
-        
+
         if (error.response?.data.message) {
           toast.error(error.response?.data.message)
           throw error
@@ -63,7 +63,7 @@ const CheckoutPage = () => {
       await PayPalservice.captureOrder(data.orderID)
       toast.success("Pago hecho con exíto")
       setItems([])
-      //Redirect to mi cursos
+      navigate('/pago-exitoso')    
     } catch (error) {
       console.log(error)
       if (error instanceof AxiosError) {
@@ -75,7 +75,7 @@ const CheckoutPage = () => {
           toast.error(`${errorDetail.description} (${response?.data?.debug_id})`,)
           return
         }
-        
+
         if (response?.message) {
           toast.error(response?.message)
           return
@@ -93,7 +93,7 @@ const CheckoutPage = () => {
       dataFetch.current = true
       setLoading(true)
       const items = await CartService.getUserCart()
-      if(items.length === 0) {
+      if (items.length === 0) {
         toast.info("No tienes nigún producto en el carrito para comprar")
         navigate("/")
       }
@@ -124,10 +124,10 @@ const CheckoutPage = () => {
   }
 
   useEffect(() => {
-    if(!dataFetch.current) {
+    if (!dataFetch.current) {
       getItems()
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (isLoading) {
@@ -139,13 +139,22 @@ const CheckoutPage = () => {
   }
 
   return (
-    <section className="grid gap-12 grid-cols-[5fr_2fr] py-8 px-16">
+    <section className="grid gap-12 grid-cols-1 lg:grid-cols-[5fr_2fr] py-8 w-[80%] mx-auto items-start">
       <article className="bg-[#25202A] rounded-md py-10 px-8">
         <h2 className="text-2xl font-semibold mb-4">Cursos de la compra</h2>
-        {isCartItems.map(item => (
-          <article key={item.pkCartWishList} className="flex gap-2">
-            <h4>{item.course.title}</h4>
-            <p>{CurrencyFormat(item.course.price ?? 0)}</p>
+        {isCartItems.map((item, index) => (
+          <article key={item.pkCartWishList} className={`flex items-start gap-4 ${isCartItems.length !== (index - 1) && 'border-b-[1px] border-[#787081] py-6'}`}>
+            <div className="w-24 bg-gradient-to-r flex-shrink-0 from-purple-500 via-violet-600 to-indigo-400 aspect-video rounded-md">
+              {item.course.cover &&
+                <img className="w-full h-full rounded-md object-cover" src={item.course.cover} alt={item.course.title} />
+              }
+            </div>
+            <div className="flex-grow lg:flex lg:justify-between">
+              <div>
+                <h4 className="font-medium text-lg">{item.course.title}</h4>
+              </div>
+              <p className="text-secundary-text font-semibold">{CurrencyFormat(item.course.price ?? 0)}</p>
+            </div>
           </article>
         ))}
       </article>
@@ -162,7 +171,7 @@ const CheckoutPage = () => {
           <PayPalButtons
             style={{
               shape: "rect",
-              color: 'black',
+              color: 'silver',
               layout: "vertical",
             }}
             createOrder={handleCreateOrder}
