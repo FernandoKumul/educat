@@ -103,9 +103,11 @@ const CartPage = () => {
           <div className="flex flex-col justify-end mt-4 gap-3 items-center lg:flex-row lg:gap-4">
             <h3 className="text-2xl lg:text-xl font-medium">Total</h3>
             <p className="text-lg lg:text-base">{CurrencyFormat(totalPrice())} MXN</p>
-            <Button className="px-12 w-full lg:w-fit">
-              <Link to={"/checkout"} className="text-base">Continuar</Link>
-            </Button>
+            <Link to={"/checkout"} className="block">
+              <Button className="px-12 w-full lg:w-fit">
+                <span className="text-base">Continuar</span>
+              </Button>
+            </Link>
           </div>
         </>
       }
