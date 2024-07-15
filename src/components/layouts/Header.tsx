@@ -94,7 +94,7 @@ const Header = () => {
                   <p>Lista de deseos</p>
                 </Link>
                 <Link to={"/my-courses"} onClick={() => setOpen(false)} className='flex items-center hover:bg-[#473D55] rounded-md hover:text-details px-3 py-3 cursor-pointer gap-2'>
-                  <RiUserLine />
+                  <RiBook3Line />
                   <p>Mis cursos</p>
                 </Link>
               </div>
@@ -142,21 +142,20 @@ const Header = () => {
                 leaveTo="opacity-0 scale-95"
               >
                 <MenuItems anchor="bottom end" modal={false} className="bg-black-auth rounded-md mt-2 py-2">
-
                   <MenuItem>
                     <p className='px-3 py-1'>{isUser.name}</p>
                   </MenuItem>
                   <MenuItem>
                     <div className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
-                      <RiUserLine />
-                      <a className="bloc px-3 py-1" href="/">Perfil</a>
+                      <RiUserLine/>
+                        <a className="bloc px-3 py-1" href="/">Perfil</a>
                     </div>
                   </MenuItem>
                   <MenuItem>
-                    <div className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
-                      <RiHeart3Line />
-                      <a className="block px-3 py-1" href="/">Lista de deseos</a>
-                    </div>
+                    <Link to={'/my-courses'} className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
+                      <RiHeart3Line/>
+                        <p className="block px-3 py-1">Lista de deseos</p>
+                    </Link>
                   </MenuItem>
                   <MenuItem>
                     <div className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
@@ -172,7 +171,6 @@ const Header = () => {
                       Cerrar Sesión
                     </div>
                   </MenuItem>
-
                 </MenuItems>
               </Transition>
             </Menu>

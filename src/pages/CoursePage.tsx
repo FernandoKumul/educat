@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { AccordionList, Button } from "@tremor/react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { RiCheckboxCircleLine, RiGlobalLine, RiGraduationCapFill, 
-  RiGroupFill, RiHeartLine, RiLoader4Line, RiTimeLine, RiVideoLine } from "@remixicon/react";
+  RiGroupFill, RiHeartFill, RiHeartLine, RiLoader4Line, RiTimeLine, RiVideoLine } from "@remixicon/react";
 import CourseService from "../services/CourseService";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
@@ -21,6 +21,7 @@ import { CurrencyFormat } from "../utils/CurrencyUtils";
 import { getFormatTime } from "../utils/TimeUtils";
 import ReviewList from "../components/Comment/ReviewList";
 import CartService from "../services/CartService";
+import WishlistService from "../services/WishlistService";
 import CartContext from "../contexts/CartContext";
 
 const CoursePage = () => {
@@ -28,12 +29,32 @@ const CoursePage = () => {
   const [isCourse, setCourse] = useState<null | ICoursePublic>(null)
   const [isTotalReviews, setTotalReviews] = useState<number>(0)
   const [isReviews, setReviews] = useState<ICommentUser[]>([])
+  const [isWishlist, setWishlist] = useState<boolean>(false)
   const [isLoading, setLoading] = useState<boolean>(true)
   const [isLoadingCart, setLoadingCart] = useState<boolean>(false)
   const dataFetch = useRef<boolean>(false)
   
   const { isUser } = useContext(AuthContext);
   const { getItems, isCartItems } = useContext(CartContext)
+
+  const alreadyWishlist = async () => {
+    try {
+      const data = await WishlistService.getUserWishlist()
+      const isWishlist = data.find(item => item.fkCourse === parseInt(courseId ?? '0'))
+      if (isWishlist) {
+        setWishlist(true)
+      }
+    } catch (error) {
+      console.log(error)
+      if (error instanceof AxiosError) {
+        if (error.response?.data.message) {
+          return toast.error(error.response?.data.message);
+        }
+
+        return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
+      }
+    }
+  }
 
   useEffect(() => {
     const getCourse = async () => {
@@ -42,7 +63,7 @@ const CoursePage = () => {
       try {
         const dataCourse = await CourseService.getCoursePublic(courseIdInt)
         const {result, count} = await CommentService.getReviewsByCourse(courseIdInt, 1, 12)
-        console.log(result, count)
+        await alreadyWishlist()
         setReviews(result)
         setTotalReviews(count)
         dataCourse.rating = Math.round(dataCourse.rating * 100) / 100
@@ -67,6 +88,42 @@ const CoursePage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const handleWishlist = async () => {
+    handleStateWishlist()
+    toast.dismiss()
+    if (!isWishlist) {
+      try {
+        await WishlistService.createWishlistItem(parseInt(courseId ?? '0'))
+        toast.success("Curso añadido a la lista de deseos")
+      } catch (error) {
+        console.log(error)
+        if (error instanceof AxiosError) {
+          if (error.response?.data.message) {
+            return toast.error(error.response?.data.message);
+          }
+
+          return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
+        }
+      }
+    } else {
+      try {
+        await WishlistService.deleteWishlistItem(parseInt(courseId ?? '0'))
+        toast.success("Curso eliminado de la lista de deseos")
+      } catch (error) {
+        console.log(error)
+        if (error instanceof AxiosError) {
+          if (error.response?.data.message) {
+            return toast.error(error.response?.data.message);
+          }
+          return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
+        }
+      }
+    }
+  }
+
+  const handleStateWishlist = () => {
+    setWishlist(!isWishlist)
+  }
 
   if (isLoading) {
     return (
@@ -212,9 +269,8 @@ const CoursePage = () => {
                 <span className="text-base">Añadir al carrito</span>
               </Button>
               }
-              <div className="size-11 flex items-center justify-center rounded-full 
-          bg-[#50475C] hover:scale-110 transition-transform cursor-pointer hover:bg-[#645971] active:scale-95">
-                <RiHeartLine size={30} className="text-secundary-text" />
+              <div onClick={handleWishlist} className="size-11 flex items-center justify-center rounded-full bg-[#50475C] hover:scale-110 transition-transform cursor-pointer hover:bg-[#645971] active:scale-95">
+                {isWishlist ? <RiHeartFill size={30} className="text-tremor-brand" /> : <RiHeartLine size={30} className="text-secundary-text" />}
               </div>
             </div>
           }
