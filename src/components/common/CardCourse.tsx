@@ -8,12 +8,13 @@ interface CardsProps {
     image: string | null;
     price: string;
     score: number;
+    className?: string
 }
-const CardCourse = ({ title, instructor, price, score, image, id }: CardsProps) => {
+const CardCourse = ({ title, instructor, price, score, image, id, className = '' }: CardsProps) => {
     const backgroundImage = image ? { backgroundImage: `url(${image})` } : {};
     return (
-        <Link to={`/course/${id}`} className="size-[280px]">
-            <div style={backgroundImage} className={`${image ? 'bg-cover bg-center' : 'bg-gradient-to-r from-purple-500 via-violet-600 to-indigo-400'} h-[160px] rounded-lg`}>
+        <Link to={`/course/${id}`} className={`w-full block ${className}`}>
+            <div style={backgroundImage} className={`${image ? 'bg-cover bg-center' : 'bg-gradient-to-r from-purple-500 via-violet-600 to-indigo-400'} aspect-video rounded-lg`}>
                 <div className="bg-white text-neutral-950 rounded-tl-lg rounded-br-lg w-[65px] h-[30px] flex justify-center items-center gap-1">
                     <p className='text-base'>{score}</p>
                     <RiStarFill
