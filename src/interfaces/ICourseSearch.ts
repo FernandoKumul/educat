@@ -6,8 +6,10 @@ export interface ICourseSearch {
     price: number,
     active: boolean,
     tags: string[],
+    rating: number,
     fkInstructor: number,
     instructorName: string,
+    instructorLastName: string,
     fkCategory: number,
     categoryName: string
 }

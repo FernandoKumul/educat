@@ -127,7 +127,7 @@ const HomePage = () => {
               <CardCourse 
               className="px-4"
               key={item} image={null} id={item} title={"Título del curso " + item} 
-              instructor="Nombre instructos" price={(100 * item).toString()} score={4.5} />
+              instructor="Nombre instructos" price={100 * item} score={4.5} />
             ))}
           </Slider>
         </div>
