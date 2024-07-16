@@ -1,7 +1,7 @@
-import { RemixiconComponentType, RiArrowRightLine, RiBarChart2Fill, RiBookReadLine, RiCameraFill, RiCpuLine, RiGroup2Line, RiMacLine, RiMarkupFill, RiMusic2Fill, RiPencilRulerLine, RiSparklingLine, RiUser5Line, RiUserFill } from "@remixicon/react";
+import { RemixiconComponentType, RiBarChart2Fill, RiBookReadLine, RiCameraFill, RiCpuLine, RiGroup2Line, RiMacLine, RiMarkupFill, RiMusic2Fill, RiPencilRulerLine, RiSparklingLine, RiUser5Line, RiUserFill } from "@remixicon/react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
+import Slider, { Settings } from "react-slick";
 import CardCourse from "../components/common/CardCourse";
 
 interface ICategory {
@@ -23,7 +23,7 @@ const CategoriesData: ICategory[] = [
 
 const HomePage = () => {
 
-  const sliderSettings = {
+  const sliderSettings: Settings = {
     dots: false,
     speed: 500,
     slidesToShow: 4,
@@ -32,10 +32,7 @@ const HomePage = () => {
     focusOnSelect: true,
     infinite: true,
     swipeToSlide: true,
-    // arrowsSlider: () => (
-    //   <div className="bg-transparent">
-    //   </div>
-    // ),
+    draggable: false,
     responsive: [
       {
         breakpoint: 1250,
@@ -101,13 +98,13 @@ const HomePage = () => {
           </div>
           <div>
             <RiBookReadLine className="text-[#D9D9D9] w-10 h-10 mb-3"></RiBookReadLine>
-            <h2 className='text-base items-center font-semibold mb-3'>Flexibilidad y accesibilidad para tu aprendizaje:</h2>
+            <h2 className='text-base items-center font-semibold mb-3'>Flexibilidad y accesibilidad para tu aprendizaje</h2>
             <p className='text-sm font-light'>Accede a tus cursos en cualquier momento y desde cualquier lugar.
             Progresión del curso guardada automáticamente para que puedas continuar donde lo dejaste.</p>
           </div>
           <div>
             <RiGroup2Line className="text-[#D9D9D9] w-10 h-10 mb-3"></RiGroup2Line>
-            <h2 className='text-base items-center font-semibold mb-3'>Interacción y comunidad para un mejor aprendizaje:</h2>
+            <h2 className='text-base items-center font-semibold mb-3'>Interacción y comunidad para un mejor aprendizaje</h2>
             <p className='text-sm font-light'>Comenta y discute lecciones con otros estudiantes para un aprendizaje colaborativo.
               Deja reseñas y calificaciones para ayudar a otros estudiantes a encontrar los mejores cursos.</p>
           </div>    
@@ -126,29 +123,12 @@ const HomePage = () => {
         {/* Slider */}
         <div>
           <Slider className="flex flex-auto m-auto" {...sliderSettings}>
-            <div>
-              <CardCourse title="Título del curso 1" instructor="Nombre instructos" price="$150MX" score={4.5}></CardCourse>
-            </div>
-            <div>
-              <CardCourse title="Título del curso 2" instructor="Nombre instructos" price="$150MX" score={4.5}></CardCourse>
-
-            </div>
-            <div>
-              <CardCourse title="Título del curso 3" instructor="Nombre instructos" price="$150MX" score={4.5}></CardCourse>
-
-            </div>
-            <div>
-              <CardCourse title="Título del curso 4" instructor="Nombre instructos" price="$150MX" score={4.5}></CardCourse>
-
-            </div>
-            <div>
-              <CardCourse title="Título del curso 5" instructor="Nombre instructos" price="$150MX" score={4.5}></CardCourse>
-
-            </div>
-            <div>
-              <CardCourse title="Título del curso agivuhaeviaernacfahio" instructor="Nombre instructos" price="$150MX" score={4.5}></CardCourse>
-
-            </div>
+            {[1,2,3,4,5,6].map(item => (
+              <CardCourse 
+              className="px-4"
+              key={item} image={null} id={item} title={"Título del curso " + item} 
+              instructor="Nombre instructos" price={100 * item} score={4.5} />
+            ))}
           </Slider>
         </div>
       </div>
@@ -164,7 +144,7 @@ const HomePage = () => {
           {CategoriesData.map(category => (            
             <div key={category.id} className="flex justify-between items-center bg-[#312B39] px-5 h-20 rounded-sm">
               <div className="flex">
-                <h1 className="white text-base lg:text-xl mr-5">{category.name}</h1>
+                <h1 className="white text-base lg:text-lg mr-5">{category.name}</h1>
                 {/* <RiArrowRightLine className="flex-shrink-0"></RiArrowRightLine>  */}
               </div>
               <category.icon className="size-7 flex-shrink-0" />

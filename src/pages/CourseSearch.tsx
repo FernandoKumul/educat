@@ -61,9 +61,11 @@ const CourseSearch = () => {
                     </Select>
                 </div>
             </div>
-            <section className="mt-5 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+            <section className="mt-5 w-5/6 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                 {courses.map((course) => (
-                    <Cards key={course.pkCourse} id={course.pkCourse} title={course.title} instructor={course.instructorName} price={String(course.price)} image={course.cover} score={4.7} />
+                    <Cards key={course.pkCourse} id={course.pkCourse} 
+                    title={course.title} instructor={course.instructorName + ' ' + course.instructorLastName} 
+                    price={course.price} image={course.cover} score={course.rating} />
                 ))}
             </section>
             <ReactPaginate
