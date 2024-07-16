@@ -76,3 +76,7 @@
 .tremor-Accordion-root {
   overflow: visible;
 }
+
+.custom-border-light.dark\:border-dark-tremor-border  {
+  border-color: rgb(122, 117, 132);
+}
