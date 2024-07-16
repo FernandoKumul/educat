@@ -18,7 +18,7 @@ const InstructorSidebar = ({handleSidebar, openSidebar}: InstructorSidebarProps)
     setPath(window.location.pathname.split('/')[2]);
   }, [path]);
   return (
-    <aside className={openSidebar ? 'h-screen max-sm:flex max-sm:w-screen max-sm:absolute max-sm:z-10 max-sm:right-0 lg:min-w-56 lg:flex-shrink-0 lg:block' : 'hidden bg-black-1 h-screen lg:min-w-56 lg:flex-shrink-0 lg:block'}>
+    <aside className={openSidebar ? 'h-screen max-sm:flex max-sm:w-screen max-sm:absolute z-50 max-sm:right-0 lg:min-w-56 lg:flex-shrink-0 lg:block' : 'hidden bg-black-1 h-screen lg:min-w-56 lg:flex-shrink-0 lg:block'}>
       <div onClick={handleSidebar} className={openSidebar ? 'max-sm:block max-sm:h-screen max-sm:w-1/5 max-sm:bg-black max-sm:opacity-50': 'hidden'}></div>
       <div className="max-sm:w-4/5 bg-black-1 flex flex-col py-5 px-10 gap-y-5">
         <Link to={'/'} className="flex items-center justify-center mb-5">
