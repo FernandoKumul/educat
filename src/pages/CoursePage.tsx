@@ -63,7 +63,9 @@ const CoursePage = () => {
       try {
         const dataCourse = await CourseService.getCoursePublic(courseIdInt)
         const {result, count} = await CommentService.getReviewsByCourse(courseIdInt, 1, 12)
-        await alreadyWishlist()
+        if (isUser) {
+          await alreadyWishlist()
+        }
         setReviews(result)
         setTotalReviews(count)
         dataCourse.rating = Math.round(dataCourse.rating * 100) / 100
@@ -89,6 +91,10 @@ const CoursePage = () => {
   }, [])
 
   const handleWishlist = async () => {
+    if (!isUser) {
+      toast.dismiss()
+      return toast.info("Necesitas iniciar sesión para usar la lista de deseos")
+    }
     handleStateWishlist()
     toast.dismiss()
     if (!isWishlist) {
@@ -101,7 +107,6 @@ const CoursePage = () => {
           if (error.response?.data.message) {
             return toast.error(error.response?.data.message);
           }
-
           return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
         }
       }
