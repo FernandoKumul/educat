@@ -1,3 +1,4 @@
+import { Accordion, AccordionBody, AccordionHeader, AccordionList } from '@tremor/react';
 import img from '../assets/userDefault.svg'
 import Avatar from '../components/common/Avatar';
 import BadgeDifficulty from '../components/course/BadgeDifficulty';
@@ -8,7 +9,7 @@ const TakingCourse = () => {
             <div className="lg:w-4/5">
                 <p className='text-2xl mb-5'>Titulo del curso</p>
                 <div>
-                    <video className='w-11/12' src='' controls>
+                    <video className='aspect-video w-11/12 rounded-md' src='' controls>
                     </video>
                 </div>
                 <p className='text-xl my-5'>Titulo del video - video videoso</p>
@@ -26,19 +27,25 @@ const TakingCourse = () => {
                 <p className='w-full'>description</p>
             </div>
             <div className='lg:w-1/5'>
-                <p>Lista de reproducción</p>
-                <ul>
-                    <li>Video 1</li>
-                    <li>Video 2</li>
-                    <li>Video 3</li>
-                    <li>Video 4</li>
-                    <li>Video 5</li>
-                    <li>Video 6</li>
-                    <li>Video 7</li>
-                    <li>Video 8</li>
-                    <li>Video 9</li>
-                    <li>Video 10</li>
-                </ul>
+                <AccordionList>
+                    <Accordion>
+                        <AccordionHeader>
+                            <p>Nombre Unidad</p>
+                        </AccordionHeader>
+                        <AccordionBody>
+                            <div className='flex'>
+                                <div className='aspect-video h-[40px] rounded-md bg-gradient-to-r from-purple-500 via-violet-600 to-indigo-400' />
+                                <div className='mx-3 min-w-0'>
+                                    <p className='truncate'>Titulo de Lección safuvysfjkjhdsdfghjklsdfysdhfjsdkfsojfsdufsdjfnjjnsdfnskdfksmfmksfmksfmk</p>
+                                    <p>15:00 Minutos</p>
+                                </div>
+                                <div>
+
+                                </div>
+                            </div>
+                        </AccordionBody>
+                    </Accordion>
+                </AccordionList>
             </div>
         </div>
     );
