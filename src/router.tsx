@@ -21,6 +21,7 @@ import CheckoutPage from "./pages/CheckoutPage";
 import TakingCourse from "./pages/TakingCourse";
 import SuccessPaymentPage from "./pages/SuccessfulpaymentPage";
 import UserCourses from "./pages/UserCourses";
+import UserProfile from "./pages/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -98,11 +99,11 @@ const router = createBrowserRouter([
       },      
       {
         path: "/",
-        element: <MainLayout />,
+        element: <MainLayout/>,
         children: [
           {
             path: "/",
-            element: <HomePage />,
+            element: <HomePage/>,
           },
           {
             path: "/search",
@@ -142,6 +143,8 @@ const router = createBrowserRouter([
               }
             ]
           },
+
+          // Usuario
           {
             path: "my-courses",
             element: <ProtectedRoute />,
@@ -149,7 +152,15 @@ const router = createBrowserRouter([
               path: '',
               element: <UserCourses />,
             }]
-          }
+          },
+          {
+            path: "user-profile",
+            element: <ProtectedRoute />,
+            children: [{
+              path: '',
+              element: <UserProfile />,
+            }]
+          },
         ]
       },
     ]
