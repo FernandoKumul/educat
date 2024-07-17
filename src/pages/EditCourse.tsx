@@ -61,6 +61,30 @@ const EditCourse = () => {
 
   const [isEditUnits, setEditUnits] = useState<IEditUnit[]>([])
   const hasFetchedData = useRef(false)
+
+  const [isLoadingPublish, setLoadingPublish] = useState(false)
+
+  //publish
+  const handlePublish = async () => {
+		try {
+			setLoadingPublish(true)
+			await CourseService.publish(isCourse?.pkCourse ?? 0)
+      toast.success('Curso publicado con éxito', { pauseOnHover: false, autoClose: 3000 })
+      getData()
+		} catch (error) {
+			console.log(error)
+			if (error instanceof AxiosError) {
+				if (error.response?.data.message) {
+					return toast.error(error.response?.data.message);
+				}
+
+				return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
+			}
+		} finally {
+			setLoadingPublish(false)
+		}
+  }
+
   //Learning
   const handleAddLearn = () => {
     setLearningList([...learningList, { id: learningId, text: '' }])
@@ -249,8 +273,8 @@ const EditCourse = () => {
     data.cover = isCurrentImg
     data.requeriments = dataForm.requeriments
     data.description = dataForm.description
-    data.tags = istags.join(',')
-    data.learnText = learningList.map(item => item.text).join(',')
+    data.tags = istags.length === 0 ? null : istags.join(',')
+    data.learnText = learningList.length === 0 ? null : learningList.map(item => item.text).join(',')
     data.units = updateUnits
     console.log({ data })
 
@@ -354,7 +378,7 @@ const EditCourse = () => {
               </span>
             </div>
           </Button>
-          <Button className="px-[10px] lg:px-4 lg:py-2">
+          <Button className="px-[10px] lg:px-4 lg:py-2"  loading={isLoadingPublish} onClick={handlePublish} disabled={isCourse.active} >
             <div className="flex items-center gap-1">
               <RiUploadCloudFill size={20} />
               <span className="hidden lg:inline">

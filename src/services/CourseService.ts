@@ -58,4 +58,25 @@ export default class CourseService {
       }
     })
   }
+
+  static async delete(courseId: number) {
+    const token = localStorage.getItem('token')
+
+    await axios.delete(`${BASE_URL}/course/${courseId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+  }
+
+  static async publish(courseId: number) {
+    const token = localStorage.getItem('token')
+    console.log(token)
+
+    await axios.put(`${BASE_URL}/course/publish/${courseId}`, null, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+  }
 }
