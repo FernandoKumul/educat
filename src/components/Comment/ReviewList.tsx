@@ -36,7 +36,7 @@ const ReviewList = ({ initReviews, total, courseId, rating, purchased, onRefresh
       const reviewByUser = await CommentService.GetCourseReviewByUser(courseId)
       setReviewByUser(reviewByUser)
       const ratingRound = Math.round(rating * 100) / 100
-      onRefresh(count, ratingRound)
+      onRefresh(ratingRound, count)
     } catch (error) {
       console.log(error)
       setReviews([])
