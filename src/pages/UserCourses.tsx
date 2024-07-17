@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import WishlistService from "../services/WishlistService";
 import { ICartItemCourse } from "../interfaces/ICartItemCourse";
 import { Tab, TabGroup, TabList } from "@tremor/react";
-import { RiHeart3Line, RiLoader4Line } from "@remixicon/react";
+import { RiCheckFill, RiHeart3Line, RiLoader4Line, RiLoopLeftFill } from "@remixicon/react";
 import CardCourse from "../components/common/CardCourse";
 import CourseService from "../services/CourseService";
 import { ICourseSearch } from "../interfaces/ICourseSearch";
@@ -66,13 +66,15 @@ const UserCourses = () => {
     }, [tabValue])
     return (
         <div className="flex flex-col items-center p-10">
-            <TabGroup className="w-fit">
-                <TabList variant="line" color={'tremor-brand'}>
-                    <Tab value={tabValue} onClick={() => setTabValue(1)} icon={RiHeart3Line}>Lista de deseos</Tab>
-                    <Tab value={tabValue} onClick={() => setTabValue(2)}>En proceso</Tab>
-                    <Tab value={tabValue} onClick={() => setTabValue(3)}>Terminados</Tab>
-                </TabList>
-            </TabGroup>
+            <div className="overflow-auto w-full">
+                <TabGroup className="w-fit mx-auto">
+                    <TabList variant="line" color={'tremor-brand'}>
+                        <Tab value={tabValue} onClick={() => setTabValue(1)} icon={RiHeart3Line}>Lista de deseos</Tab>
+                        <Tab value={tabValue} onClick={() => setTabValue(2)} icon={RiLoopLeftFill}>En proceso</Tab>
+                        <Tab value={tabValue} onClick={() => setTabValue(3)} icon={RiCheckFill}>Terminados</Tab>
+                    </TabList>
+                </TabGroup>
+            </div>
             {isLoading &&
                 <div className="flex-grow flex items-center justify-center">
                     <RiLoader4Line size={48} className="animate-spin" />

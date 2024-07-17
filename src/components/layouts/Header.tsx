@@ -171,10 +171,10 @@ const Header = () => {
                     </Link>
                   </MenuItem>
                   <MenuItem>
-                    <div className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
+                    <Link to={'/my-courses'} className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
                       <RiBook3Line />
-                      <a className="block px-3 py-1" href="/">Mis cursos</a>
-                    </div>
+                      <p className="block px-3 py-1">Mis cursos</p>
+                    </Link>
                   </MenuItem>
                   <MenuItem>
                     <div onClick={logout} className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>

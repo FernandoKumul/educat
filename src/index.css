@@ -13,15 +13,15 @@
   flex-direction: column;
   min-height: 100vh;
 } */
-::-webkit-scrollbar {
+.custom-scroll-1::-webkit-scrollbar {
   width: 5px;
   height: 30px;
 }
-::-webkit-scrollbar-thumb {
+.custom-scroll-1::-webkit-scrollbar-thumb {
   background: #3f3848;
   border-radius: 10px;
 }
-::-webkit-scrollbar-thumb:hover {
+.custom-scroll-1::-webkit-scrollbar-thumb:hover {
   background: #312b39; 
 }
 

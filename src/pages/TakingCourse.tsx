@@ -77,7 +77,7 @@ const TakingCourse = () => {
     }
     console.log(isLesson)
     return (
-        <div className="flex flex-col lg:flex-row px-6 py-6 lg:px-24 lg:py-10 lg:gap-4 xl:px-36">
+        <div className="flex flex-col lg:flex-row px-6 py-6 lg:px-24 lg:py-10 lg:gap-4">
             <div className="lg:w-4/5">
                 <p className='text-2xl mb-5'>{isCourse.title}</p>
                 {isLesson?.type === 'text' &&
@@ -110,7 +110,7 @@ const TakingCourse = () => {
                 <p className='w-full my-5'>{isCourse.description}</p>
             </div>
             <div className='lg:w-1/5'>
-                <AccordionList className='overflow-auto max-h-[600px]'>
+                <AccordionList className='overflow-auto max-h-[600px] custom-scroll-1'>
                     {isCourse.units.map(unit => (
                         <UnitCard key={unit.pkUnit} unit={unit} purchased={isCourse.purchased} />
                     ))}
