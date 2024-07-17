@@ -1,4 +1,4 @@
-import { RiEditLine, RiUser3Line, RiBookLine, RiFeedbackLine, RiGroupLine } from "@remixicon/react";
+import { RiEditLine, RiBookLine, RiFeedbackLine, RiGroupLine, RiUserLine } from "@remixicon/react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.svg";
 import { useEffect, useState } from "react";
@@ -25,7 +25,7 @@ const InstructorSidebar = ({handleSidebar, openSidebar}: InstructorSidebarProps)
           <img src={logo} alt="logo educat" className="w-44"/>
         </Link>
         <Link to={'/instructor/profile'} onClick={() => currentView('profile')} className={path === 'profile' ? 'text-tremor-brand flex w-fit items-center gap-x-3' : 'flex w-fit items-center gap-x-3'}>
-          <RiUser3Line className="size-7"  />
+          <RiUserLine className="size-7"  />
           <p>Perfil</p>
         </Link>
         <Link to={'/instructor/edit'} onClick={() => currentView('edit')} className={path === 'edit' ? 'text-tremor-brand flex w-fit items-center gap-x-3' : 'flex w-fit items-center gap-x-3'}>
