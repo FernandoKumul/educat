@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import AuthContext from '../contexts/AuthContext';
 import CourseService from '../services/CourseService';
 import CategoriesData from '../data/CategoriesData';
-import { ICoursePublic } from '../interfaces/ICoursePublic';
+import { ICoursePublic, ILessonOut } from '../interfaces/ICoursePublic';
 import { Accordion, AccordionBody, AccordionHeader, AccordionList } from '@tremor/react';
 import { RiFileTextLine, RiGroupFill, RiLoader4Line, RiVideoOnLine } from '@remixicon/react';
 import Avatar from '../components/common/Avatar';
@@ -15,20 +15,28 @@ import { getFormatTimeinMinutes } from '../utils/TimeUtils';
 const TakingCourse = () => {
     const { courseId } = useParams();
     const [isCourse, setCourse] = useState<null | ICoursePublic>(null);
+    const [isLesson, setLesson] = useState<null | ILessonOut>(null);
     const [isLoading, setLoading] = useState<boolean>(true);
     const dataFetch = useRef<boolean>(false);
 
     const { isUser } = useContext(AuthContext);
 
+    const getLesson = async (lessonId: number) => {
+        const response = await CourseService.getLesson(lessonId)
+        setLesson(response)
+        console.log(isLesson)
+    }
+
     useEffect(() => {
         const getCourse = async () => {
             dataFetch.current = true
             const courseIdInt = parseInt(courseId ?? '0')
-            console.log(courseIdInt)
             try {
                 const dataCourse = await CourseService.getCoursePublic(courseIdInt)
                 dataCourse.rating = Math.round(dataCourse.rating * 100) / 100
                 setCourse(dataCourse)
+                const initialLesson = dataCourse.units[0].lessons[0].pkLesson
+                getLesson(initialLesson)
             } catch (error) {
                 console.log(error)
                 if (error instanceof AxiosError) {
@@ -43,11 +51,10 @@ const TakingCourse = () => {
         }
         if (!dataFetch.current) {
             getCourse()
-            console.log(isCourse)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-    console.log(isCourse)
+
     if (isLoading) {
         return (
             <div className="flex-grow flex items-center justify-center">
@@ -69,16 +76,16 @@ const TakingCourse = () => {
             </div>
         )
     }
-
+    console.log(isLesson)
     return (
         <div className="flex lg:p-10">
             <div className="lg:w-4/5">
                 <p className='text-2xl mb-5'>{isCourse.title}</p>
                 <div>
-                    <video className='aspect-video w-11/12 rounded-md' src='' controls>
+                    <video className='aspect-video w-11/12 rounded-md' src={isLesson?.videoUrl} controls>
                     </video>
                 </div>
-                <p className='text-xl my-5'>Titulo del video - video videoso</p>
+                <p className='text-xl my-5'>{isLesson?.title}</p>
                 <div className='flex items-center gap-x-3'>
                     <Avatar url={isCourse.instructor.avatarUrl} />
                     <p>{isCourse.instructor.name + ' ' + isCourse.instructor.lastName}</p>
@@ -98,7 +105,7 @@ const TakingCourse = () => {
             <div className='lg:w-1/5'>
                 <AccordionList>
                     {isCourse.units.map(unit => (
-                        <Accordion className="mb-4 bg-header">
+                        <Accordion key={unit.pkUnit} className="mb-4 bg-header">
                             <AccordionHeader className="text-white">
                                 <p className="text-ellipsis whitespace-nowrap overflow-hidden">
                                     {unit.order + '. ' + (unit.title ? unit.title : 'Sin título')}
@@ -108,7 +115,7 @@ const TakingCourse = () => {
                                 <p className="text-secundary-text mb-2">{unit.lessons.length} {unit.lessons.length === 1 ? 'Lección' : 'Lecciones'}</p>
                                 <div className="flex flex-col gap-4 rounded-md">
                                     {unit.lessons.map(lesson => (
-                                        <article key={lesson.pkLesson} className="bg-[#443C50] flex rounded-md">
+                                        <article key={lesson.pkLesson} onClick={() => getLesson(lesson.pkLesson)} className="bg-[#443C50] flex rounded-md">
                                             <div
                                                 className={`text-slate-100 bg-gradient-to-r from-purple-500 via-violet-600 to-indigo-400 w-[100px] flex items-center justify-center rounded-s-md flex-shrink-0`}>
                                                 {lesson.type === 'text' ? <RiFileTextLine /> : <RiVideoOnLine />}

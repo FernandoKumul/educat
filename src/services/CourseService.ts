@@ -58,4 +58,15 @@ export default class CourseService {
       }
     })
   }
+  
+  static async getLesson(lessonId: number) {
+    const token = localStorage.getItem('token')
+
+    const response = await axios.get(`${BASE_URL}/course/lesson/${lessonId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    return response.data.data
+  }
 }
