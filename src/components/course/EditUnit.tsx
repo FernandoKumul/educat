@@ -178,10 +178,13 @@ const EditUnit = ({ unit, onValueChange, onItemRemove, onUnitDown, onUnitUp, tot
         </p>
       </AccordionHeader>
       <AccordionBody className="bg-black-2 py-4">
-        <section className="flex justify-between flex-wrap gap-y-2">
-          <div className="flex lg:w-1/2 gap-2">
-            <TextInput placeholder="" error={dirtyForm && unit.title.trim() === ''} value={isTitle} onValueChange={handleChangeTitle} />
-            <Button icon={RiAddBoxLine} onClick={handleAddLesson}>Lección</Button>
+        <section className="flex justify-between items-start flex-wrap gap-y-2">
+          <div>
+            <div className="flex w-full xl:w-1/2 gap-2 mb-1">
+              <TextInput placeholder="Nombre de la unidad" error={dirtyForm && unit.title.trim() === ''} value={isTitle} onValueChange={handleChangeTitle} />
+              <Button icon={RiAddBoxLine} onClick={handleAddLesson}>Lección</Button>
+            </div>
+            <span className="text-slate-300 text-sm">Máximo 100 carateres</span>
           </div>
           <div className="flex gap-2">
             <button onClick={() => onUnitUp(unit.pkUnit!, unit.order)} disabled={unit.order === 1}
@@ -222,14 +225,17 @@ const EditUnit = ({ unit, onValueChange, onItemRemove, onUnitDown, onUnitUp, tot
                 </button>
               </div>
             </div>
-            <div className="flex items-center gap-2 mt-2 mb-4">
-              <Select className="w-1/4" defaultValue="video" value={lesson.type}
+            <div className="flex flex-col sm:flex-row items-start gap-2 mt-2 mb-4">
+              <Select className="sm:w-1/4" defaultValue="video" value={lesson.type}
                 onValueChange={(value) => handleChangeTypeLesson(value as typeLesson, lesson.pkLesson!)}>
                 <SelectItem value="video">Video</SelectItem>
                 <SelectItem value="text">Texto</SelectItem>
               </Select>
-              <TextInput value={lesson.title} error={dirtyForm && lesson.title.trim() === ''} placeholder="Nombre de la lección"
-                onValueChange={(value) => handleChangeTitleLesson(value, lesson.pkLesson!)} />
+              <div className="w-full">
+                <TextInput value={lesson.title} error={dirtyForm && lesson.title.trim() === ''} placeholder="Nombre de la lección"
+                  onValueChange={(value) => handleChangeTitleLesson(value, lesson.pkLesson!)} className="w-full mb-1" />
+                <span className="text-slate-300 text-sm">Máximo 100 carateres</span>
+              </div>
             </div>
             {lesson.type === 'video'
               ?

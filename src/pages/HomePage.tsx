@@ -24,7 +24,7 @@ const CategoriesData: ICategory[] = [
   { id: 6, name: 'Música' , icon: RiMusic2Fill},
   { id: 7, name: 'Marketing' , icon: RiPencilRulerLine},
   { id: 8, name: 'Negocios' , icon: RiBarChart2Fill},
-  { id: 8, name: 'Manualidades' , icon: RiScissorsFill},
+  { id: 9, name: 'Manualidades' , icon: RiScissorsFill},
 ];
 
 const HomePage = () => {
@@ -185,7 +185,7 @@ const HomePage = () => {
       <div className='px-14 my-5'>
         <h1 className='text-details flex justify-center text-xl md:text-2xl font-semibold mb-5'>Categorías</h1>
         
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid  grid-cols-1 lg:grid-cols-3 gap-5">
           {CategoriesData.map(category => (            
             <div key={category.id} className="flex justify-between items-center bg-[#312B39] px-5 h-20 rounded-sm">
               <div className="flex">
@@ -195,8 +195,6 @@ const HomePage = () => {
               <category.icon className="size-7 flex-shrink-0" />
             </div>
           ))}
-
-
         </div>
       </div>
 
