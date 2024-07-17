@@ -196,7 +196,7 @@ const CoursePage = () => {
     try {
       setLoadingCart(true)
       await CartService.createCartItem(parseInt(courseId ?? ''))
-      toast.success("Articulo añadido al carrito")
+      toast.success("Artículo añadido al carrito")
       getItems()
     } catch (error) {
       console.log(error)
