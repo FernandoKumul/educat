@@ -1,8 +1,13 @@
-import { RemixiconComponentType, RiBarChart2Fill, RiBookReadLine, RiCameraFill, RiCpuLine, RiGroup2Line, RiMacLine, RiMarkupFill, RiMusic2Fill, RiPencilRulerLine, RiScissorsFill, RiSparklingLine, RiUser5Line, RiUserFill } from "@remixicon/react";
+import { RemixiconComponentType, RiBarChart2Fill, RiBookReadLine, RiCameraFill, RiCpuLine, RiGroup2Line, RiLoader4Line, RiMacLine, RiMarkupFill, RiMusic2Fill, RiPencilRulerLine, RiScissorsFill, RiSparklingLine, RiUser5Line, RiUserFill } from "@remixicon/react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider, { Settings } from "react-slick";
 import CardCourse from "../components/common/CardCourse";
+import { useEffect, useState } from "react";
+import { ICourseSearch } from "../interfaces/ICourseSearch";
+import CourseService from "../services/CourseService";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 interface ICategory {
   name: string,
@@ -23,6 +28,8 @@ const CategoriesData: ICategory[] = [
 ];
 
 const HomePage = () => {
+  const [isPopularCourses, setPopularCourses] = useState<ICourseSearch[]>([])
+  const [isLoadingPopular, setLoadingPopular] = useState(true)
 
   const sliderSettings: Settings = {
     dots: false,
@@ -60,6 +67,29 @@ const HomePage = () => {
       }
     ]
   };
+
+  useEffect(() => {
+    const getPopularCourses = async () => {
+      try {
+        setLoadingPopular(true)
+        const courses = await CourseService.getCoursePopular(8)
+        setPopularCourses(courses)
+      } catch (error) {
+        console.log(error)
+        if (error instanceof AxiosError) {
+          if (error.response?.data.message) {
+            return toast.error(error.response?.data.message);
+          }
+  
+          return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
+        }
+      } finally {
+        setLoadingPopular(false)
+      }
+    }
+
+    getPopularCourses()
+  }, [])
 
   return (
     <section>
@@ -123,14 +153,22 @@ const HomePage = () => {
         <h1 className='text-details flex justify-center text-xl md:text-2xl font-semibold mb-8'>Más populares</h1>
         {/* Slider */}
         <div>
-          <Slider className="flex flex-auto m-auto" {...sliderSettings}>
-            {[1,2,3,4,5,6].map(item => (
-              <CardCourse 
-              className="px-4"
-              key={item} image={null} id={item} title={"Título del curso " + item} 
-              instructor="Nombre instructos" price={100 * item} score={4.5} />
-            ))}
-          </Slider>
+          {isLoadingPopular
+          ?
+          <div className="flex-grow flex items-center justify-center h-48">
+            <RiLoader4Line size={48} className="animate-spin" />
+          </div>
+          :
+            <Slider className="flex flex-auto m-auto" {...sliderSettings}>
+              {isPopularCourses.map(item => (
+                <CardCourse
+                  className="px-4"
+                  key={item.pkCourse} image={null} id={item.pkCourse} title={item.title}
+                  instructor={item.instructorName + " " + item.instructorLastName} price={item.price} score={item.rating} />
+              ))}
+            </Slider>
+          }
+          
         </div>
       </div>
 
