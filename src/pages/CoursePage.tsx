@@ -297,7 +297,7 @@ const CoursePage = () => {
           </p>
           <AccordionList>
             {isCourse.units.map(item => (
-              <UnitCard unit={item} key={item.pkUnit} />
+              <UnitCard purchased={isCourse.purchased} unit={item} key={item.pkUnit} />
             ))}
           </AccordionList>
 
