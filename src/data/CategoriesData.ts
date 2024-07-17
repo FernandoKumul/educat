@@ -12,6 +12,7 @@ const CategoriesData: Category[] = [
   { id: 6, name: 'Música' },
   { id: 7, name: 'Marketing' },
   { id: 8, name: 'Negocios' },
+  { id: 9, name: 'Manualidades' },
 ];
 
 export default CategoriesData;

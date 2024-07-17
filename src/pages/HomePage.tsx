@@ -1,4 +1,4 @@
-import { RemixiconComponentType, RiBarChart2Fill, RiBookReadLine, RiCameraFill, RiCpuLine, RiGroup2Line, RiMacLine, RiMarkupFill, RiMusic2Fill, RiPencilRulerLine, RiSparklingLine, RiUser5Line, RiUserFill } from "@remixicon/react";
+import { RemixiconComponentType, RiBarChart2Fill, RiBookReadLine, RiCameraFill, RiCpuLine, RiGroup2Line, RiMacLine, RiMarkupFill, RiMusic2Fill, RiPencilRulerLine, RiScissorsFill, RiSparklingLine, RiUser5Line, RiUserFill } from "@remixicon/react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider, { Settings } from "react-slick";
@@ -19,6 +19,7 @@ const CategoriesData: ICategory[] = [
   { id: 6, name: 'Música' , icon: RiMusic2Fill},
   { id: 7, name: 'Marketing' , icon: RiPencilRulerLine},
   { id: 8, name: 'Negocios' , icon: RiBarChart2Fill},
+  { id: 8, name: 'Manualidades' , icon: RiScissorsFill},
 ];
 
 const HomePage = () => {
