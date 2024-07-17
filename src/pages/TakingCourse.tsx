@@ -1,19 +1,20 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import AuthContext from '../contexts/AuthContext';
 import CourseService from '../services/CourseService';
 import CategoriesData from '../data/CategoriesData';
 import { ICoursePublic, ILessonOut } from '../interfaces/ICoursePublic';
-import { Accordion, AccordionBody, AccordionHeader, AccordionList } from '@tremor/react';
-import { RiFileTextLine, RiGroupFill, RiLoader4Line, RiVideoOnLine } from '@remixicon/react';
+import { AccordionList } from '@tremor/react';
+import { RiGroupFill, RiLoader4Line } from '@remixicon/react';
+import UnitCard from '../components/course/UnitCard';
 import Avatar from '../components/common/Avatar';
 import BadgeDifficulty from '../components/course/BadgeDifficulty';
-import { getFormatTimeinMinutes } from '../utils/TimeUtils';
 
 const TakingCourse = () => {
     const { courseId } = useParams();
+    const [params] = useSearchParams()
     const [isCourse, setCourse] = useState<null | ICoursePublic>(null);
     const [isLesson, setLesson] = useState<null | ILessonOut>(null);
     const [isLoading, setLoading] = useState<boolean>(true);
@@ -21,8 +22,9 @@ const TakingCourse = () => {
 
     const { isUser } = useContext(AuthContext);
 
-    const getLesson = async (lessonId: number) => {
-        const response = await CourseService.getLesson(lessonId)
+    const getLesson = async () => {
+        const lessonNumber = parseInt(params.get('number') ?? '0')
+        const response = await CourseService.getLesson(lessonNumber)
         setLesson(response)
         console.log(isLesson)
     }
@@ -35,8 +37,7 @@ const TakingCourse = () => {
                 const dataCourse = await CourseService.getCoursePublic(courseIdInt)
                 dataCourse.rating = Math.round(dataCourse.rating * 100) / 100
                 setCourse(dataCourse)
-                const initialLesson = dataCourse.units[0].lessons[0].pkLesson
-                getLesson(initialLesson)
+                getLesson()
             } catch (error) {
                 console.log(error)
                 if (error instanceof AxiosError) {
@@ -52,8 +53,8 @@ const TakingCourse = () => {
         if (!dataFetch.current) {
             getCourse()
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [params])
 
     if (isLoading) {
         return (
@@ -113,32 +114,7 @@ const TakingCourse = () => {
             <div className='lg:w-1/5'>
                 <AccordionList className='overflow-auto max-h-[600px]'>
                     {isCourse.units.map(unit => (
-                        <Accordion key={unit.pkUnit} className="mb-4 bg-header">
-                            <AccordionHeader className="text-white">
-                                <p className="text-ellipsis whitespace-nowrap overflow-hidden">
-                                    {unit.order + '. ' + (unit.title ? unit.title : 'Sin título')}
-                                </p>
-                            </AccordionHeader>
-                            <AccordionBody className="py-4 pt-0 text-white">
-                                <p className="text-secundary-text mb-2">{unit.lessons.length} {unit.lessons.length === 1 ? 'Lección' : 'Lecciones'}</p>
-                                <div className="flex flex-col gap-4 rounded-md">
-                                    {unit.lessons.map(lesson => (
-                                        <article key={lesson.pkLesson} onClick={() => getLesson(lesson.pkLesson)} className={`${isLesson?.pkLesson === lesson.pkLesson ? 'text-details' : 'text-white'} ' bg-black-2 flex rounded-md cursor-pointer hover:bg-black-auth hover:transition-colors'`}>
-                                            <div
-                                                className={`text-slate-100 bg-gradient-to-r from-purple-500 via-violet-600 to-indigo-400 w-[100px] flex items-center justify-center rounded-s-md flex-shrink-0`}>
-                                                {lesson.type === 'text' ? <RiFileTextLine /> : <RiVideoOnLine />}
-                                            </div>
-                                            <div className="flex-grow min-w-0 px-4 py-2">
-                                                <h4 className="text-base font-medium whitespace-nowrap text-ellipsis overflow-hidden">
-                                                    {lesson.title}
-                                                </h4>
-                                                <p>{getFormatTimeinMinutes(lesson.timeDuration)} min</p>
-                                            </div>
-                                        </article>
-                                    ))}
-                                </div>
-                            </AccordionBody>
-                        </Accordion>
+                        <UnitCard key={unit.pkUnit} unit={unit} purchased={isCourse.purchased} />
                     ))}
                 </AccordionList>
             </div>
