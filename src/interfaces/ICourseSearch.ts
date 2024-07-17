@@ -12,4 +12,5 @@ export interface ICourseSearch {
     instructorLastName: string,
     fkCategory: number,
     categoryName: string
+    cretionDate: string
 }

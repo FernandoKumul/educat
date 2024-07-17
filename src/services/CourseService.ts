@@ -2,6 +2,7 @@ import axios from "axios"
 import { IEditCourse } from "../interfaces/IEditCourse"
 import { ICoursePublic } from "../interfaces/ICoursePublic"
 import { ICourseInstructor } from "../interfaces/ICourseInstructor"
+import { ICourseSearch } from "../interfaces/ICourseSearch"
 
 const BASE_URL = 'https://localhost:7245/api'
 
@@ -78,5 +79,12 @@ export default class CourseService {
         'Authorization': `Bearer ${token}`
       }
     })
+  }
+
+  static async getCoursePopular(limit: number): Promise<ICourseSearch[]> {
+
+    const response = await axios.get(`${BASE_URL}/course/popular?limit=${limit}`)
+
+    return response.data.data
   }
 }
