@@ -81,11 +81,19 @@ const TakingCourse = () => {
         <div className="flex lg:p-10">
             <div className="lg:w-4/5">
                 <p className='text-2xl mb-5'>{isCourse.title}</p>
-                <div>
-                    <video className='aspect-video w-11/12 rounded-md' src={isLesson?.videoUrl} controls>
-                    </video>
-                </div>
-                <p className='text-xl my-5'>{isLesson?.title}</p>
+                {isLesson?.type === 'text' &&
+                    <div>
+                        <p className='text-xl my-5 text-secundary-text'>{isLesson?.title}</p>
+                        <p className='text-md my-5 ml-5'>{isLesson?.text}</p>
+                    </div>
+                }
+                {isLesson?.type === 'video' &&
+                    <div>
+                        <video className='aspect-video w-11/12 rounded-md' src={isLesson?.videoUrl} controls>
+                        </video>
+                        <p className='text-xl my-5'>{isLesson?.title}</p>
+                    </div>
+                }
                 <div className='flex items-center gap-x-3'>
                     <Avatar url={isCourse.instructor.avatarUrl} />
                     <p>{isCourse.instructor.name + ' ' + isCourse.instructor.lastName}</p>
@@ -115,7 +123,7 @@ const TakingCourse = () => {
                                 <p className="text-secundary-text mb-2">{unit.lessons.length} {unit.lessons.length === 1 ? 'Lección' : 'Lecciones'}</p>
                                 <div className="flex flex-col gap-4 rounded-md">
                                     {unit.lessons.map(lesson => (
-                                        <article key={lesson.pkLesson} onClick={() => getLesson(lesson.pkLesson)} className="bg-[#443C50] flex rounded-md">
+                                        <article key={lesson.pkLesson} onClick={() => getLesson(lesson.pkLesson)} className={`${isLesson?.pkLesson === lesson.pkLesson ? 'text-details' : 'text-white'} ' bg-black-2 flex rounded-md cursor-pointer hover:bg-black-auth hover:transition-colors'`}>
                                             <div
                                                 className={`text-slate-100 bg-gradient-to-r from-purple-500 via-violet-600 to-indigo-400 w-[100px] flex items-center justify-center rounded-s-md flex-shrink-0`}>
                                                 {lesson.type === 'text' ? <RiFileTextLine /> : <RiVideoOnLine />}
@@ -124,7 +132,7 @@ const TakingCourse = () => {
                                                 <h4 className="text-base font-medium whitespace-nowrap text-ellipsis overflow-hidden">
                                                     {lesson.title}
                                                 </h4>
-                                                <p className="text-secundary-text">{getFormatTimeinMinutes(lesson.timeDuration)} min</p>
+                                                <p>{getFormatTimeinMinutes(lesson.timeDuration)} min</p>
                                             </div>
                                         </article>
                                     ))}
