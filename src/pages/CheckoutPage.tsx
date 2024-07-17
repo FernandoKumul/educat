@@ -94,7 +94,7 @@ const CheckoutPage = () => {
       setLoading(true)
       const items = await CartService.getUserCart()
       if (items.length === 0) {
-        toast.info("No tienes nigún producto en el carrito para comprar")
+        toast.info("No tienes ningún producto en el carrito para comprar")
         navigate("/")
       }
       setCartItems(items)
