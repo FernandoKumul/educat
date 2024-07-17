@@ -46,20 +46,20 @@ const InstructorProfile = () => {
                     <p className="text-2xl text-white">{instructor?.name + ' ' + instructor?.lastName}</p>
                     { instructor?.occupation ? <p className="text-sm text-secondary-text">{'Instructor | ' + instructor?.occupation}</p> : <p className="text-sm text-secondary-text">Sin ocupación</p> }
                 </div>
-                <div className="border-b border-black-2 w-full pb-5">
+                <div className="border-b border-slate-400 w-full pb-5">
                     <p className="text-white">3.7 (100 Reseñas)</p>
                 </div>
                 <div className="grid grid-cols-2 justify-items-center gap-10 text-white">
                     <div>
-                        <p className="text-xl">22</p>
+                        <p className="text-xl text-details">22</p>
                         <p className="text-sm text-gray-400">Cursos completados</p>
                     </div>
                     <div>
-                        <p className="text-xl">2</p>
+                        <p className="text-xl text-details">2</p>
                         <p className="text-sm text-gray-400">Cursos impartidos</p>
                     </div>
                     <div className="col-span-2">
-                        <p className="text-xl">3</p>
+                        <p className="text-xl text-details">3</p>
                         <p className="text-sm text-gray-400">Cursos en proceso</p>
                     </div>
                 </div>
