@@ -82,8 +82,8 @@ const TakingCourse = () => {
             <div className="lg:w-4/5">
                 <p className='text-2xl mb-5'>{isCourse.title}</p>
                 {isLesson?.type === 'text' &&
-                    <div>
-                        <p className='text-xl my-5 text-secundary-text'>{isLesson?.title}</p>
+                    <div className='border-b-2 mb-5 lg:w-[95%] lg:border-b-tremor-content'>
+                        <p className='text-xl text-secundary-text'>{isLesson?.title}</p>
                         <p className='text-md my-5 ml-5'>{isLesson?.text}</p>
                     </div>
                 }
@@ -111,7 +111,7 @@ const TakingCourse = () => {
                 <p className='w-full my-5'>{isCourse.description}</p>
             </div>
             <div className='lg:w-1/5'>
-                <AccordionList>
+                <AccordionList className='overflow-auto max-h-[600px]'>
                     {isCourse.units.map(unit => (
                         <Accordion key={unit.pkUnit} className="mb-4 bg-header">
                             <AccordionHeader className="text-white">

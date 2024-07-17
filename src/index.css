@@ -13,6 +13,17 @@
   flex-direction: column;
   min-height: 100vh;
 } */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 30px;
+}
+::-webkit-scrollbar-thumb {
+  background: #3f3848;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #312b39; 
+}
 
 :root {
   line-height: 1.5;
@@ -77,6 +88,6 @@
   overflow: visible;
 }
 
-.custom-border-light.dark\:border-dark-tremor-border  {
+.custom-border-light.dark\:border-dark-tremor-border {
   border-color: rgb(122, 117, 132);
 }

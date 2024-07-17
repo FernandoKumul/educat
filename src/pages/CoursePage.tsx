@@ -263,7 +263,7 @@ const CoursePage = () => {
             isCourse.purchased
               ?
 
-              <Link to={`/course/lesson/${isCourse.pkCourse}`}>
+              <Link to={`/course/units/${isCourse.pkCourse}`}>
                 <Button className="w-full"><span className="text-base">Continuar</span></Button>
               </Link>
               :
