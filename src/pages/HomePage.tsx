@@ -159,11 +159,17 @@ const HomePage = () => {
             <RiLoader4Line size={48} className="animate-spin" />
           </div>
           :
+            isPopularCourses.length === 0
+            ?
+            <div className="flex-grow flex items-center justify-center h-48">
+              <h2 className="text-xl font-medium">Por el momento no hay cursos populares.</h2>
+            </div>
+            :
             <Slider className="flex flex-auto m-auto" {...sliderSettings}>
               {isPopularCourses.map(item => (
                 <CardCourse
                   className="px-4"
-                  key={item.pkCourse} image={null} id={item.pkCourse} title={item.title}
+                  key={item.pkCourse} image={item.cover} id={item.pkCourse} title={item.title}
                   instructor={item.instructorName + " " + item.instructorLastName} price={item.price} score={item.rating} />
               ))}
             </Slider>
