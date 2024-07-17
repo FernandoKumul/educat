@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import WishlistService from "../services/WishlistService";
-import { ICartItemCourse } from "../interfaces/ICartItemCourse";
 import { Tab, TabGroup, TabList } from "@tremor/react";
 import { RiCheckFill, RiHeart3Line, RiLoader4Line, RiLoopLeftFill } from "@remixicon/react";
 import CardCourse from "../components/common/CardCourse";
@@ -11,7 +10,7 @@ import { ICourseSearch } from "../interfaces/ICourseSearch";
 
 const UserCourses = () => {
     const [tabValue, setTabValue] = useState(1);
-    const [wishlist, setWishlist] = useState<ICartItemCourse[]>([]);
+    const [wishlist, setWishlist] = useState<ICourseSearch[]>([]);
     const [courses, setCourses] = useState<ICourseSearch[]>([])
     const [isLoading, setLoading] = useState<boolean>(true)
 
@@ -84,7 +83,7 @@ const UserCourses = () => {
                 tabValue === 1 &&
                 <div className="mt-10 w-4/5 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                     {wishlist.map((item) => (
-                        <CardCourse key={item.pkCartWishList} id={item.course.pkCourse} title={item.course.title} instructor={item.instructor.name + ' ' + item.instructor.lastName} price={item.course.price ?? 0} image={item.course.cover} score={4.7} />
+                        <CardCourse key={item.pkCourse} id={item.pkCourse} title={item.title} instructor={item.instructorName + ' ' + item.instructorLastName} price={item.price ?? 0} image={item.cover} score={item.rating} />
                     ))}
                 </div>
             }
@@ -92,7 +91,7 @@ const UserCourses = () => {
                 tabValue === 2 &&
                 <div className="mt-10 w-4/5 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                     {courses.map((course) => (
-                        <CardCourse key={course.pkCourse} id={course.pkCourse} title={course.title} instructor={course.instructorName + ' ' + course.instructorLastName} price={course.price ?? 0} image={course.cover} score={4.7} />
+                        <CardCourse key={course.pkCourse} id={course.pkCourse} title={course.title} instructor={course.instructorName + ' ' + course.instructorLastName} price={course.price ?? 0} image={course.cover} score={course.rating} />
                     ))}
                 </div>
             }
