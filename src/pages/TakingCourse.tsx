@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
@@ -18,12 +18,13 @@ const TakingCourse = () => {
     const [isCourse, setCourse] = useState<null | ICoursePublic>(null);
     const [isLesson, setLesson] = useState<null | ILessonOut>(null);
     const [isLoading, setLoading] = useState<boolean>(true);
-    const dataFetch = useRef<boolean>(false);
+    // const dataFetch = useRef<boolean>(false);
 
     const { isUser } = useContext(AuthContext);
 
     const getLesson = async () => {
         const lessonNumber = parseInt(params.get('number') ?? '0')
+        console.log(lessonNumber)
         const response = await CourseService.getLesson(lessonNumber)
         setLesson(response)
         console.log(isLesson)
@@ -31,7 +32,6 @@ const TakingCourse = () => {
 
     useEffect(() => {
         const getCourse = async () => {
-            dataFetch.current = true
             const courseIdInt = parseInt(courseId ?? '0')
             try {
                 const dataCourse = await CourseService.getCoursePublic(courseIdInt)
@@ -50,9 +50,7 @@ const TakingCourse = () => {
                 setLoading(false)
             }
         }
-        if (!dataFetch.current) {
-            getCourse()
-        }
+        getCourse()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params])
 
@@ -79,7 +77,7 @@ const TakingCourse = () => {
     }
     console.log(isLesson)
     return (
-        <div className="flex lg:p-10">
+        <div className="flex flex-col lg:flex-row px-6 py-6 lg:px-24 lg:py-10 lg:gap-4 xl:px-36">
             <div className="lg:w-4/5">
                 <p className='text-2xl mb-5'>{isCourse.title}</p>
                 {isLesson?.type === 'text' &&
@@ -90,7 +88,7 @@ const TakingCourse = () => {
                 }
                 {isLesson?.type === 'video' &&
                     <div>
-                        <video className='aspect-video w-11/12 rounded-md' src={isLesson?.videoUrl} controls>
+                        <video className='aspect-video w-full lg:w-11/12 rounded-md' src={isLesson?.videoUrl} controls>
                         </video>
                         <p className='text-xl my-5'>{isLesson?.title}</p>
                     </div>
@@ -99,8 +97,8 @@ const TakingCourse = () => {
                     <Avatar url={isCourse.instructor.avatarUrl} />
                     <p>{isCourse.instructor.name + ' ' + isCourse.instructor.lastName}</p>
                 </div>
-                <div className='flex mt-5 lg:gap-x-5 lg:items-center'>
-                    <div className='flex lg:gap-x-2'>
+                <div className='flex flex-wrap gap-4 items-center mt-5 lg:gap-x-5'>
+                    <div className='flex gap-x-2'>
                         <RiGroupFill size={20} />
                         <p>{isCourse.numberStudents} {isCourse.numberStudents === 1 ? 'Estudiante' : 'Estudiantes'}</p>
                     </div>

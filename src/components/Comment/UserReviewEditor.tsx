@@ -116,8 +116,8 @@ const UserReviewEditor = ({ purchased, reviewByUser, courseId, onRefreshReviews 
   if (reviewByUser) {
     return (
       <article className="bg-header rounded-md px-4 py-6 mb-6 flex gap-4">
-        <Avatar url={reviewByUser.user.avatarUrl} className="size-12" />
-        <div className="flex-grow">
+        <Avatar url={reviewByUser.user.avatarUrl} className="size-12 flex-shrink-0" />
+        <div className="flex-grow min-w-0">
           <h3 className="overflow-hidden text-nowrap text-ellipsis">
             {reviewByUser.user.name + " " + reviewByUser.user.lastName} (Tu comentario)
           </h3>
@@ -128,7 +128,7 @@ const UserReviewEditor = ({ purchased, reviewByUser, courseId, onRefreshReviews 
             rows={4} onValueChange={value => setTextReview(value)} value={isTextReview} />
             : <p>{reviewByUser.text}</p> 
           }
-          <footer className="flex justify-between items-center mt-2">
+          <footer className="flex justify-between flex-wrap gap-y-4 items-center mt-2">
           {
             isEditing
             ?
