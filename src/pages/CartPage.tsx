@@ -88,7 +88,7 @@ const CartPage = () => {
               <thead className="bg-header rounded-sm text-xl">
                 <tr>
                   <th className="w-[260px]"></th>
-                  <th className="py-3 font-semibold min-w-[12 0px]">Curso</th>
+                  <th className="py-3 font-semibold min-w-[120px]">Curso</th>
                   <th className="py-3 font-semibold min-w-[150px] w-48">Precio</th>
                   <th className="py-3 min-w-[92px] w-[92px]"></th>
                 </tr>

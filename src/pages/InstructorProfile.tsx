@@ -64,7 +64,7 @@ const InstructorProfile = () => {
                     </div>
                 </div>
             </section>
-            <section className="bg-black-auth rounded-md flex flex-col w-full p-5 sm:w-[375px] sm:p-10 xl:h-[408px] xl:justify-between">
+            <section className="bg-black-auth rounded-md flex flex-col w-full p-5 sm:w-[375px] sm:p-10 xl:h-[408px] xl:justify-between overflow-auto">
                 <p className="text-white text-xl mb-2">Descripción</p>
                 <p className="text-secundary-text mb-5 xl:flex-grow">{instructor?.description}</p>
                 <div className="flex justify-center gap-x-5">
