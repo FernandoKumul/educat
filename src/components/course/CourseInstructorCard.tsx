@@ -8,20 +8,21 @@ type IProps = {
     image: string | null;
     price: number | null;
     active: boolean;
-    className?: string
+    className?: string;
+    onDelete: (id: number, title: string) => void
 }
 
-const CourseInstructorCard = ({id, image, price, title, active, className}: IProps) => {
+const CourseInstructorCard = ({id, image, price, title, active, className, onDelete}: IProps) => {
     const backgroundImage = image ? { backgroundImage: `url(${image})` } : {};
     
     return (
         <article className={`w-full ${className}`}>
             <div style={backgroundImage} className={`${image ? 'bg-cover bg-center' : 'bg-gradient-to-r from-purple-500 via-violet-600 to-indigo-400'} flex justify-end items-start aspect-video rounded-lg`}>
-                <div className="bg-white group text-neutral-950 rounded-tr-lg rounded-bl-lg min-w-[65px] w-fit flex justify-center items-center gap-2 py-1 px-2">
+                <div className="bg-white text-neutral-950 rounded-tr-lg rounded-bl-lg min-w-[65px] w-fit flex justify-center items-center gap-2 py-1 px-2">
                     <Link className="cursor-pointer" to={`/instructor/edit-course/${id}`} >
-                        <RiEdit2Line className="text-green-500 group-hover:text-green-600" />
+                        <RiEdit2Line className="text-green-500 hover:text-green-600" />
                     </Link>
-                    <RiDeleteBinLine className="text-red-500 cursor-pointer hover:text-red-600" />
+                    <RiDeleteBinLine onClick={() => onDelete(id, title)} className="text-red-500 cursor-pointer hover:text-red-600" />
                 </div>
             </div>
             <footer className='py-3 px-1'>
