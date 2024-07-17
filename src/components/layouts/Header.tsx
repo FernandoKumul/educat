@@ -78,6 +78,14 @@ const Header = () => {
                   <RiUserLine />
                   <p>Perfil</p>
                 </Link>
+                {isUser.isInstructor
+                ?
+                  <Link to={'/instructor/profile'} className='flex items-center hover:bg-[#473D55] rounded-md hover:text-details px-3 py-3 cursor-pointer gap-2'>
+                    <RiBriefcaseLine />Panel de instructor
+                  </Link>
+                :
+                  <span className='flex items-center hover:bg-[#473D55] rounded-md hover:text-details px-3 py-3 cursor-pointer gap-2'><RiBriefcaseLine />Se instructor</span>
+                }
                 <Link to={"/cart"} onClick={() => setOpen(false)} className='flex items-center hover:bg-[#473D55] rounded-md hover:text-details px-3 py-3 cursor-pointer gap-2'>
                   <div className='relative'>
                     <RiShoppingCart2Line />
@@ -120,7 +128,12 @@ const Header = () => {
         <div className='hidden md:flex md:items-center w-1/3 justify-end' >
 
           <div className='flex gap-5'>
-            <Link className='flex hover:text-details gap-1' to={'/'}><RiBriefcaseLine />Se instructor</Link>
+            {isUser.isInstructor
+            ?
+              <Link to={'/instructor/profile'} className='flex hover:text-details gap-1'><RiBriefcaseLine />Panel de instructor</Link>
+            :
+              <span className='flex hover:text-details gap-1 cursor-pointer'><RiBriefcaseLine />Se instructor</span>
+            }
             <Link to={'/cart'} className='relative hover:text-details'>
               <RiShoppingCart2Line />
               {isCartItems.length > 0 &&

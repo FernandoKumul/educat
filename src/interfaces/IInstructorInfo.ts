@@ -11,5 +11,5 @@ export interface IInstructorInfo {
     lastName: string,
     email: string,
     avatarUrl: string | null,
-    description: string,
+    description: string | null,
 }

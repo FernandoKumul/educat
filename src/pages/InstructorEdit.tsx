@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, FormEvent } from "react";
 import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { Button, TextInput, Textarea } from "@tremor/react";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import InstructorService from "../services/instructorService";
 import FileService from "../services/FileService";
 import { IInstructorInfo } from "../interfaces/IInstructorInfo";
@@ -118,6 +118,7 @@ const InstructorEdit = () => {
 
     useEffect(() => {
         getData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
@@ -178,7 +179,7 @@ const InstructorEdit = () => {
                         <div className="flex max-sm:mb-3 xl:justify-center">
                             <div className="max-sm:w-full xl:w-[93%]">
                                 <p className="my-3">Descripción</p>
-                                <Textarea placeholder="" name="description" value={user.description} onChange={handleChange} />
+                                <Textarea placeholder="" name="description" value={user.description ?? ''} onChange={handleChange} />
                             </div>
                         </div>
                         <div className="flex max-sm:flex-col max-sm:gap-y-3 max-sm:mb-3 xl:gap-x-10 xl:justify-center">
@@ -210,7 +211,7 @@ const InstructorEdit = () => {
                                 <TextInput placeholder="usuario@example.com" name="emailPaypal" value={user.emailPaypal} onChange={handleChange} />
                             </div>
                             <div className="xl:w-[45%] xl:flex xl:items-center">
-                                <p className="text-secundary-text font-light italic max-sm:text-sm max-sm:text-center">Nota: Recuerda que debe ser el mismo correo que el de tu cuenta de paypal ya que sera al correo que se envien los pagos de tus cursos</p>
+                                <p className="text-secundary-text font-light italic max-sm:text-sm max-sm:text-center">Nota: Recuerda que debe ser el mismo correo que el de tu cuenta de paypal ya que será al correo que se envíen los pagos de tus cursos</p>
                             </div>
                         </div>
                     </div>
@@ -223,11 +224,6 @@ const InstructorEdit = () => {
                     </div>
                 </form>
             </div>
-            <ToastContainer
-                className="text-sm"
-                position="top-right"
-                theme="dark"
-            />
         </div>
     );
 }
