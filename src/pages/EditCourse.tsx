@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { AxiosError } from "axios";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -343,7 +343,7 @@ const EditCourse = () => {
   return (
     <main className="">
       <div className="bg-black-1 h-16 flex justify-between items-center px-6">
-        <RiArrowLeftLine size={28} />
+        <Link to={'/instructor/courses'}><RiArrowLeftLine size={28} /></Link>
         <div className="flex gap-3 items-center">
           <Button icon={RiEyeFill} className="px-[10px]"></Button>
           <Button className="px-[10px] lg:px-4 lg:py-2" onClick={handleSaveCourse} loading={isLoadingSave}>

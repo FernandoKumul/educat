@@ -45,9 +45,9 @@ const UserCourses = () => {
             </TabGroup>
             {
                 tabValue === 1 &&
-                <div className="mt-10 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                <div className="mt-10 w-4/5 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                     {wishlist.map((item) => (
-                        <CardCourse key={item.pkCartWishList} id={item.course.pkCourse} title={item.course.title} instructor={item.instructor.name + ' ' + item.instructor.lastName} price={String(item.course.price)} image={item.course.cover} score={4.7} />
+                        <CardCourse key={item.pkCartWishList} id={item.course.pkCourse} title={item.course.title} instructor={item.instructor.name + ' ' + item.instructor.lastName} price={item.course.price ?? 0} image={item.course.cover} score={4.7} />
                     ))}
                 </div>
             }

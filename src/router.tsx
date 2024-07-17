@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import MainLayout from "./components/layouts/MainLayout";
 import ErrorPage from "./pages/ErrorPage";
@@ -21,6 +21,7 @@ import CheckoutPage from "./pages/CheckoutPage";
 import TakingCourse from "./pages/TakingCourse";
 import SuccessPaymentPage from "./pages/SuccessfulpaymentPage";
 import UserCourses from "./pages/UserCourses";
+import InstructorCoursePage from "./pages/InstructorCoursePage";
 
 const router = createBrowserRouter([
   {
@@ -65,12 +66,26 @@ const router = createBrowserRouter([
         element: <InstructorLayout />,
         children: [
           {
+            path: '',
+            element: <Navigate to="/instructor/profile" replace />
+          },
+          {
             path: "edit-course/:courseId",
             element: <InstructorGuard />,
             children: [
               {
                 path: '',
                 element: <EditCourse />
+              }
+            ]
+          },
+          {
+            path: "courses",
+            element: <InstructorGuard />,
+            children: [
+              {
+                path: '',
+                element: <InstructorCoursePage />,
               }
             ]
           },
