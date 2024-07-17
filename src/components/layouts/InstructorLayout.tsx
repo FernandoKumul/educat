@@ -10,9 +10,9 @@ const InstructorLayout = () => {
     setIsOpen(!isOpen);
   }
 
-  return ( 
+  return (
     <div className="flex h-screen max-sm:relative">
-      <InstructorSidebar openSidebar={isOpen} handleSidebar={handleSidebar}/>
+      <InstructorSidebar openSidebar={isOpen} handleSidebar={handleSidebar} />
       <div className="flex-grow overflow-auto flex flex-col">
         <HeaderInstructor handleSidebar={handleSidebar} />
         <Outlet />
@@ -25,5 +25,5 @@ const InstructorLayout = () => {
     </div>
   );
 }
- 
+
 export default InstructorLayout;

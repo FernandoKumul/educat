@@ -86,4 +86,16 @@ export default class CourseService {
 
     return response.data.data
   }
+  
+  static async getPurchasedCourses(): Promise<ICourseSearch[]> {
+    const token = localStorage.getItem('token')
+
+    const response = await axios.get(`${BASE_URL}/course/purchased`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+
+    return response.data.data
+  }
 }
