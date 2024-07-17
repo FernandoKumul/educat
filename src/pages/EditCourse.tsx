@@ -217,6 +217,7 @@ const EditCourse = () => {
 
   const handleSaveCourse = async () => {
     handleSubmit(() => { })()
+    
     const isValidTitle = await trigger('title')
     setDirty(true)
 
@@ -394,9 +395,10 @@ const EditCourse = () => {
           <section className="bg-black-2 p-4 rounded-b-md">
             <div className="mb-4">
               <label htmlFor="title" className="block mb-1">Título <span className="text-red-600">*</span></label>
-              <TextInput error={!!errors.title} errorMessage="El título es requerido" id="title"
+              <TextInput error={!!errors.title} errorMessage="El título es requerido" id="title" max={100}
                 {...register('title', { required: true, setValueAs: (value: string) => value.trim() })}
                 placeholder="Curso sin título" />
+              <span className="text-slate-300 text-sm">Máximo 100 carateres</span>
             </div>
             <div className="mb-4">
               <label htmlFor="summary" className="block mb-1">Resumen</label>
@@ -410,6 +412,7 @@ const EditCourse = () => {
                     placeholder="Habla un poco sobre tu curso" />
                 )}
               />
+              <span className="text-slate-300 text-sm">Máximo 255 carateres</span>
             </div>
             <div className="md:flex md:gap-2 md:flex-wrap">
               <div className="mb-4 md:flex-grow">
