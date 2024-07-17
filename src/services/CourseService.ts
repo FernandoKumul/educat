@@ -72,7 +72,6 @@ export default class CourseService {
 
   static async publish(courseId: number) {
     const token = localStorage.getItem('token')
-    console.log(token)
 
     await axios.put(`${BASE_URL}/course/publish/${courseId}`, null, {
       headers: {
