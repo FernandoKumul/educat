@@ -1,8 +1,10 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { AccordionList, Button } from "@tremor/react";
 import { useContext, useEffect, useRef, useState } from "react";
-import { RiCheckboxCircleLine, RiGlobalLine, RiGraduationCapFill, 
-  RiGroupFill, RiHeartFill, RiHeartLine, RiLoader4Line, RiTimeLine, RiVideoLine } from "@remixicon/react";
+import {
+  RiCheckboxCircleLine, RiGlobalLine, RiGraduationCapFill,
+  RiGroupFill, RiHeartFill, RiHeartLine, RiLoader4Line, RiTimeLine, RiVideoLine
+} from "@remixicon/react";
 import CourseService from "../services/CourseService";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
@@ -33,7 +35,7 @@ const CoursePage = () => {
   const [isLoading, setLoading] = useState<boolean>(true)
   const [isLoadingCart, setLoadingCart] = useState<boolean>(false)
   const dataFetch = useRef<boolean>(false)
-  
+
   const { isUser } = useContext(AuthContext);
   const { getItems, isCartItems } = useContext(CartContext)
 
@@ -62,7 +64,7 @@ const CoursePage = () => {
       const courseIdInt = parseInt(courseId ?? '0')
       try {
         const dataCourse = await CourseService.getCoursePublic(courseIdInt)
-        const {result, count} = await CommentService.getReviewsByCourse(courseIdInt, 1, 12)
+        const { result, count } = await CommentService.getReviewsByCourse(courseIdInt, 1, 12)
         if (isUser) {
           await alreadyWishlist()
         }
@@ -187,7 +189,7 @@ const CoursePage = () => {
   }
 
   const handleAddCart = async () => {
-    if(!isUser) {
+    if (!isUser) {
       return toast.info("Necesitas iniciar sesión para usar el carrito")
     }
 
@@ -212,7 +214,7 @@ const CoursePage = () => {
 
   const handleRefreshReviews = (rating: number, count: number) => {
     setTotalReviews(count)
-    setCourse({...isCourse, rating})
+    setCourse({ ...isCourse, rating })
   }
 
   return (
@@ -258,26 +260,29 @@ const CoursePage = () => {
             {CurrencyFormat(isCourse.price ?? 0)} MXN
           </h3>
           {
-            isCourse.purchased 
-            ?
-            <Button className="w-full"><span className="text-base">Continuar</span></Button>
-            :
-            <div className="flex gap-3">
-              {isCartItems.find(item => item.fkCourse === parseInt(courseId ?? '0')) 
-              ? 
-              <Button className="grow" disabled={true}>
-                <span className="text-base">Curso en el carrito</span>
-              </Button> 
-              : 
-              <Button className="grow" loading={isLoadingCart} onClick={handleAddCart}
-               disabled={isUser?.pkUser === isCourse.instructor.pkUser}>
-                <span className="text-base">Añadir al carrito</span>
-              </Button>
-              }
-              <div onClick={handleWishlist} className="size-11 flex items-center justify-center rounded-full bg-[#50475C] hover:scale-110 transition-transform cursor-pointer hover:bg-[#645971] active:scale-95">
-                {isWishlist ? <RiHeartFill size={30} className="text-tremor-brand" /> : <RiHeartLine size={30} className="text-secundary-text" />}
+            isCourse.purchased
+              ?
+
+              <Link to={`/course/lesson/${isCourse.pkCourse}`}>
+                <Button className="w-full"><span className="text-base">Continuar</span></Button>
+              </Link>
+              :
+              <div className="flex gap-3">
+                {isCartItems.find(item => item.fkCourse === parseInt(courseId ?? '0'))
+                  ?
+                  <Button className="grow" disabled={true}>
+                    <span className="text-base">Curso en el carrito</span>
+                  </Button>
+                  :
+                  <Button className="grow" loading={isLoadingCart} onClick={handleAddCart}
+                    disabled={isUser?.pkUser === isCourse.instructor.pkUser}>
+                    <span className="text-base">Añadir al carrito</span>
+                  </Button>
+                }
+                <div onClick={handleWishlist} className="size-11 flex items-center justify-center rounded-full bg-[#50475C] hover:scale-110 transition-transform cursor-pointer hover:bg-[#645971] active:scale-95">
+                  {isWishlist ? <RiHeartFill size={30} className="text-tremor-brand" /> : <RiHeartLine size={30} className="text-secundary-text" />}
+                </div>
               </div>
-            </div>
           }
         </div>
       </header>
@@ -323,9 +328,9 @@ const CoursePage = () => {
         </div>
       </div>
       <section className="px-8 lg:px-24  xl:px-36 mb-10">
-				<ReviewList initReviews={isReviews} rating={isCourse.rating} purchased={isCourse.purchased} 
-        onRefresh={(rating, count) => handleRefreshReviews(rating, count)}
-        total={isTotalReviews} courseId={parseInt(courseId ?? '0')} />
+        <ReviewList initReviews={isReviews} rating={isCourse.rating} purchased={isCourse.purchased}
+          onRefresh={(rating, count) => handleRefreshReviews(rating, count)}
+          total={isTotalReviews} courseId={parseInt(courseId ?? '0')} />
       </section>
     </section>
   );
