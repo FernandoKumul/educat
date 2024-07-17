@@ -40,11 +40,11 @@ const LoginPage = () => {
     } catch (error) {
       console.log(error)
       if (error instanceof AxiosError) {
-        if (error.response?.data.message === 'Su cuenta existe, pero su correo no está verificado') {
-          return toast.warn(error.response?.data.message)
+        if (error.response?.data.message) {
+          return toast.error(error.response?.data.message);
         }
 
-        return toast.error('Oops... Ocurrió un error, Intentelo más tarde');
+        return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
       }
     } finally {
       setLoading(false)
@@ -62,11 +62,11 @@ const LoginPage = () => {
       } catch (error) {
         console.log(error)
         if (error instanceof AxiosError) {
-          if (error.response?.data.message === 'Su cuenta existe, pero su correo no está verificado') {
-            return toast.warn(error.response?.data.message)
+          if (error.response?.data.message) {
+            return toast.error(error.response?.data.message);
           }
-
-          return toast.error('Oops... Ocurrió un error, Intentelo más tarde');
+  
+          return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
         }
       } finally {
         setLoading(false)

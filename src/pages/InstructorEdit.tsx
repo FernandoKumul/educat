@@ -210,7 +210,7 @@ const InstructorEdit = () => {
                                 <TextInput placeholder="usuario@example.com" name="emailPaypal" value={user.emailPaypal} onChange={handleChange} />
                             </div>
                             <div className="xl:w-[45%] xl:flex xl:items-center">
-                                <p className="text-secundary-text font-light italic max-sm:text-sm max-sm:text-center">Nota: Recuerda que debe ser el mismo correo que el de tu cuenta de paypal ya que sera al correo que se envien los pagos de tus cursos</p>
+                                <p className="text-secundary-text font-light italic max-sm:text-sm max-sm:text-center">Nota: Recuerda que debe ser el mismo correo que el de tu cuenta de paypal ya que será al correo que se envíen los pagos de tus cursos</p>
                             </div>
                         </div>
                     </div>
