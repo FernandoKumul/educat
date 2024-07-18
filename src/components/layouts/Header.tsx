@@ -144,7 +144,7 @@ const Header = () => {
             </Link>
             <Menu>
               <MenuButton className="hover:text-details">
-                {isUser.avatarUrl ? <img className='rounded-full size-6' src={isUser.avatarUrl} alt="avatar" /> : <RiUserLine />}
+                {isUser.avatarUrl ? <img className='rounded-full size-6 object-cover' src={isUser.avatarUrl} alt="avatar" /> : <RiUserLine />}
               </MenuButton>
               <Transition
                 enter="transition ease-out duration-75"
