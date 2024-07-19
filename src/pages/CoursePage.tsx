@@ -39,25 +39,6 @@ const CoursePage = () => {
   const { isUser } = useContext(AuthContext);
   const { getItems, isCartItems } = useContext(CartContext)
 
-  const alreadyWishlist = async () => {
-    try {
-      const data = await WishlistService.getUserWishlist()
-      const isWishlist = data.find(item => item.fkCourse === parseInt(courseId ?? '0'))
-      if (isWishlist) {
-        setWishlist(true)
-      }
-    } catch (error) {
-      console.log(error)
-      if (error instanceof AxiosError) {
-        if (error.response?.data.message) {
-          return toast.error(error.response?.data.message);
-        }
-
-        return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
-      }
-    }
-  }
-
   useEffect(() => {
     const getCourse = async () => {
       dataFetch.current = true
@@ -65,8 +46,12 @@ const CoursePage = () => {
       try {
         const dataCourse = await CourseService.getCoursePublic(courseIdInt)
         const { result, count } = await CommentService.getReviewsByCourse(courseIdInt, 1, 12)
-        if (isUser) {
-          await alreadyWishlist()
+        const data = await WishlistService.getUserWishlist()
+        if(data.length !== 0) {
+          const isWishlist = data.find(item => item.pkCourse === parseInt(courseId ?? '0'))
+          if (isWishlist) {
+            setWishlist(true)
+          }
         }
         setReviews(result)
         setTotalReviews(count)

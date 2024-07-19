@@ -63,7 +63,8 @@ const AuthProvider = () => {
           setUser(user);
         } catch (error) {
           localStorage.removeItem('token')
-          setUser(null)        }
+          setUser(null)        
+        }
       } else {
         setLoading(false);
       }
