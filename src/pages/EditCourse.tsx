@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { AxiosError } from "axios";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -61,6 +61,30 @@ const EditCourse = () => {
 
   const [isEditUnits, setEditUnits] = useState<IEditUnit[]>([])
   const hasFetchedData = useRef(false)
+
+  const [isLoadingPublish, setLoadingPublish] = useState(false)
+
+  //publish
+  const handlePublish = async () => {
+		try {
+			setLoadingPublish(true)
+			await CourseService.publish(isCourse?.pkCourse ?? 0)
+      toast.success('Curso publicado con éxito', { pauseOnHover: false, autoClose: 3000 })
+      getData()
+		} catch (error) {
+			console.log(error)
+			if (error instanceof AxiosError) {
+				if (error.response?.data.message) {
+					return toast.error(error.response?.data.message);
+				}
+
+				return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
+			}
+		} finally {
+			setLoadingPublish(false)
+		}
+  }
+
   //Learning
   const handleAddLearn = () => {
     setLearningList([...learningList, { id: learningId, text: '' }])
@@ -193,6 +217,7 @@ const EditCourse = () => {
 
   const handleSaveCourse = async () => {
     handleSubmit(() => { })()
+    
     const isValidTitle = await trigger('title')
     setDirty(true)
 
@@ -249,8 +274,8 @@ const EditCourse = () => {
     data.cover = isCurrentImg
     data.requeriments = dataForm.requeriments
     data.description = dataForm.description
-    data.tags = istags.join(',')
-    data.learnText = learningList.map(item => item.text).join(',')
+    data.tags = istags.length === 0 ? null : istags.join(',')
+    data.learnText = learningList.length === 0 ? null : learningList.map(item => item.text).join(',')
     data.units = updateUnits
     console.log({ data })
 
@@ -343,7 +368,7 @@ const EditCourse = () => {
   return (
     <main className="">
       <div className="bg-black-1 h-16 flex justify-between items-center px-6">
-        <RiArrowLeftLine size={28} />
+        <Link to={'/instructor/courses'}><RiArrowLeftLine size={28} /></Link>
         <div className="flex gap-3 items-center">
           <Button icon={RiEyeFill} className="px-[10px]"></Button>
           <Button className="px-[10px] lg:px-4 lg:py-2" onClick={handleSaveCourse} loading={isLoadingSave}>
@@ -354,7 +379,7 @@ const EditCourse = () => {
               </span>
             </div>
           </Button>
-          <Button className="px-[10px] lg:px-4 lg:py-2">
+          <Button className="px-[10px] lg:px-4 lg:py-2"  loading={isLoadingPublish} onClick={handlePublish} disabled={isCourse.active} >
             <div className="flex items-center gap-1">
               <RiUploadCloudFill size={20} />
               <span className="hidden lg:inline">
@@ -370,9 +395,10 @@ const EditCourse = () => {
           <section className="bg-black-2 p-4 rounded-b-md">
             <div className="mb-4">
               <label htmlFor="title" className="block mb-1">Título <span className="text-red-600">*</span></label>
-              <TextInput error={!!errors.title} errorMessage="El título es requerido" id="title"
+              <TextInput error={!!errors.title} errorMessage="El título es requerido" id="title" max={100}
                 {...register('title', { required: true, setValueAs: (value: string) => value.trim() })}
                 placeholder="Curso sin título" />
+              <span className="text-slate-300 text-sm">Máximo 100 carateres</span>
             </div>
             <div className="mb-4">
               <label htmlFor="summary" className="block mb-1">Resumen</label>
@@ -386,6 +412,7 @@ const EditCourse = () => {
                     placeholder="Habla un poco sobre tu curso" />
                 )}
               />
+              <span className="text-slate-300 text-sm">Máximo 255 carateres</span>
             </div>
             <div className="md:flex md:gap-2 md:flex-wrap">
               <div className="mb-4 md:flex-grow">

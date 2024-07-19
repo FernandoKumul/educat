@@ -13,6 +13,17 @@
   flex-direction: column;
   min-height: 100vh;
 } */
+.custom-scroll-1::-webkit-scrollbar {
+  width: 5px;
+  height: 30px;
+}
+.custom-scroll-1::-webkit-scrollbar-thumb {
+  background: #3f3848;
+  border-radius: 10px;
+}
+.custom-scroll-1::-webkit-scrollbar-thumb:hover {
+  background: #312b39; 
+}
 
 :root {
   line-height: 1.5;
@@ -75,4 +86,8 @@
 
 .tremor-Accordion-root {
   overflow: visible;
+}
+
+.custom-border-light.dark\:border-dark-tremor-border {
+  border-color: rgb(122, 117, 132);
 }

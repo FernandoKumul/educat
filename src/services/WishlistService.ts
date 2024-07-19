@@ -1,11 +1,11 @@
 import axios from "axios";
-import { ICartItemCourse } from "../interfaces/ICartItemCourse"
 import { ICartWish } from "../interfaces/ICartWish"
+import { ICourseSearch } from "../interfaces/ICourseSearch";
 
 const BASE_URL = 'https://localhost:7245/api'
 
 export default class WishlistService {
-    static async getUserWishlist(): Promise<ICartItemCourse[]> {
+    static async getUserWishlist(): Promise<ICourseSearch[]> {
         const token = localStorage.getItem('token')
         const response = await axios.get(`${BASE_URL}/wishlist/`, {
             headers: {

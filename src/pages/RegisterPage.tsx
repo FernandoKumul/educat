@@ -30,10 +30,10 @@ const RegisterPage = () => {
     } catch (error) {
       console.log(error)
       if (error instanceof AxiosError) {
-        if(error.response?.data.message === "Error al registrar usuario: El correo ya está registrado en la base de datos.") {
-          return toast.error('El correo ya está registrado');  
+        if (error.response?.data.message) {
+          return toast.error(error.response?.data.message);
         }
-        
+
         return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
       }
     } finally {

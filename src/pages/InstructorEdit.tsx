@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, FormEvent } from "react";
 import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { Button, TextInput, Textarea } from "@tremor/react";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import InstructorService from "../services/instructorService";
 import FileService from "../services/FileService";
 import { IInstructorInfo } from "../interfaces/IInstructorInfo";
@@ -118,6 +118,7 @@ const InstructorEdit = () => {
 
     useEffect(() => {
         getData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
@@ -129,10 +130,10 @@ const InstructorEdit = () => {
                 <form autoComplete="off" onSubmit={handleSubmit(onSubmit)} className="bg-black-2 p-5 rounded-b-md">
                     <p className="max-sm:text-center xl:text-xl xl:mt-8 mb-3">Información personal</p>
                     <div className="relative">
-                        <div className=" z-10 absolute max-sm:size-28 max-sm:translate-x-1/2 max-sm:-left-3 xl:size-52 rounded-full cursor-pointer xl:translate-x-1/2 xl:-bottom-2 xl:right-16 flex justify-center items-center" onClick={() => inputImgRef.current?.click()}>
-                            {isLoadingImg ? <RiLoader4Line size={52} className="animate-spin" /> : <RiImageEditLine size={52} />}
-                        </div>
                         <div className="max-sm:flex max-sm:justify-center xl:absolute xl:-bottom-28 xl:-right-36 xl:-translate-x-1/2 xl:-translate-y-1/2">
+                            <div className=" z-10 absolute max-sm:size-28 xl:size-52 rounded-full -translate-x-1/2 left-1/2 cursor-pointer flex justify-center items-center" onClick={() => inputImgRef.current?.click()}>
+                                {isLoadingImg ? <RiLoader4Line size={52} className="animate-spin" /> : <RiImageEditLine size={52} />}
+                            </div>
                             <img
                                 className="size-28 sm:size-52 rounded-full object-cover brightness-75"
                                 src={imgUrl || userDefault}
@@ -178,7 +179,7 @@ const InstructorEdit = () => {
                         <div className="flex max-sm:mb-3 xl:justify-center">
                             <div className="max-sm:w-full xl:w-[93%]">
                                 <p className="my-3">Descripción</p>
-                                <Textarea placeholder="" name="description" value={user.description} onChange={handleChange} />
+                                <Textarea placeholder="" name="description" value={user.description ?? ''} onChange={handleChange} />
                             </div>
                         </div>
                         <div className="flex max-sm:flex-col max-sm:gap-y-3 max-sm:mb-3 xl:gap-x-10 xl:justify-center">
@@ -210,7 +211,7 @@ const InstructorEdit = () => {
                                 <TextInput placeholder="usuario@example.com" name="emailPaypal" value={user.emailPaypal} onChange={handleChange} />
                             </div>
                             <div className="xl:w-[45%] xl:flex xl:items-center">
-                                <p className="text-secundary-text font-light italic max-sm:text-sm max-sm:text-center">Nota: Recuerda que debe ser el mismo correo que el de tu cuenta de paypal ya que sera al correo que se envien los pagos de tus cursos</p>
+                                <p className="text-secundary-text font-light italic max-sm:text-sm max-sm:text-center">Nota: Recuerda que debe ser el mismo correo que el de tu cuenta de paypal ya que será al correo que se envíen los pagos de tus cursos</p>
                             </div>
                         </div>
                     </div>
@@ -223,11 +224,6 @@ const InstructorEdit = () => {
                     </div>
                 </form>
             </div>
-            <ToastContainer
-                className="text-sm"
-                position="top-right"
-                theme="dark"
-            />
         </div>
     );
 }

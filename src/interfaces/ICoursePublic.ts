@@ -44,3 +44,15 @@ export interface ILessonProgram {
 }
 
 export type typeLesson = 'text' | 'video'
+
+export interface ILessonOut {
+  pkLesson: number;
+  title: string;
+  fkunit: number;
+  text: string;
+  order: number;
+  timeDuration: number;
+  type: typeLesson;
+  videoUrl: string;
+  cretionDate: string;
+}

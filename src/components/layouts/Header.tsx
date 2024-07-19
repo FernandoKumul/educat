@@ -78,6 +78,14 @@ const Header = () => {
                   <RiUserLine />
                   <p>Perfil</p>
                 </Link>
+                {isUser.isInstructor
+                ?
+                  <Link to={'/instructor/profile'} className='flex items-center hover:bg-[#473D55] rounded-md hover:text-details px-3 py-3 cursor-pointer gap-2'>
+                    <RiBriefcaseLine />Panel de instructor
+                  </Link>
+                :
+                  <span className='flex items-center hover:bg-[#473D55] rounded-md hover:text-details px-3 py-3 cursor-pointer gap-2'><RiBriefcaseLine />Se instructor</span>
+                }
                 <Link to={"/cart"} onClick={() => setOpen(false)} className='flex items-center hover:bg-[#473D55] rounded-md hover:text-details px-3 py-3 cursor-pointer gap-2'>
                   <div className='relative'>
                     <RiShoppingCart2Line />
@@ -120,7 +128,12 @@ const Header = () => {
         <div className='hidden md:flex md:items-center w-1/3 justify-end' >
 
           <div className='flex gap-5'>
-            <Link className='flex hover:text-details gap-1' to={'/'}><RiBriefcaseLine />Se instructor</Link>
+            {isUser.isInstructor
+            ?
+              <Link to={'/instructor/profile'} className='flex hover:text-details gap-1'><RiBriefcaseLine />Panel de instructor</Link>
+            :
+              <span className='flex hover:text-details gap-1 cursor-pointer'><RiBriefcaseLine />Se instructor</span>
+            }
             <Link to={'/cart'} className='relative hover:text-details'>
               <RiShoppingCart2Line />
               {isCartItems.length > 0 &&
@@ -131,7 +144,7 @@ const Header = () => {
             </Link>
             <Menu>
               <MenuButton className="hover:text-details">
-                {isUser.avatarUrl ? <img className='rounded-full size-6' src={isUser.avatarUrl} alt="avatar" /> : <RiUserLine />}
+                {isUser.avatarUrl ? <img className='rounded-full size-6 object-cover' src={isUser.avatarUrl} alt="avatar" /> : <RiUserLine />}
               </MenuButton>
               <Transition
                 enter="transition ease-out duration-75"
@@ -158,10 +171,10 @@ const Header = () => {
                     </Link>
                   </MenuItem>
                   <MenuItem>
-                    <div className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
+                    <Link to={'/my-courses'} className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
                       <RiBook3Line />
-                      <a className="block px-3 py-1" href="/">Mis cursos</a>
-                    </div>
+                      <p className="block px-3 py-1">Mis cursos</p>
+                    </Link>
                   </MenuItem>
                   <MenuItem>
                     <div onClick={logout} className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>

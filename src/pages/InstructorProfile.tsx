@@ -46,25 +46,25 @@ const InstructorProfile = () => {
                     <p className="text-2xl text-white">{instructor?.name + ' ' + instructor?.lastName}</p>
                     { instructor?.occupation ? <p className="text-sm text-secondary-text">{'Instructor | ' + instructor?.occupation}</p> : <p className="text-sm text-secondary-text">Sin ocupación</p> }
                 </div>
-                <div className="border-b border-black-2 w-full pb-5">
+                <div className="border-b border-slate-400 w-full pb-5">
                     <p className="text-white">3.7 (100 Reseñas)</p>
                 </div>
                 <div className="grid grid-cols-2 justify-items-center gap-10 text-white">
                     <div>
-                        <p className="text-xl">22</p>
+                        <p className="text-xl text-details">22</p>
                         <p className="text-sm text-gray-400">Cursos completados</p>
                     </div>
                     <div>
-                        <p className="text-xl">2</p>
+                        <p className="text-xl text-details">2</p>
                         <p className="text-sm text-gray-400">Cursos impartidos</p>
                     </div>
                     <div className="col-span-2">
-                        <p className="text-xl">3</p>
+                        <p className="text-xl text-details">3</p>
                         <p className="text-sm text-gray-400">Cursos en proceso</p>
                     </div>
                 </div>
             </section>
-            <section className="bg-black-auth rounded-md flex flex-col w-full p-5 sm:w-[375px] sm:p-10 xl:h-[408px] xl:justify-between">
+            <section className="bg-black-auth rounded-md flex flex-col w-full p-5 sm:w-[375px] sm:p-10 xl:h-[408px] xl:justify-between overflow-auto">
                 <p className="text-white text-xl mb-2">Descripción</p>
                 <p className="text-secundary-text mb-5 xl:flex-grow">{instructor?.description}</p>
                 <div className="flex justify-center gap-x-5">
