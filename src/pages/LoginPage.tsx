@@ -5,10 +5,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form"
 import { useGoogleLogin } from '@react-oauth/google'
 import { ILoginUser } from "../interfaces/ILoginUser";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { Button, TextInput } from "@tremor/react";
 import GoogleIcon from "../components/Icons/GoogleIcon";
-import 'react-toastify/dist/ReactToastify.css';
+
 interface User {
   access_token: string;
 }
@@ -133,12 +133,6 @@ const LoginPage = () => {
           </div>
         </form>
       </section>
-
-      <ToastContainer
-        className="text-sm"
-        position="top-right"
-        theme="dark"
-      />
     </main>
   );
 }

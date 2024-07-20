@@ -6,26 +6,48 @@ import { Button, TextInput } from '@tremor/react';
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
 import CartContext from '../../contexts/CartContext';
 import Avatar from '../common/Avatar';
+import DialogConfirmation from '../common/DialogConfirmation';
+import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
+import UserService from '../../services/UserService';
 
 const Header = () => {
   const [searchValue, setValue] = useState('');
-  const { isUser, logout } = useContext(AuthContext);
+  const { isUser, logout, reloadUser } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const { isCartItems } = useContext(CartContext);
 
+  const navigate = useNavigate();
 
   // para el menú hambuerguesa
   const handleToggleMenu = () => {
     setOpen(!open);
   }
 
+  const handleBecomeInstructor = async (): Promise<void> => {
+    try {
+      await UserService.becomeInstructor();
+      toast.success("¡¡Ahora eres un Instructor!!")
+      await reloadUser();
+      navigate('/instructor/profile')
+    } catch (error) {
+      console.log(error)
+      if (error instanceof AxiosError) {
+        if (error.response?.data.message) {
+          toast.error(error.response?.data.message);
+          return
+        }
+
+        toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
+      }
+    }
+  }
 
   useEffect(() => {
     const search = new URLSearchParams(window.location.search).get('q') || '';
     setValue(search);
   }, []);
 
-  const navigate = useNavigate();
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -84,7 +106,9 @@ const Header = () => {
                     <RiBriefcaseLine />Panel de instructor
                   </Link>
                 :
-                  <span className='flex items-center hover:bg-[#473D55] rounded-md hover:text-details px-3 py-3 cursor-pointer gap-2'><RiBriefcaseLine />Se instructor</span>
+                  <DialogConfirmation description='¿Estás seguro de convertirte en instructor?' onClick={handleBecomeInstructor}>
+                    <span className='flex items-center hover:bg-[#473D55] rounded-md hover:text-details px-3 py-3 cursor-pointer gap-2'><RiBriefcaseLine />Se instructor</span>
+                  </DialogConfirmation>
                 }
                 <Link to={"/cart"} onClick={() => setOpen(false)} className='flex items-center hover:bg-[#473D55] rounded-md hover:text-details px-3 py-3 cursor-pointer gap-2'>
                   <div className='relative'>
@@ -132,7 +156,9 @@ const Header = () => {
             ?
               <Link to={'/instructor/profile'} className='flex hover:text-details gap-1'><RiBriefcaseLine />Panel de instructor</Link>
             :
-              <span className='flex hover:text-details gap-1 cursor-pointer'><RiBriefcaseLine />Se instructor</span>
+              <DialogConfirmation description='¿Estás seguro de convertirte en instructor?' onClick={handleBecomeInstructor}>
+                <span className='flex hover:text-details gap-1 cursor-pointer'><RiBriefcaseLine />Se instructor</span>
+              </DialogConfirmation>
             }
             <Link to={'/cart'} className='relative hover:text-details'>
               <RiShoppingCart2Line />

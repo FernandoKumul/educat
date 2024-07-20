@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Footer from "./Footer";
 import Header from "./Header";
-import { ToastContainer } from "react-toastify";
 import CartProvider from "../../contexts/CartProvider";
 
 const MainLayout = () => {
@@ -13,11 +12,6 @@ const MainLayout = () => {
           <Outlet />
         </main>
         <Footer />
-        <ToastContainer
-          className="text-sm"
-          position="top-right"
-          theme="dark"
-        />
       </div>
     </CartProvider>
   );

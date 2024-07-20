@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 import InstructorService from "../services/instructorService";
 import FileService from "../services/FileService";
 import { IInstructorInfo } from "../interfaces/IInstructorInfo";
-import 'react-toastify/dist/ReactToastify.css';
 import { RiImageEditLine, RiLoader4Line } from "@remixicon/react";
 import userDefault from '../assets/userDefault.svg';
 

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import HeaderInstructor from "./HeaderInstructor";
 import InstructorSidebar from "./InstructorSidebar";
-import { ToastContainer } from "react-toastify";
 
 const InstructorLayout = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,11 +16,6 @@ const InstructorLayout = () => {
         <HeaderInstructor handleSidebar={handleSidebar} />
         <Outlet />
       </div>
-      <ToastContainer
-        className="text-sm"
-        position="top-right"
-        theme="dark"
-      />
     </div>
   );
 }
