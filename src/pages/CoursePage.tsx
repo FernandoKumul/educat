@@ -137,6 +137,8 @@ const CoursePage = () => {
     switch (isCourse.language) {
       case 'spanish':
         return 'Español'
+      case 'english':
+        return 'Inglés'
       default:
         return 'Sin idioma'
     }
