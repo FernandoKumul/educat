@@ -14,7 +14,7 @@ const HeaderInstructor = ({handleSidebar}: HeaderInstructorProps) => {
     <header className="flex bg-header justify-end items-center gap-8 min-h-16 px-6">
       <Link to={'/'} className='hover:text-details max-sm:hidden'>Inicio</Link>
       <div className="flex items-center gap-3 max-sm:hidden">
-        <p>{(isUser?.name + ' ' + isUser?.lastName).trim()}</p>
+        <p>{isUser?.name}</p>
         {isUser?.avatarUrl ? <img className='rounded-full size-6 object-cover ' src={isUser.avatarUrl} alt="avatar" /> : <RiUserLine />}
       </div>
       <RiMenuLine onClick={handleSidebar} className="size-7 hidden max-sm:block" />
