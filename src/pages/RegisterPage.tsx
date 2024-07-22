@@ -2,8 +2,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { Button, TextInput } from "@tremor/react";
 import { IRegisterUser } from "../interfaces/IRegisterUser";
 import AuthService from "../services/AuthService";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 import { AxiosError } from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -141,11 +140,6 @@ const RegisterPage = () => {
         </h2>
         <h4 className="text-xl text-center xl:text-2xl xl:tracking-wide  ">el sitio en el cual puedes aprender a tu ritmo<span className="text-details">!</span></h4>
       </section>
-      <ToastContainer 
-        className="text-sm"
-        position="top-right"
-        theme="dark"
-       />
     </main>
   );
 }

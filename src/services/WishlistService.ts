@@ -7,6 +7,11 @@ const BASE_URL = 'https://localhost:7245/api'
 export default class WishlistService {
     static async getUserWishlist(): Promise<ICourseSearch[]> {
         const token = localStorage.getItem('token')
+
+        if (!token) {
+            return []
+        }
+
         const response = await axios.get(`${BASE_URL}/wishlist/`, {
             headers: {
                 'Authorization': `Bearer ${token}`
