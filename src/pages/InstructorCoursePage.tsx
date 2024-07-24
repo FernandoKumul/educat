@@ -92,7 +92,6 @@ const InstructorCoursePage = () => {
 		} finally {
 			setLoadingDelete(false)
 			setDirty(false)
-			toast.dismiss()
 		}
 	}
 
