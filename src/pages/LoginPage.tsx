@@ -12,9 +12,13 @@ import GoogleIcon from "../components/Icons/GoogleIcon";
 interface User {
   access_token: string;
 }
+interface Email {
+  email: string;
+}
 
 const LoginPage = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [handleRender, setHandleRender] = useState(false);
 
   const loginGoogle = useGoogleLogin({
     onSuccess: (codeResponse: User) => setUser(codeResponse),
@@ -51,6 +55,27 @@ const LoginPage = () => {
     }
   }
 
+  const onSubmitRecovery: SubmitHandler<Email> = async (data) => {
+    try {
+      toast.dismiss()
+      setLoading(true)
+      await AuthService.SendEmailRecovery(data.email)
+      toast.success('Se ha enviado un correo de recuperación a tu dirección de correo electrónico')
+      setHandleRender(false)
+    } catch (error) {
+      console.log(error)
+      if (error instanceof AxiosError) {
+        if (error.response?.data.message) {
+          return toast.error(error.response?.data.message);
+        }
+
+        return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const loginByGoogle = async () => {
     if (user) {
       try {
@@ -65,7 +90,7 @@ const LoginPage = () => {
           if (error.response?.data.message) {
             return toast.error(error.response?.data.message);
           }
-  
+
           return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
         }
       } finally {
@@ -76,7 +101,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     loginByGoogle()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   return (
@@ -106,32 +131,57 @@ const LoginPage = () => {
         <div className="h-[2px] bg-[#9D9D9D] my-10 relative">
           <span className="text-xl font-light absolute bg-black-auth top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-3">ó</span>
         </div>
-        <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-          <div className="mb-4">
-            <label htmlFor="email" className="block mb-1">Correo</label>
-            <TextInput placeholder="" errorMessage={errors.email?.message} error={!!errors.email} {...register("email", {
-              required: "El email es requerido",
-              pattern: { value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, message: "Email inválido" },
-              setValueAs: (value: string) => value.trim()
-            })} id="email" className={`bg-transparent ${errors.email || 'border-[#9D9D9D]'} hover:bg-gray-700`} autoComplete="email" />
-          </div>
+        {!handleRender && (
+          <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+            <div className="mb-4">
+              <label htmlFor="email" className="block mb-1">Correo</label>
+              <TextInput placeholder="" errorMessage={errors.email?.message} error={!!errors.email} {...register("email", {
+                required: "El email es requerido",
+                pattern: { value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, message: "Email inválido" },
+                setValueAs: (value: string) => value.trim()
+              })} id="email" className={`bg-transparent ${errors.email || 'border-[#9D9D9D]'} hover:bg-gray-700`} autoComplete="email" />
+            </div>
 
-          <div className="mb-5">
-            <label htmlFor="password" className="block mb-1">Contraseña</label>
-            <TextInput placeholder="" error={!!errors.password} errorMessage={errors.password?.message} {...register("password", {
-              required: "La contraseña es requerido",
-              setValueAs: (value: string) => value.trim()
-            })} type="password" name="password" id="password"
-              className={`bg-transparent ${errors.password || 'border-[#9D9D9D]'} hover:bg-gray-700 icon-input-text-white`} autoComplete="off" />
-            <Link to={'/recovery-password'} className="underline text-[#B5B5B5] text-sm text-right block mt-1">¿Olvidaste tu contraseña?</Link>
-          </div>
+            <div className="mb-5">
+              <label htmlFor="password" className="block mb-1">Contraseña</label>
+              <TextInput placeholder="" error={!!errors.password} errorMessage={errors.password?.message} {...register("password", {
+                required: "La contraseña es requerido",
+                setValueAs: (value: string) => value.trim()
+              })} type="password" name="password" id="password"
+                className={`bg-transparent ${errors.password || 'border-[#9D9D9D]'} hover:bg-gray-700 icon-input-text-white`} autoComplete="off" />
+              <p onClick={() => setHandleRender(!handleRender)} className="underline text-[#B5B5B5] text-sm text-right block mt-1 select-none cursor-pointer hover:text-tremor-brand transition-all">¿Olvidaste tu contraseña?</p>
+            </div>
 
-          <div className="lg:flex lg:justify-center">
-            <Button className="w-full h-12 mt-6 lg:w-auto lg:px-[10%] focus:outline focus:outline-current" type="submit" loading={loading}>
-              <span className="text-base">Entrar</span>
-            </Button>
-          </div>
-        </form>
+            <div className="lg:flex lg:justify-center">
+              <Button className="w-full h-12 mt-6 lg:w-auto lg:px-[10%] focus:outline focus:outline-current" type="submit" loading={loading}>
+                <span className="text-base">Entrar</span>
+              </Button>
+            </div>
+          </form>
+        )
+        }
+        {handleRender && (
+          <form autoComplete="off" onSubmit={handleSubmit(onSubmitRecovery)}>
+            <div className="mb-4">
+              <p className="text-xl">Restablecer la contraseña</p>
+              <p className="text-sm text-secundary-text mt-2 mb-5 italic">Indícanos tu dirección de correo electrónico y te enviaremos un enlace para que puedas volver a acceder a tu cuenta.</p>
+              <label htmlFor="email" className="block mb-1">Correo</label>
+              <TextInput placeholder="" errorMessage={errors.email?.message} error={!!errors.email} {...register("email", {
+                required: "El email es requerido",
+                pattern: { value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, message: "Email inválido" },
+                setValueAs: (value: string) => value.trim()
+              })} id="email" className={`bg-transparent ${errors.email || 'border-[#9D9D9D]'} hover:bg-gray-700`} autoComplete="email" />
+            </div>
+            <div className="lg:flex lg:justify-center">
+              <Button className="w-full h-12 mt-6 lg:w-auto lg:px-[10%] focus:outline focus:outline-current" type="submit" loading={loading}>
+                <span className="text-base">Recuperar</span>
+              </Button>
+            </div>
+          </form>
+        )
+        }
+
+
       </section>
     </main>
   );

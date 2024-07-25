@@ -22,6 +22,8 @@ import TakingCourse from "./pages/TakingCourse";
 import SuccessPaymentPage from "./pages/SuccessfulpaymentPage";
 import UserCourses from "./pages/UserCourses";
 import InstructorCoursePage from "./pages/InstructorCoursePage";
+import ChangePassword from "./pages/ChangePassword";
+
 
 const router = createBrowserRouter([
   {
@@ -58,6 +60,16 @@ const router = createBrowserRouter([
           {
             path: '',
             element: <LoginPage />
+          }
+        ]
+      },
+      {
+        path: '/change-password/:token',
+        element: <UnAuthGuard />,
+        children: [
+          {
+            path: '',
+            element: <ChangePassword />
           }
         ]
       },
