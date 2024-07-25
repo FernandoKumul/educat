@@ -8,6 +8,7 @@ import { ICourseSearch } from "../interfaces/ICourseSearch";
 import CourseService from "../services/CourseService";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import computersImg from '../assets/computers.png';
 
 interface ICategory {
   name: string,
@@ -111,7 +112,7 @@ const HomePage = () => {
           <p className='my-3 text-sm md:text-base'>Habilidades para tú presente (y tú futuro). Da tus primeros pasos con nosotros.</p>
         </div>
 
-        <img src="./src/assets/computers.png" alt="computers" className="m-auto absolute bottom-0 right-0 lg:top-0 opacity-10 lg:opacity-85 lg:w-1/2"/>
+        <img src={computersImg} alt="computers" className="m-auto absolute bottom-0 right-0 lg:top-0 opacity-10 lg:opacity-85 lg:w-1/2"/>
       </div>
       
 

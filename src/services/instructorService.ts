@@ -1,7 +1,7 @@
 import axios from "axios";
 import { IInstructorInfo } from "../interfaces/IInstructorInfo";
 
-const BASE_URL = 'https://localhost:7245/api'
+const BASE_URL =  import.meta.env.VITE_URL_API ?? 'https://localhost:7245/api'
 
 export default class InstructorService{
     static async getInstructorProfile(token: string): Promise<IInstructorInfo>{

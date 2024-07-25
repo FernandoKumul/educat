@@ -7,7 +7,7 @@ type IProps = {
 const Avatar = ({url, alt = '', className = ''}: IProps) => {
   if(!url) {
     return (
-      <img className={"size-8 rounded-full object-cover " + className} src="/src/assets/UserDefault.svg" alt="" />
+      <img className={"size-8 rounded-full object-cover " + className} src="/UserDefault.svg" alt="avatar" />
     )
   }
 
