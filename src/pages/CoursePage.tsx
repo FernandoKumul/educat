@@ -219,6 +219,7 @@ const CoursePage = () => {
 
   return (
     <section>
+      {/* Información general */}
       <header className="bg-header px-8 py-6 lg:flex lg:px-24 lg:py-10 lg:gap-4 xl:px-36">
         <div className="mb-6 lg:grow lg:mb-0">
           <h1 className="text-2xl font-semibold mb-2">{isCourse.title}</h1>
@@ -308,6 +309,7 @@ const CoursePage = () => {
         </div>
         <div className="lg:w-[300px] flex-shrink-0">
           {isCourse.purchased &&
+           // Información del progreso
             <article>
               <div className="flex justify-between items-center mb-2">
                 <h2 className="font-semibold">Progreso</h2>
@@ -340,6 +342,7 @@ const CoursePage = () => {
           </div>
         </div>
       </div>
+      {/* Reseñas */}
       <section className="px-8 lg:px-24  xl:px-36 mb-10">
         <ReviewList initReviews={isReviews} rating={isCourse.rating} purchased={isCourse.purchased}
           onRefresh={(rating, count) => handleRefreshReviews(rating, count)}

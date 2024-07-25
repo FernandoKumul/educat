@@ -12,6 +12,7 @@ import UnitCard from '../components/course/UnitCard';
 import Avatar from '../components/common/Avatar';
 import BadgeDifficulty from '../components/course/BadgeDifficulty';
 import ProgressService from '../services/ProgressService';
+import ProgressBar from '../components/common/ProgressBar';
 
 const TakingCourse = () => {
     const { courseId } = useParams();
@@ -35,6 +36,18 @@ const TakingCourse = () => {
     const saveProgress = async (lessonId: number) => {
         try {
             await ProgressService.addProgress(lessonId)
+            if (!isCourse) return
+            const newUnits = [...isCourse.units].map(unit => {
+                const newLessons = [...unit.lessons].map(lesson => {
+                    if (lesson.pkLesson === lessonId) {
+                        lesson.completed = true
+                    }
+                    return lesson
+                })
+                return { ...unit, lessons: newLessons }
+            })
+
+            setCourse({ ...isCourse, units: newUnits })
         } catch (error) {
             console.log(error)
             if (error instanceof AxiosError) {
@@ -95,10 +108,30 @@ const TakingCourse = () => {
             </div>
         )
     }
-    console.log(isLesson)
+
+    const getNumbersLessons = () => {
+        let countLessons = 0
+        isCourse.units.forEach(unit => {
+          countLessons += unit.lessons.length
+        });
+        return countLessons
+      }
+    
+      const getNumbersLessonsCompleted = () => {
+        let countLessons = 0
+        isCourse.units.forEach(unit => {
+          unit.lessons.forEach(lesson => {
+            if (lesson.completed) {
+              countLessons++
+            }
+          })
+        });
+        return countLessons
+      }
+
     return (
         <div className="flex flex-col lg:flex-row px-6 py-6 lg:px-24 lg:py-10 lg:gap-4">
-            <div className="lg:w-4/5">
+            <div className="lg:w-[70%] lg:pr-6 flex-shrink-0">
                 <p className='text-2xl mb-5'>{isCourse.title}</p>
                 {isLesson?.type === 'text' &&
                     <div className='border-b-2 mb-5 lg:w-[95%] lg:border-b-tremor-content'>
@@ -108,7 +141,7 @@ const TakingCourse = () => {
                 }
                 {isLesson?.type === 'video' &&
                     <div>
-                        <video className='aspect-video w-full lg:w-11/12 rounded-md' src={isLesson?.videoUrl} controls>
+                        <video className='aspect-video w-full rounded-md' src={isLesson?.videoUrl} controls>
                         </video>
                         <p className='text-xl my-5'>{isLesson?.title}</p>
                     </div>
@@ -129,8 +162,13 @@ const TakingCourse = () => {
                 </div>
                 <p className='w-full my-5'>{isCourse.description}</p>
             </div>
-            <div className='lg:w-1/5'>
-                <AccordionList className='overflow-auto max-h-[600px] custom-scroll-1'>
+            <div className='lg:w-[30%] min-w-0'>
+                <ProgressBar value={getNumbersLessonsCompleted() * 100 / getNumbersLessons()} className='mb-2' />
+                <div className="flex mb-4 justify-between text-secundary-text">
+                    <h2>Tareas completadas</h2>
+                    <span>{getNumbersLessonsCompleted()}/{getNumbersLessons()}</span>
+                </div>
+                <AccordionList className='overflow-auto max-h-[500px] custom-scroll-1 w-full'>
                     {isCourse.units.map(unit => (
                         <UnitCard key={unit.pkUnit} unit={unit} purchased={isCourse.purchased} />
                     ))}
