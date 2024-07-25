@@ -10,7 +10,6 @@ import CartContext from '../../contexts/CartContext';
 import UserService from '../../services/UserService';
 import Avatar from '../common/Avatar';
 import DialogConfirmation from '../common/DialogConfirmation';
-import logoImg from '/src/assets/logo.svg'
 
 const Header = () => {
   const [searchValue, setValue] = useState('');
@@ -63,7 +62,7 @@ const Header = () => {
       {/* Buscador y logo */}
       <div className='flex w-2/3'>
         <Link to={'/'}>
-          <img src={logoImg} alt="logo" className='w-20' />
+          <img src="/logo.svg" alt="logo" className='w-20' />
         </Link>
 
         <form className='relative ml-10 hidden md:block w-3/4' onSubmit={handleSearch}>
@@ -78,7 +77,7 @@ const Header = () => {
 
         <section className={`bg-header px-8 pt-4 pb-8 fixed h-dvh w-full flex flex-col z-10 top-0 right-0 ${open ? '' : 'translate-x-full'} transition-transform`}>
           <header className='flex justify-between items-center'>
-            <img src={logoImg} alt="logo" className='w-24' />
+            <img src="/logo.svg" alt="logo" className='w-24' />
             <RiCloseLine onClick={handleToggleMenu} />
           </header>
 

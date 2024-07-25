@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { RiEditLine, RiBookLine, RiFeedbackLine, RiGroupLine, RiUserLine } from "@remixicon/react";
 import AuthContext from "../../contexts/AuthContext";
-import logo from "../../assets/logo.svg";
 
 type InstructorSidebarProps = {
   openSidebar: boolean;
@@ -28,7 +27,7 @@ const InstructorSidebar = ({ handleSidebar, openSidebar }: InstructorSidebarProp
       <div className="max-sm:w-4/5 bg-black-1 flex flex-col h-full justify-between gap-y-2 py-5 px-6">
         <div className="flex flex-col gap-y-5">
           <Link to={'/'} className="flex items-center justify-center mb-5">
-            <img src={logo} alt="logo educat" className="w-40" />
+            <img src="/logo.svg" alt="logo educat" className="w-40" />
           </Link>
           <Link to={'/instructor/profile'} onClick={() => currentView('profile')} className={`${path === 'profile' ? 'text-tremor-brand' : ''} flex items-center gap-x-3 hover:bg-[#5a4b6e] rounded-md py-2 px-4 transition-colors`}>
             <RiUserLine />

@@ -1,5 +1,3 @@
-import userDefault from '/src/assets/UserDefault.svg';
-
 type IProps = {
   url: string | null
   alt?: string,
@@ -9,7 +7,7 @@ type IProps = {
 const Avatar = ({url, alt = '', className = ''}: IProps) => {
   if(!url) {
     return (
-      <img className={"size-8 rounded-full object-cover " + className} src={userDefault} alt="avatar" />
+      <img className={"size-8 rounded-full object-cover " + className} src="/UserDefault.svg" alt="avatar" />
     )
   }
 

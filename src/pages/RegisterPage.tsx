@@ -45,12 +45,12 @@ const RegisterPage = () => {
   return (
     <main className="flex flex-col min-h-screen md:flex-row">
       <Link to={'/'}>
-        <img className="w-56 mx-auto py-8 md:hidden" src="/src/assets/logo.svg" alt="logo" />
+        <img className="w-56 mx-auto py-8 md:hidden" src="/logo.svg" alt="logo" />
       </Link>
 
       <section className="bg-black-auth rounded-t-3xl px-8 pt-10 pb-8 flex-grow md:w-1/2 md:rounded-none lg:px-12 xl:px-28">
         <Link to={'/'}>
-          <img className="hidden w-48 mx-auto mb-2 md:block" src="/src/assets/logo.svg" alt="logo" />
+          <img className="hidden w-48 mx-auto mb-2 md:block" src="/logo.svg" alt="logo" />
         </Link>
         <h1 className="text-[28px] font-medium text-center">Registro</h1>
         <h3 className="text-center mb-3">¿Ya tienes una cuenta? <Link to={'/login'} className="underline underline-offset-[0.5px]">Inicia sesión</Link></h3>
