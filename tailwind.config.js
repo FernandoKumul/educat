@@ -46,6 +46,10 @@ export default {
       },
       'secundary-text': '#E3DFE7',
       'details': '#FF87DD',
+      'black-auth': '#312F35',
+      'header': '#312B39',
+      'black-1': '#25202A',
+      'black-2': '#443C50',
         tremor: {
           brand: {
             faint: '#0B1229',
@@ -56,9 +60,9 @@ export default {
             inverted: "#FFF",
           },
           background: {
-            muted: '#131A2B',
+            muted: '#322E37',
             subtle: colors.gray[800],
-            DEFAULT: colors.gray[900],
+            DEFAULT: '#27222D',
             emphasis: colors.gray[300],
           },
           border: {
