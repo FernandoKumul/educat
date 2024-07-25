@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const BASE_URL = 'https://localhost:7245/api'
+const BASE_URL =  import.meta.env.VITE_URL_API ?? 'https://localhost:7245/api'
 
 export default class PayPalservice {
   static async createOrder(): Promise<string> {
