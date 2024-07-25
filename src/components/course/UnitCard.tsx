@@ -1,6 +1,6 @@
 import { Accordion, AccordionBody, AccordionHeader } from "@tremor/react";
 import { IUnitProgram } from "../../interfaces/ICoursePublic";
-import { RiFileTextLine, RiVideoOnLine } from "@remixicon/react";
+import { RiEyeFill, RiEyeOffFill, RiFileTextLine, RiVideoOnLine } from "@remixicon/react";
 import { getFormatTimeinMinutes } from "../../utils/TimeUtils";
 import { Link } from "react-router-dom";
 
@@ -10,7 +10,6 @@ type IProps = {
 }
 
 const UnitCard = ({ unit, purchased }: IProps) => {
-  //Calcular el tiempo de la unidad
 
   return (
     <Accordion className="mb-4 bg-header">
@@ -29,20 +28,24 @@ const UnitCard = ({ unit, purchased }: IProps) => {
                 items-center justify-center rounded-s-md flex-shrink-0`}>
                 {lesson.type === 'text' ? <RiFileTextLine /> : <RiVideoOnLine />}
               </div>
-              <div className="flex-grow min-w-0 px-4 py-2">
-                {purchased
-                  ?
-                  <Link to={`/course/${unit.fkCourse}/lesson?number=${lesson.pkLesson}`}
-                    className="block text-base font-medium whitespace-nowrap text-ellipsis overflow-hidden hover:underline w-fit max-w-full">
-                    {lesson.title}
-                  </Link>
-
-                  :
-                  <h4 className="text-base font-medium whitespace-nowrap text-ellipsis overflow-hidden">
-                    {lesson.title}
-                  </h4>
+              <div className="flex-grow min-w-0 px-4 gap-2 py-2 flex justify-between">
+                <div className="min-w-0 flex-grow">
+                  {purchased
+                    ?
+                    <Link to={`/course/${unit.fkCourse}/lesson?number=${lesson.pkLesson}`} title={lesson.title}
+                      className="block text-base font-medium whitespace-nowrap text-ellipsis overflow-hidden hover:underline w-fit max-w-full">
+                      {lesson.title}
+                    </Link>
+                    :
+                    <h4 className="text-base font-medium whitespace-nowrap text-ellipsis overflow-hidden">
+                      {lesson.title}
+                    </h4>
+                  }
+                  <p className="text-secundary-text">{getFormatTimeinMinutes(lesson.timeDuration)} min</p>
+                </div>
+                {purchased && 
+                  (lesson.completed ? <RiEyeFill className="flex-shrink-0" /> : <RiEyeOffFill className="flex-shrink-0" />)
                 }
-                <p className="text-secundary-text">{getFormatTimeinMinutes(lesson.timeDuration)} min</p>
               </div>
             </article>
           ))}

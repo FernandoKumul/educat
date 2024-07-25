@@ -40,6 +40,7 @@ export interface ILessonProgram {
   type: typeLesson;
   timeDuration: number;
   order: number;
+  completed: boolean;
   cretionDate: string;
 }
 
@@ -53,6 +54,7 @@ export interface ILessonOut {
   order: number;
   timeDuration: number;
   type: typeLesson;
+  completed: boolean;
   videoUrl: string;
   cretionDate: string;
 }
