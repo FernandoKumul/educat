@@ -28,4 +28,7 @@ export default class AuthService {
     const response = await axios.post(`${BASE_URL}/auth/google?accessToken=${accessToken}`)
     localStorage.setItem('token', response.data.data.token)
   }
+  static async SendEmailRecovery(email: string) {
+    await axios.get(`${BASE_URL}/auth/send-email-recovery?email=${email}`)
+  }
 }
