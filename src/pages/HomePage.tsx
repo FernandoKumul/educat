@@ -31,6 +31,8 @@ const HomePage = () => {
   const [isPopularCourses, setPopularCourses] = useState<ICourseSearch[]>([])
   const [isLoadingPopular, setLoadingPopular] = useState(true)
 
+  console.log(import.meta.env.MODE)
+  console.log(import.meta.env.VITE_URL_API)
   const sliderSettings: Settings = {
     dots: false,
     speed: 500,

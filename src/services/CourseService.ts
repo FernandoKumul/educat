@@ -4,7 +4,7 @@ import { ICoursePublic } from "../interfaces/ICoursePublic"
 import { ICourseInstructor } from "../interfaces/ICourseInstructor"
 import { ICourseSearch } from "../interfaces/ICourseSearch"
 
-const BASE_URL = 'https://localhost:7245/api'
+const BASE_URL =  import.meta.env.VITE_URL_API ?? 'https://localhost:7245/api'
 
 export default class CourseService {
   static async getCourseToEdit(courseId: number): Promise<IEditCourse> {

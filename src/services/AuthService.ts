@@ -3,7 +3,7 @@ import { IRegisterUser } from "../interfaces/IRegisterUser"
 import { ILoginUser } from "../interfaces/ILoginUser"
 import { IUserAuth } from "../interfaces/IUserAuth"
 
-const BASE_URL = 'https://localhost:7245/api'
+const BASE_URL =  import.meta.env.VITE_URL_API ?? 'https://localhost:7245/api'
 
 export default class AuthService {
 
