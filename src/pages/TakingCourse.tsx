@@ -11,6 +11,7 @@ import { RiGroupFill, RiLoader4Line } from '@remixicon/react';
 import UnitCard from '../components/course/UnitCard';
 import Avatar from '../components/common/Avatar';
 import BadgeDifficulty from '../components/course/BadgeDifficulty';
+import ProgressService from '../services/ProgressService';
 
 const TakingCourse = () => {
     const { courseId } = useParams();
@@ -27,7 +28,26 @@ const TakingCourse = () => {
         console.log(lessonNumber)
         const response = await CourseService.getLesson(lessonNumber)
         setLesson(response)
+        saveProgress(response.pkLesson)
         console.log(isLesson)
+    }
+
+    const saveProgress = async (lessonId: number) => {
+        try {
+            await ProgressService.addProgress(lessonId)
+        } catch (error) {
+            console.log(error)
+            if (error instanceof AxiosError) {
+                if (error.response?.data.message === 'El progreso ya ha sido agregado') {
+                    return
+                }
+                
+                if (error.response?.data.message) {
+                    return toast.error(error.response?.data.message);
+                }
+                return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
+            }
+        }
     }
 
     useEffect(() => {
