@@ -6,7 +6,7 @@ type IProps = {
 const ProgressBar = ({ value, className = '' }: IProps) => {
   return (
     <div className={"w-full bg-[#626164] rounded-full h-2" + ' ' + className}>
-      <div className="bg-details h-2 rounded-full" style={{ width: value + '%' }}></div>
+      <div className="bg-details h-2 rounded-full transition-all" style={{ width: value + '%' }}></div>
     </div>
   );
 }
