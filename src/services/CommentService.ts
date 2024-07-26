@@ -3,7 +3,7 @@ import { ICommentUser } from "../interfaces/ICommentUser"
 import { IAddReview } from "../interfaces/IAddReview"
 import { IEditReview } from "../interfaces/IEditReview"
 
-const BASE_URL = 'https://localhost:7245/api'
+const BASE_URL =  import.meta.env.VITE_URL_API ?? 'https://localhost:7245/api'
 
 type IResponseGetReviewsByCourse = {
   result: ICommentUser[],

@@ -3,7 +3,7 @@ import { IRegisterUser } from "../interfaces/IRegisterUser"
 import { ILoginUser } from "../interfaces/ILoginUser"
 import { IUserAuth } from "../interfaces/IUserAuth"
 
-const BASE_URL = 'https://localhost:7245/api'
+const BASE_URL =  import.meta.env.VITE_URL_API ?? 'https://localhost:7245/api'
 
 export default class AuthService {
 
@@ -27,5 +27,11 @@ export default class AuthService {
   static async TokenByGoogle(accessToken: string) {
     const response = await axios.post(`${BASE_URL}/auth/google?accessToken=${accessToken}`)
     localStorage.setItem('token', response.data.data.token)
+  }
+  static async SendEmailRecovery(email: string) {
+    await axios.get(`${BASE_URL}/auth/send-email-recovery?email=${email}`)
+  }
+  static async ChangePassword(token: string, password: string) {
+    await axios.put(`${BASE_URL}/auth/change-password?token=${token}&newPassword=${password}`)
   }
 }

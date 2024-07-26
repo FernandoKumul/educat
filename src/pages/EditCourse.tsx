@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { AxiosError } from "axios";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, SubmitErrorHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { RiAddBoxLine, RiArrowLeftLine, RiCloseFill, RiCloseLine, RiEyeFill, RiImageAddLine, RiLoader4Line, RiSave3Fill, RiUploadCloudFill } from "@remixicon/react";
 import { AccordionList, Button, NumberInput, Select, SelectItem, TextInput, Textarea } from "@tremor/react";
@@ -43,7 +43,6 @@ const EditCourse = () => {
     getValues,
     setValue,
     handleSubmit,
-    trigger
   } = useForm<ICourseInfoP1>()
   const [isCourse, setCourse] = useState<IEditCourse | null>(null)
   const [isLoading, setLoading] = useState<boolean>(true)
@@ -214,15 +213,36 @@ const EditCourse = () => {
     return getFormatTime(totalTime)
   }
 
-
-  const handleSaveCourse = async () => {
-    handleSubmit(() => { })()
-    
-    const isValidTitle = await trigger('title')
+  const handleErrorSaveCourse: SubmitErrorHandler<ICourseInfoP1> = () => {
     setDirty(true)
 
-    if (!isValidTitle) {
-      return toast.error('El título es obligatorio')
+    for (const error in errors) {
+      if (errors[error as keyof ICourseInfoP1]?.message) {
+        return toast.error(errors[error as keyof ICourseInfoP1]?.message)
+      }
+    }
+
+    console.log(errors.root?.message)
+    if (errors.root?.message) {
+      return toast.error(errors.root?.message)
+    }
+  }
+
+  const handleSaveCourse = async () => {    
+    setDirty(true)
+
+    if (isCourse?.active) {
+      if (isCategory === '') {
+        return toast.error('No has seleccionado una categoría.')
+      }
+
+      if (!isVideoUrl) {
+        return toast.error('No has subido un video de presentación.')
+      }
+
+      if (!isCurrentImg) {
+        return toast.error('No has subido una imagen de portada.')
+      }
     }
 
     for (const learning of learningList) {
@@ -253,6 +273,17 @@ const EditCourse = () => {
       }
     }
 
+    if (isCourse?.active) {
+      if (isEditUnits.length === 0) {
+        return toast.error('No hay unidades en el curso.')
+      }
+
+      for (const unit of isEditUnits) {
+        if (unit.lessons.length === 0) {
+          return toast.error(`No hay lecciones en la unidad ${unit.order}.`)
+        }
+      }
+    }
 
     const updateUnits = isEditUnits.map(({ pkUnit, ...unit }) => {
       if (pkUnit! <= -1) {
@@ -327,6 +358,15 @@ const EditCourse = () => {
         return learn
       }) ?? []
       setLearningList(learningArray)
+      if (dataCourse.active) {
+        register('summary', { required: "El resumen es requerido", validate: value => Boolean(value?.trim()) || "El resumen es requerido" })
+        register('language', { required: "El idioma es requerido"})
+        register('difficulty', { required: "La dificultad es requerida"})
+        register('price', { required: "El precio es requerido"})
+        register('requeriments', { required: "Los requerimientos son requeridos"})
+        register('description', { required: "La descripción es requerida"})
+      }
+
     } catch (error) {
       console.log(error)
       if (error instanceof AxiosError) {
@@ -371,7 +411,7 @@ const EditCourse = () => {
         <Link to={'/instructor/courses'}><RiArrowLeftLine size={28} /></Link>
         <div className="flex gap-3 items-center">
           <Button icon={RiEyeFill} className="px-[10px]"></Button>
-          <Button className="px-[10px] lg:px-4 lg:py-2" onClick={handleSaveCourse} loading={isLoadingSave}>
+          <Button className="px-[10px] lg:px-4 lg:py-2" onClick={handleSubmit(handleSaveCourse, handleErrorSaveCourse)} loading={isLoadingSave}>
             <div className="flex items-center gap-1" >
               <RiSave3Fill size={20} />
               <span className="hidden lg:inline">
@@ -409,6 +449,7 @@ const EditCourse = () => {
                 render={({ field }) => (
                   <Textarea id="summary" {...field} value={field.value ?? ''} className="text-tremor-content-emphasis"
                     onChange={field.onChange}
+                    error={!!errors.summary} errorMessage={errors.summary?.message}
                     placeholder="Habla un poco sobre tu curso" />
                 )}
               />
@@ -425,6 +466,7 @@ const EditCourse = () => {
                     <Select
                       {...field}
                       placeholder="Escoja el idioma"
+                      error={!!errors.language} errorMessage={errors.language?.message}
                       onValueChange={field.onChange}
                       value={field.value ?? ""}
                     >

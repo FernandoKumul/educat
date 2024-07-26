@@ -178,9 +178,9 @@ const EditUnit = ({ unit, onValueChange, onItemRemove, onUnitDown, onUnitUp, tot
         </p>
       </AccordionHeader>
       <AccordionBody className="bg-black-2 py-4">
-        <section className="flex justify-between items-start flex-wrap gap-y-2">
-          <div>
-            <div className="flex w-full xl:w-1/2 gap-2 mb-1">
+        <section className="flex justify-between items-start flex-wrap gap-y-2 gap-x-8">
+          <div className="flex-grow">
+            <div className="flex w-full gap-2 mb-1">
               <TextInput placeholder="Nombre de la unidad" error={dirtyForm && unit.title.trim() === ''} value={isTitle} onValueChange={handleChangeTitle} />
               <Button icon={RiAddBoxLine} onClick={handleAddLesson}>Lección</Button>
             </div>

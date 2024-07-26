@@ -5,7 +5,7 @@ const Footer = () => {
     <footer className='bg-[#3F3848] flex justify-between p-10 max-sm:items-center max-sm:px-20 max-sm:py-5  max-sm:flex-col'>
 
       <Link to={'/'}>
-        <img src="/src/assets/Logo.svg" alt="logo" className='w-50'/>
+        <img src="/logo.svg" alt="logo" className='w-50'/>
       </Link>
         
 

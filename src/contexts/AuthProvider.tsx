@@ -1,45 +1,10 @@
 import { useEffect, useState } from "react";
-import AuthContext from "./AuthContext";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import AuthContext from "./AuthContext";
 import AuthService from "../services/AuthService";
 import { IUserAuth } from "../interfaces/IUserAuth";
-
-
-
-// const AuthProvider = ({ children }: {children: ReactNode}) => {
-//   const [isUser, setUser] = useState<null | string>(null);
-//   const location = useLocation()
-
-//   const verifyUserToken = () => {
-//     setUser('Fernando')
-//   }
-
-//   useEffect(() => {
-//     console.log('Cambio de página: ' + location.pathname)
-//     // const verifyToken = async () => {
-//     //   const token = localStorage.getItem('authToken');
-//     //   if (token) {
-//     //     try {
-//     //       await api.get('/verify-token', { headers: { 'Authorization': `Bearer ${token}` } });
-//     //       setIsAuthenticated(true);
-//     //     } catch (error) {
-//     //       logout();
-//     //     }
-//     //   } else {
-//     //     setIsAuthenticated(false);
-//     //   }
-//     //   setLoading(false);  // Estado de carga a false después de la verificación
-//     // };
-
-//     // verifyToken();
-//   }, [location.pathname]); 
-
-//   return (
-//     <AuthContext.Provider value={{ isUser, verifyUserToken }}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// };
+import 'react-toastify/dist/ReactToastify.css';
 
 const AuthProvider = () => {
   const [isUser, setUser] = useState<null | IUserAuth>(null);
@@ -53,6 +18,19 @@ const AuthProvider = () => {
     navigate(0)
   }
 
+  const reloadUser = async () => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      try {
+        const user = await AuthService.verifyToken(token)
+        setUser(user)
+      } catch (error) {
+        localStorage.removeItem('token')
+        setUser(null)
+      }
+    }
+  }
+
   useEffect(() => {
     console.log('Cambio de página: ' + location.pathname)
     const verifyToken = async () => {
@@ -60,10 +38,11 @@ const AuthProvider = () => {
       if (token) {
         try {
           const user = await AuthService.verifyToken(token)
-          setUser(user);
+          setUser(user)
         } catch (error) {
           localStorage.removeItem('token')
-          setUser(null)        }
+          setUser(null)        
+        }
       } else {
         setLoading(false);
       }
@@ -74,9 +53,14 @@ const AuthProvider = () => {
   }, [location.pathname]); 
 
   return (
-    <AuthContext.Provider value={{ isUser, isLoading, logout }}>
+    <AuthContext.Provider value={{ isUser, isLoading, logout, reloadUser }}>
       <Outlet />
-    </AuthContext.Provider>
+        <ToastContainer
+          className="text-sm"
+          position="top-right"
+          theme="dark"
+        />    
+      </AuthContext.Provider>
   );
 };
 

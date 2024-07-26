@@ -1,31 +1,53 @@
-import { RiBook3Line, RiBriefcaseLine, RiCloseLine, RiHeart3Line, RiMenuLine, RiSearchLine, RiShoppingCart2Line, RiUserAddLine, RiUserLine } from '@remixicon/react'
 import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import AuthContext from '../../contexts/AuthContext';
 import { Button, TextInput } from '@tremor/react';
+import { toast } from 'react-toastify';
+import { AxiosError } from 'axios';
+import { RiBook3Line, RiBriefcaseLine, RiCloseLine, RiHeart3Line, RiMenuLine, RiSearchLine, RiShoppingCart2Line, RiUserAddLine, RiUserLine } from '@remixicon/react'
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
+import AuthContext from '../../contexts/AuthContext';
 import CartContext from '../../contexts/CartContext';
+import UserService from '../../services/UserService';
 import Avatar from '../common/Avatar';
+import DialogConfirmation from '../common/DialogConfirmation';
 
 const Header = () => {
   const [searchValue, setValue] = useState('');
-  const { isUser, logout } = useContext(AuthContext);
+  const { isUser, logout, reloadUser } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const { isCartItems } = useContext(CartContext);
 
+  const navigate = useNavigate();
 
   // para el menú hambuerguesa
   const handleToggleMenu = () => {
     setOpen(!open);
   }
 
+  const handleBecomeInstructor = async (): Promise<void> => {
+    try {
+      await UserService.becomeInstructor();
+      toast.success("¡¡Ahora eres un Instructor!!")
+      await reloadUser();
+      navigate('/instructor/profile')
+    } catch (error) {
+      console.log(error)
+      if (error instanceof AxiosError) {
+        if (error.response?.data.message) {
+          toast.error(error.response?.data.message);
+          return
+        }
+
+        toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
+      }
+    }
+  }
 
   useEffect(() => {
     const search = new URLSearchParams(window.location.search).get('q') || '';
     setValue(search);
   }, []);
 
-  const navigate = useNavigate();
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -40,7 +62,7 @@ const Header = () => {
       {/* Buscador y logo */}
       <div className='flex w-2/3'>
         <Link to={'/'}>
-          <img src="/src/assets/Logo.svg" alt="logo" className='w-20' />
+          <img src="/logo.svg" alt="logo" className='w-20' />
         </Link>
 
         <form className='relative ml-10 hidden md:block w-3/4' onSubmit={handleSearch}>
@@ -55,7 +77,7 @@ const Header = () => {
 
         <section className={`bg-header px-8 pt-4 pb-8 fixed h-dvh w-full flex flex-col z-10 top-0 right-0 ${open ? '' : 'translate-x-full'} transition-transform`}>
           <header className='flex justify-between items-center'>
-            <img src="/src/assets/Logo.svg" alt="logo" className='w-24' />
+            <img src="/logo.svg" alt="logo" className='w-24' />
             <RiCloseLine onClick={handleToggleMenu} />
           </header>
 
@@ -84,7 +106,9 @@ const Header = () => {
                     <RiBriefcaseLine />Panel de instructor
                   </Link>
                 :
-                  <span className='flex items-center hover:bg-[#473D55] rounded-md hover:text-details px-3 py-3 cursor-pointer gap-2'><RiBriefcaseLine />Se instructor</span>
+                  <DialogConfirmation description='¿Estás seguro de convertirte en instructor?' onClick={handleBecomeInstructor}>
+                    <span className='flex items-center hover:bg-[#473D55] rounded-md hover:text-details px-3 py-3 cursor-pointer gap-2'><RiBriefcaseLine />Se instructor</span>
+                  </DialogConfirmation>
                 }
                 <Link to={"/cart"} onClick={() => setOpen(false)} className='flex items-center hover:bg-[#473D55] rounded-md hover:text-details px-3 py-3 cursor-pointer gap-2'>
                   <div className='relative'>
@@ -132,7 +156,9 @@ const Header = () => {
             ?
               <Link to={'/instructor/profile'} className='flex hover:text-details gap-1'><RiBriefcaseLine />Panel de instructor</Link>
             :
-              <span className='flex hover:text-details gap-1 cursor-pointer'><RiBriefcaseLine />Se instructor</span>
+              <DialogConfirmation description='¿Estás seguro de convertirte en instructor?' onClick={handleBecomeInstructor}>
+                <span className='flex hover:text-details gap-1 cursor-pointer'><RiBriefcaseLine />Se instructor</span>
+              </DialogConfirmation>
             }
             <Link to={'/cart'} className='relative hover:text-details'>
               <RiShoppingCart2Line />

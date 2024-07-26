@@ -25,6 +25,7 @@ import ReviewList from "../components/Comment/ReviewList";
 import CartService from "../services/CartService";
 import WishlistService from "../services/WishlistService";
 import CartContext from "../contexts/CartContext";
+import ProgressBar from "../components/common/ProgressBar";
 
 const CoursePage = () => {
   const { courseId } = useParams()
@@ -39,25 +40,6 @@ const CoursePage = () => {
   const { isUser } = useContext(AuthContext);
   const { getItems, isCartItems } = useContext(CartContext)
 
-  const alreadyWishlist = async () => {
-    try {
-      const data = await WishlistService.getUserWishlist()
-      const isWishlist = data.find(item => item.fkCourse === parseInt(courseId ?? '0'))
-      if (isWishlist) {
-        setWishlist(true)
-      }
-    } catch (error) {
-      console.log(error)
-      if (error instanceof AxiosError) {
-        if (error.response?.data.message) {
-          return toast.error(error.response?.data.message);
-        }
-
-        return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
-      }
-    }
-  }
-
   useEffect(() => {
     const getCourse = async () => {
       dataFetch.current = true
@@ -65,8 +47,12 @@ const CoursePage = () => {
       try {
         const dataCourse = await CourseService.getCoursePublic(courseIdInt)
         const { result, count } = await CommentService.getReviewsByCourse(courseIdInt, 1, 12)
-        if (isUser) {
-          await alreadyWishlist()
+        const data = await WishlistService.getUserWishlist()
+        if(data.length !== 0) {
+          const isWishlist = data.find(item => item.pkCourse === parseInt(courseId ?? '0'))
+          if (isWishlist) {
+            setWishlist(true)
+          }
         }
         setReviews(result)
         setTotalReviews(count)
@@ -152,6 +138,8 @@ const CoursePage = () => {
     switch (isCourse.language) {
       case 'spanish':
         return 'Español'
+      case 'english':
+        return 'Inglés'
       default:
         return 'Sin idioma'
     }
@@ -161,6 +149,18 @@ const CoursePage = () => {
     let countLessons = 0
     isCourse.units.forEach(unit => {
       countLessons += unit.lessons.length
+    });
+    return countLessons
+  }
+
+  const getNumbersLessonsCompleted = () => {
+    let countLessons = 0
+    isCourse.units.forEach(unit => {
+      unit.lessons.forEach(lesson => {
+        if (lesson.completed) {
+          countLessons++
+        }
+      })
     });
     return countLessons
   }
@@ -219,6 +219,7 @@ const CoursePage = () => {
 
   return (
     <section>
+      {/* Información general */}
       <header className="bg-header px-8 py-6 lg:flex lg:px-24 lg:py-10 lg:gap-4 xl:px-36">
         <div className="mb-6 lg:grow lg:mb-0">
           <h1 className="text-2xl font-semibold mb-2">{isCourse.title}</h1>
@@ -307,6 +308,20 @@ const CoursePage = () => {
           <p className="text-secundary-text whitespace-pre-line">{isCourse.description}</p>
         </div>
         <div className="lg:w-[300px] flex-shrink-0">
+          {isCourse.purchased &&
+           // Información del progreso
+            <article>
+              <div className="flex justify-between items-center mb-2">
+                <h2 className="font-semibold">Progreso</h2>
+                <span>{(getNumbersLessonsCompleted() * 100 / getNumbersLessons()).toFixed(2)}%</span>
+              </div>
+              <ProgressBar className="mb-2" value={getNumbersLessonsCompleted() * 100 / getNumbersLessons()} />
+              <div className="flex mb-4 justify-between text-secundary-text">
+                <h2>Tareas completadas</h2>
+                <span>{getNumbersLessonsCompleted()}/{getNumbersLessons()}</span>
+              </div>
+            </article>
+          }
           <h2 className="font-semibold text-xl mb-1">Incluye</h2>
           <div className="flex gap-y-4 flex-col mb-4">
             <div className="flex gap-3">
@@ -327,6 +342,7 @@ const CoursePage = () => {
           </div>
         </div>
       </div>
+      {/* Reseñas */}
       <section className="px-8 lg:px-24  xl:px-36 mb-10">
         <ReviewList initReviews={isReviews} rating={isCourse.rating} purchased={isCourse.purchased}
           onRefresh={(rating, count) => handleRefreshReviews(rating, count)}
