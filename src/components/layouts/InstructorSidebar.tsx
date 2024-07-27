@@ -22,7 +22,7 @@ const InstructorSidebar = ({ handleSidebar, openSidebar }: InstructorSidebarProp
   }, [path]);
 
   return (
-    <aside className={openSidebar ? 'h-screen max-sm:flex max-sm:w-screen max-sm:absolute z-50 max-sm:right-0 lg:min-w-56 lg:flex-shrink-0 lg:block' : 'hidden bg-black-1 h-screen lg:min-w-56 lg:flex-shrink-0 lg:block'}>
+    <aside className={openSidebar ? 'h-screen max-sm:flex max-sm:w-screen max-sm:absolute z-50 max-sm:right-0 md:min-w-56 md:flex-shrink-0 md:block' : 'hidden bg-black-1 h-screen md:min-w-56 md:flex-shrink-0 md:block'}>
       <div onClick={handleSidebar} className={openSidebar ? 'max-sm:block max-sm:h-screen max-sm:w-1/5 max-sm:bg-black max-sm:opacity-50' : 'hidden'}></div>
       <div className="max-sm:w-4/5 bg-black-1 flex flex-col h-full justify-between gap-y-2 py-5 px-6">
         <div className="flex flex-col gap-y-5">

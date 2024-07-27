@@ -24,20 +24,19 @@ const TakingCourse = () => {
 
     const { isUser } = useContext(AuthContext);
 
-    const getLesson = async () => {
+    const getLesson = async (dataCourse: ICoursePublic | null) => {
         const lessonNumber = parseInt(params.get('number') ?? '0')
         console.log(lessonNumber)
         const response = await CourseService.getLesson(lessonNumber)
         setLesson(response)
-        saveProgress(response.pkLesson)
-        console.log(isLesson)
+        saveProgress(response.pkLesson, dataCourse)
     }
 
-    const saveProgress = async (lessonId: number) => {
+    const saveProgress = async (lessonId: number, dataCourse: ICoursePublic | null) => {
         try {
             await ProgressService.addProgress(lessonId)
-            if (!isCourse) return
-            const newUnits = [...isCourse.units].map(unit => {
+            if (!dataCourse) return
+            const newUnits = [...dataCourse.units].map(unit => {
                 const newLessons = [...unit.lessons].map(lesson => {
                     if (lesson.pkLesson === lessonId) {
                         lesson.completed = true
@@ -47,7 +46,7 @@ const TakingCourse = () => {
                 return { ...unit, lessons: newLessons }
             })
 
-            setCourse({ ...isCourse, units: newUnits })
+            setCourse({ ...dataCourse, units: newUnits })
         } catch (error) {
             console.log(error)
             if (error instanceof AxiosError) {
@@ -70,7 +69,7 @@ const TakingCourse = () => {
                 const dataCourse = await CourseService.getCoursePublic(courseIdInt)
                 dataCourse.rating = Math.round(dataCourse.rating * 100) / 100
                 setCourse(dataCourse)
-                getLesson()
+                getLesson(dataCourse)
             } catch (error) {
                 console.log(error)
                 if (error instanceof AxiosError) {
