@@ -26,7 +26,8 @@ const Header = () => {
 
   const handleBecomeInstructor = async (): Promise<void> => {
     try {
-      await UserService.becomeInstructor();
+      const newToken = await UserService.becomeInstructor();
+      localStorage.setItem('token', newToken)
       toast.success("¡¡Ahora eres un Instructor!!")
       await reloadUser();
       navigate('/instructor/profile')
@@ -78,7 +79,7 @@ const Header = () => {
         <section className={`bg-header px-8 pt-4 pb-8 fixed h-dvh w-full flex flex-col z-10 top-0 right-0 ${open ? '' : 'translate-x-full'} transition-transform`}>
           <header className='flex justify-between items-center'>
             <img src="/logo.svg" alt="logo" className='w-24' />
-            <RiCloseLine onClick={handleToggleMenu} />
+            <RiCloseLine className='cursor-pointer' onClick={handleToggleMenu} />
           </header>
 
           <form className='relative mt-6 w-full' onSubmit={handleSearch}>

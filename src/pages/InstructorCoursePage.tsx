@@ -70,7 +70,6 @@ const InstructorCoursePage = () => {
 		} finally {
 			setLoadingAdd(false)
 			setDirty(false)
-			toast.dismiss()
 		}
 	}
 
