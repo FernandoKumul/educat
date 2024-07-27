@@ -26,7 +26,8 @@ const Header = () => {
 
   const handleBecomeInstructor = async (): Promise<void> => {
     try {
-      await UserService.becomeInstructor();
+      const newToken = await UserService.becomeInstructor();
+      localStorage.setItem('token', newToken)
       toast.success("¡¡Ahora eres un Instructor!!")
       await reloadUser();
       navigate('/instructor/profile')
