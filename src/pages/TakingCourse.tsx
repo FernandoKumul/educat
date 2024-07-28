@@ -53,7 +53,7 @@ const TakingCourse = () => {
                 if (error.response?.data.message === 'El progreso ya ha sido agregado') {
                     return
                 }
-                
+
                 if (error.response?.data.message) {
                     return toast.error(error.response?.data.message);
                 }
@@ -83,7 +83,7 @@ const TakingCourse = () => {
             }
         }
         getCourse()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params])
 
     if (isLoading) {
@@ -111,22 +111,22 @@ const TakingCourse = () => {
     const getNumbersLessons = () => {
         let countLessons = 0
         isCourse.units.forEach(unit => {
-          countLessons += unit.lessons.length
+            countLessons += unit.lessons.length
         });
         return countLessons
-      }
-    
-      const getNumbersLessonsCompleted = () => {
+    }
+
+    const getNumbersLessonsCompleted = () => {
         let countLessons = 0
         isCourse.units.forEach(unit => {
-          unit.lessons.forEach(lesson => {
-            if (lesson.completed) {
-              countLessons++
-            }
-          })
+            unit.lessons.forEach(lesson => {
+                if (lesson.completed) {
+                    countLessons++
+                }
+            })
         });
         return countLessons
-      }
+    }
 
     return (
         <div className="flex flex-col lg:flex-row px-6 py-6 lg:px-24 lg:py-10 lg:gap-4">
