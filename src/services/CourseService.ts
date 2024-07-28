@@ -98,7 +98,7 @@ export default class CourseService {
     return response.data.data
   }
   
-  static async getPurchasedCourses(): Promise<ICourseSearch[]> {
+  static async getInProcessCourses(): Promise<ICourseSearch[]> {
     const token = localStorage.getItem('token')
 
     const response = await axios.get(`${BASE_URL}/course/in-process`, {
@@ -107,6 +107,16 @@ export default class CourseService {
       }
     })
 
+    return response.data.data
+  }
+  static async getDoneCourses(): Promise<ICourseSearch[]> {
+    const token = localStorage.getItem('token')
+
+    const response = await axios.get(`${BASE_URL}/course/done`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
     return response.data.data
   }
 }

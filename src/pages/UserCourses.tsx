@@ -13,7 +13,6 @@ const UserCourses = () => {
     const tabInt = parseInt(tab ?? '1');
     const navigate = useNavigate();
     const [tabValue, setTabValue] = useState(tabInt);
-    const [wishlist, setWishlist] = useState<ICourseSearch[]>([]);
     const [courses, setCourses] = useState<ICourseSearch[]>([])
     const [isLoading, setLoading] = useState<boolean>(true)
 
@@ -27,7 +26,7 @@ const UserCourses = () => {
         try {
             const response = await WishlistService.getUserWishlist();
             console.log(response)
-            setWishlist(response);
+            setCourses(response);
         } catch (error) {
             console.log(error)
             if (error instanceof AxiosError) {
@@ -42,9 +41,28 @@ const UserCourses = () => {
         }
     }
 
-    const getCourses = async () => {
+    const getInProcessCourses = async () => {
         try {
-            const response = await CourseService.getPurchasedCourses();
+            const response = await CourseService.getInProcessCourses();
+            console.log(response)
+            setCourses(response);
+        } catch (error) {
+            console.log(error)
+            if (error instanceof AxiosError) {
+                if (error.response?.data.message) {
+                    return toast.error(error.response?.data.message);
+                }
+                return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
+            }
+        }
+        finally {
+            setLoading(false);
+        }
+    }
+
+    const getDoneCourses = async () => {
+        try {
+            const response = await CourseService.getDoneCourses();
             console.log(response)
             setCourses(response);
         } catch (error) {
@@ -63,7 +81,10 @@ const UserCourses = () => {
 
     useEffect(() => {
         if (tabValue === 1) {
-            getCourses();
+            getInProcessCourses();
+        }
+        if (tabValue === 2) {
+            getDoneCourses();
         }
         if (tabValue === 3) {
             getWishlist();
@@ -108,14 +129,16 @@ const UserCourses = () => {
             }
             {
                 tabValue === 2 &&
-                <div>
-                    <h1>Terminados</h1>
+                <div className="mt-10 w-4/5 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                    {courses.map((course) => (
+                        <CardCourse key={course.pkCourse} id={course.pkCourse} title={course.title} instructor={course.instructorName + ' ' + course.instructorLastName} price={course.price ?? 0} image={course.cover} score={course.rating} />
+                    ))}
                 </div>
             }
             {
                 tabValue === 3 &&
                 <div className="mt-10 w-4/5 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-                    {wishlist.map((item) => (
+                    {courses.map((item) => (
                         <CardCourse key={item.pkCourse} id={item.pkCourse} title={item.title} instructor={item.instructorName + ' ' + item.instructorLastName} price={item.price ?? 0} image={item.cover} score={item.rating} />
                     ))}
                 </div>
