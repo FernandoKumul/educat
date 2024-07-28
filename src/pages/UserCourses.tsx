@@ -73,6 +73,7 @@ const UserCourses = () => {
 
     useEffect(() => {
         tabHandler(tabInt);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tab])
 
     return (
