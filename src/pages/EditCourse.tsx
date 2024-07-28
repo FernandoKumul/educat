@@ -447,8 +447,9 @@ const EditCourse = () => {
                 defaultValue={null}
                 control={control}
                 render={({ field }) => (
-                  <Textarea id="summary" {...field} value={field.value ?? ''} className="text-tremor-content-emphasis"
+                  <Textarea id="summary" maxLength={255} {...field} value={field.value ?? ''} className="text-tremor-content-emphasis"
                     onChange={field.onChange}
+                    rows={3}
                     error={!!errors.summary} errorMessage={errors.summary?.message}
                     placeholder="Habla un poco sobre tu curso" />
                 )}

@@ -54,7 +54,7 @@ const TagInput = ({value = [], setTags, name, id}: IProps) => {
 
   return (
     <form onSubmit={handleAddTag}>
-      <TextInput errorMessage="No pueden haber etiquetas repetidas" autoComplete="off" error={isErrorTagRepeat} value={isInputTag}
+      <TextInput maxLength={24} errorMessage="No pueden haber etiquetas repetidas" autoComplete="off" error={isErrorTagRepeat} value={isInputTag}
         id={id} name={name} placeholder="Escribe alguna etiqueta" onValueChange={valueChange => setInputTag(valueChange)} />
       <div className="flex gap-2 flex-wrap mt-3">
         {value.map((item, index) => (
