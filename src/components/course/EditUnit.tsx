@@ -181,7 +181,7 @@ const EditUnit = ({ unit, onValueChange, onItemRemove, onUnitDown, onUnitUp, tot
         <section className="flex justify-between items-start flex-wrap gap-y-2 gap-x-8">
           <div className="flex-grow">
             <div className="flex w-full gap-2 mb-1">
-              <TextInput placeholder="Nombre de la unidad" error={dirtyForm && unit.title.trim() === ''} value={isTitle} onValueChange={handleChangeTitle} />
+              <TextInput maxLength={100} placeholder="Nombre de la unidad" error={dirtyForm && unit.title.trim() === ''} value={isTitle} onValueChange={handleChangeTitle} />
               <Button icon={RiAddBoxLine} onClick={handleAddLesson}>Lección</Button>
             </div>
             <span className="text-slate-300 text-sm">Máximo 100 carateres</span>
@@ -207,7 +207,7 @@ const EditUnit = ({ unit, onValueChange, onItemRemove, onUnitDown, onUnitUp, tot
           <div key={lesson.pkLesson}>
             <div className="border-t-[2px] border-gray-400 mt-4 mb-2"></div>
             <div className="text-gray-300 flex justify-between items-center">
-              <h4>Lección {lesson.order}. {lesson.title ? lesson.title : 'Esta lección no tienen nombre'}</h4>
+              <h4 className="text-ellipsis overflow-hidden min-w-0">Lección {lesson.order}. {lesson.title ? lesson.title : 'Esta lección no tienen nombre'}</h4>
               <div className="flex gap-2">
                 <button onClick={() => handleUpLesson(lesson.pkLesson!, lesson.order)} disabled={lesson.order === 1}
                   className={`border-0 p-2 rounded-md text-gray-400 
@@ -232,7 +232,7 @@ const EditUnit = ({ unit, onValueChange, onItemRemove, onUnitDown, onUnitUp, tot
                 <SelectItem value="text">Texto</SelectItem>
               </Select>
               <div className="w-full">
-                <TextInput value={lesson.title} error={dirtyForm && lesson.title.trim() === ''} placeholder="Nombre de la lección"
+                <TextInput maxLength={100} value={lesson.title} error={dirtyForm && lesson.title.trim() === ''} placeholder="Nombre de la lección"
                   onValueChange={(value) => handleChangeTitleLesson(value, lesson.pkLesson!)} className="w-full mb-1" />
                 <span className="text-slate-300 text-sm">Máximo 100 carateres</span>
               </div>

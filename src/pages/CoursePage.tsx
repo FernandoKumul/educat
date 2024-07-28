@@ -179,7 +179,7 @@ const CoursePage = () => {
       unit.lessons.forEach(lesson => totalTime += lesson.timeDuration)
     });
 
-    const totalHours = Math.floor(totalTime / 1440)
+    const totalHours = Math.floor(totalTime / 3600)
 
     if (totalHours <= 0) return 'Menos de 0 horas de contenido'
 
