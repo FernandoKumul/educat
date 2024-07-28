@@ -26,7 +26,8 @@ const Header = () => {
 
   const handleBecomeInstructor = async (): Promise<void> => {
     try {
-      await UserService.becomeInstructor();
+      const newToken = await UserService.becomeInstructor();
+      localStorage.setItem('token', newToken)
       toast.success("¡¡Ahora eres un Instructor!!")
       await reloadUser();
       navigate('/instructor/profile')
@@ -78,7 +79,7 @@ const Header = () => {
         <section className={`bg-header px-8 pt-4 pb-8 fixed h-dvh w-full flex flex-col z-10 top-0 right-0 ${open ? '' : 'translate-x-full'} transition-transform`}>
           <header className='flex justify-between items-center'>
             <img src="/logo.svg" alt="logo" className='w-24' />
-            <RiCloseLine onClick={handleToggleMenu} />
+            <RiCloseLine className='cursor-pointer' onClick={handleToggleMenu} />
           </header>
 
           <form className='relative mt-6 w-full' onSubmit={handleSearch}>
@@ -207,7 +208,7 @@ const Header = () => {
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 cursor-pointer">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                       </svg>
-                      Cerrar Sesión
+                      <p className="block px-3 py-1">Cerrar Sesión</p>
                     </div>
                   </MenuItem>
                 </MenuItems>

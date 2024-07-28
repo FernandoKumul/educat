@@ -24,7 +24,7 @@ const CardCourse = ({ title, instructor, price, score, image, id, className = ''
                 </div>
             </div>
             <div className='py-3 px-1'>
-                <p className="text-2xl font-semibold">{title}</p>
+                <p className="text-[22px] font-semibold max-line-2">{title}</p>
                 <p className="text-sm text-gray-300">{instructor}</p>
                 <p className="text-sm">{CurrencyFormat(price)}</p>
             </div>
