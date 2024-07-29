@@ -7,6 +7,7 @@ import { RiCheckFill, RiHeart3Line, RiLoader4Line, RiLoopLeftFill } from "@remix
 import CardCourse from "../components/common/CardCourse";
 import CourseService from "../services/CourseService";
 import { ICourseSearch } from "../interfaces/ICourseSearch";
+import LoaderCat from "../components/common/LoaderCat";
 
 const UserCourses = () => {
     const { tab } = useParams();
@@ -122,7 +123,7 @@ const UserCourses = () => {
 
             {isLoading &&
                 <div className="flex-grow flex items-center justify-center">
-                    <RiLoader4Line size={48} className="animate-spin" />
+                    <LoaderCat/>
                 </div>
             }
             {

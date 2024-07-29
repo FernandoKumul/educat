@@ -1,7 +1,8 @@
-import { RiCloseCircleLine, RiLoader3Line } from "@remixicon/react";
+import { RiCloseCircleLine} from "@remixicon/react";
 import { ICartItemCourse } from "../../interfaces/ICartItemCourse";
 import { CurrencyFormat } from "../../utils/CurrencyUtils";
 import { useState } from "react";
+import LoaderCat from "../common/LoaderCat";
 
 type IProps = {
   item: ICartItemCourse,
@@ -30,7 +31,7 @@ const CartRow = ({ item, onDelete }: IProps) => {
       <td className="py-4">
         <div className={`flex justify-center ${!isLoadingDelete && 'cursor-pointer'}`}>
           {isLoadingDelete
-          ? <RiLoader3Line className="animate-spin" />
+          ? <LoaderCat/>
           : <RiCloseCircleLine onClick={handleDelete} />
           }
         </div>

@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { AxiosError } from "axios";
 import { Controller, SubmitErrorHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { RiAddBoxLine, RiArrowLeftLine, RiCloseFill, RiCloseLine, RiEyeFill, RiImageAddLine, RiLoader4Line, RiSave3Fill, RiUploadCloudFill } from "@remixicon/react";
+import { RiAddBoxLine, RiArrowLeftLine, RiCloseFill, RiCloseLine, RiEyeFill, RiImageAddLine, RiSave3Fill, RiUploadCloudFill } from "@remixicon/react";
 import { AccordionList, Button, NumberInput, Select, SelectItem, TextInput, Textarea } from "@tremor/react";
 import { IEditCourse, IEditUnit } from "../interfaces/IEditCourse";
 import CategoriesData from "../data/CategoriesData";
@@ -14,6 +14,7 @@ import EditUnit from "../components/course/EditUnit";
 import UploadVideo from "../components/upload/UploadVideo";
 import { getFormatTime } from "../utils/TimeUtils";
 import CourseService from "../services/CourseService";
+import LoaderCat from "../components/common/LoaderCat";
 
 interface ICourseInfoP1 {
   title: string;
@@ -392,7 +393,7 @@ const EditCourse = () => {
   if (isLoading) {
     return (
       <div className="flex-grow flex items-center justify-center">
-        <RiLoader4Line size={48} className="animate-spin" />
+        <LoaderCat/>
       </div>
     )
   }
@@ -596,7 +597,7 @@ const EditCourse = () => {
               <h3 className="mb-1">Miniatura</h3>
               <div className="border aspect-video rounded-md relative border-secundary-text mb-4 flex items-center justify-center">
                 {isLoadingImg
-                  ? <RiLoader4Line size={48} className="animate-spin" />
+                  ?<LoaderCat/>
                   : isCurrentImg
                     ? null
                     :

@@ -1,4 +1,4 @@
-import { RemixiconComponentType, RiBarChart2Fill, RiBookReadLine, RiCameraFill, RiCpuLine, RiGroup2Line, RiLoader4Line, RiMacLine, RiMarkupFill, RiMusic2Fill, RiPencilRulerLine, RiScissorsFill, RiSparklingLine, RiUser5Line, RiUserFill } from "@remixicon/react";
+import { RemixiconComponentType, RiBarChart2Fill, RiBookReadLine, RiCameraFill, RiCpuLine, RiGroup2Line, RiMacLine, RiMarkupFill, RiMusic2Fill, RiPencilRulerLine, RiScissorsFill, RiSparklingLine, RiUser5Line, RiUserFill } from "@remixicon/react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider, { Settings } from "react-slick";
@@ -9,6 +9,7 @@ import CourseService from "../services/CourseService";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import computersImg from '../assets/computers.png';
+import LoaderCat from "../components/common/LoaderCat";
 
 interface ICategory {
   name: string,
@@ -95,7 +96,7 @@ const HomePage = () => {
   return (
     <section>
 
-      <div className="bg-[rgb(49,43,57)] flex flex-col py-20 px-12 lg:h-[70vh] relative overflow-hidden">
+      <div className="bg-[rgb(49,43,57)] flex flex-col pt-20 pb-6 px-12 lg:h-[70vh] relative overflow-hidden">
         <div className="my-auto lg:ml-9 lg:w-1/3">
           <h1 className='
           text-3xl 
@@ -110,9 +111,10 @@ const HomePage = () => {
             .
           </span></h1>
           <p className='my-3 text-sm md:text-base'>Habilidades para tú presente (y tú futuro). Da tus primeros pasos con nosotros.</p>
+          <LoaderCat size={260}/>
         </div>
 
-        <img src={computersImg} alt="computers" className="m-auto absolute bottom-0 right-0 lg:top-0 opacity-10 lg:opacity-85 lg:w-1/2"/>
+        <img src={computersImg} alt="computers" className="m-auto absolute top-4 right-0 lg:top-0 opacity-10 lg:opacity-85 lg:w-1/2"/>
       </div>
       
 
@@ -157,7 +159,7 @@ const HomePage = () => {
           {isLoadingPopular
           ?
           <div className="flex-grow flex items-center justify-center h-48">
-            <RiLoader4Line size={48} className="animate-spin" />
+            <LoaderCat/>
           </div>
           :
             isPopularCourses.length === 0

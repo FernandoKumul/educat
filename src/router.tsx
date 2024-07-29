@@ -22,6 +22,7 @@ import TakingCourse from "./pages/TakingCourse";
 import SuccessPaymentPage from "./pages/SuccessfulpaymentPage";
 import UserCourses from "./pages/UserCourses";
 import InstructorCoursePage from "./pages/InstructorCoursePage";
+import UserProfile from "./pages/UserProfile";
 import ChangePassword from "./pages/ChangePassword";
 
 
@@ -125,11 +126,11 @@ const router = createBrowserRouter([
       },      
       {
         path: "/",
-        element: <MainLayout />,
+        element: <MainLayout/>,
         children: [
           {
             path: "/",
-            element: <HomePage />,
+            element: <HomePage/>,
           },
           {
             path: "/search",
@@ -169,6 +170,8 @@ const router = createBrowserRouter([
               }
             ]
           },
+
+          // Usuario
           {
             path: "my-courses/:tab",
             element: <ProtectedRoute />,
@@ -176,7 +179,15 @@ const router = createBrowserRouter([
               path: '',
               element: <UserCourses />,
             }]
-          }
+          },
+          {
+            path: "user-profile",
+            element: <ProtectedRoute />,
+            children: [{
+              path: '',
+              element: <UserProfile />,
+            }]
+          },
         ]
       },
     ]
