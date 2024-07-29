@@ -30,7 +30,7 @@ const UserProfile = () => {
                 setUser(data)
                 setValue("name", data.name)
                 setValue("lastName", data.lastName)
-                setValue("avatarUrl", data.avatarUrl)
+                setImgUrl(data.avatarUrl)            
             }
         }
         catch (error) {
@@ -102,7 +102,7 @@ const UserProfile = () => {
     }, [])
 
     return(
-        <div className="flex max-sm:flex-col justify-center items-center gap-y-4 gap-5 my-10 sm:mt-20">
+        <div className="flex max-sm:flex-col justify-center items-center gap-y-4 sm:gap-10 my-10 sm:mt-20">
 
             {/* Sección de vista de perfil de usuario */}
             <div className=" select-none p-10 flex flex-col h-full items-center justify-center gap-y-5 max-sm:mt-14 xl:flex-row xl:justify-around">
@@ -128,7 +128,6 @@ const UserProfile = () => {
                             <p className="text-sm text-gray-400">Cursos en proceso</p>
                         </div>
                     </div>
-                    <Button className="bg-primary-600 flex" icon={RiBriefcaseLine}>Se instructor</Button>
                 </section>
             </div>
 
@@ -136,17 +135,16 @@ const UserProfile = () => {
             <section className="w-full sm:w-auto select-none flex flex-col h-full justify-center gap-y-5 xl:justify-around px-14">
 
                 {/* formulario */}
-                    <p className="text-2xl text-white"> Editar mi perfil</p>
+                    <p className="text-2xl text-white sm:-mt-16"> Editar mi perfil</p>
                     <p>Información Personal</p>
 
-                    <div className="relative">
+                    <div className="">
                         <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
                             <div className="flex justify-center ">
-                                <div className=" rounded-full cursor-pointer flex justify-center items-center" onClick={() => inputImgRef.current?.click()}>
-                                    {isLoadingImg ? <RiLoader4Line size={52} className=" animate-spin top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" /> : <RiImageEditLine className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" size={52} />}
+                                <div className=" rounded-full cursor-pointer flex justify-center gap-8 items-center" onClick={() => inputImgRef.current?.click()}>
+                                    {isLoadingImg ? <RiLoader4Line size={52} className=" animate-spin" /> : <RiImageEditLine size={80} />}
                                     <img
-                                        className="left-1/2 size-28 sm:size-40 lg:w-full rounded-full object-cover brightness-50
-                                        top-1/2 -translate-x-1/2 -translate-y-1/2"
+                                        className="size-28 sm:size-36 lg:w-full rounded-full object-cover brightness-50"
                                         src={imgUrl || userDefault}
                                         alt="user image"
                                     />
