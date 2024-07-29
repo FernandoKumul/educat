@@ -192,13 +192,13 @@ const Header = () => {
                     </Link>
                   </MenuItem>
                   <MenuItem>
-                    <Link to={'/my-courses'} className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
+                    <Link to={'/my-courses/wishlist'} className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
                       <RiHeart3Line/>
                         <p className="block px-3 py-1">Lista de deseos</p>
                     </Link>
                   </MenuItem>
                   <MenuItem>
-                    <Link to={'/my-courses'} className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
+                    <Link to={'/my-courses/in-process'} className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
                       <RiBook3Line />
                       <p className="block px-3 py-1">Mis cursos</p>
                     </Link>

@@ -54,7 +54,7 @@ const TakingCourse = () => {
                 if (error.response?.data.message === 'El progreso ya ha sido agregado') {
                     return
                 }
-                
+
                 if (error.response?.data.message) {
                     return toast.error(error.response?.data.message);
                 }
@@ -84,7 +84,7 @@ const TakingCourse = () => {
             }
         }
         getCourse()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params])
 
     if (isLoading) {
@@ -112,22 +112,22 @@ const TakingCourse = () => {
     const getNumbersLessons = () => {
         let countLessons = 0
         isCourse.units.forEach(unit => {
-          countLessons += unit.lessons.length
+            countLessons += unit.lessons.length
         });
         return countLessons
-      }
-    
-      const getNumbersLessonsCompleted = () => {
+    }
+
+    const getNumbersLessonsCompleted = () => {
         let countLessons = 0
         isCourse.units.forEach(unit => {
-          unit.lessons.forEach(lesson => {
-            if (lesson.completed) {
-              countLessons++
-            }
-          })
+            unit.lessons.forEach(lesson => {
+                if (lesson.completed) {
+                    countLessons++
+                }
+            })
         });
         return countLessons
-      }
+    }
 
     return (
         <div className="flex flex-col lg:flex-row px-6 py-6 lg:px-24 lg:py-10 lg:gap-4">
@@ -165,7 +165,7 @@ const TakingCourse = () => {
             <div className='lg:w-[30%] min-w-0'>
                 <ProgressBar value={getNumbersLessonsCompleted() * 100 / getNumbersLessons()} className='mb-2' />
                 <div className="flex mb-4 justify-between text-secundary-text">
-                    <h2>Tareas completadas</h2>
+                    <h2>Lecciones completadas</h2>
                     <span>{getNumbersLessonsCompleted()}/{getNumbersLessons()}</span>
                 </div>
                 <AccordionList className='overflow-auto max-h-[500px] custom-scroll-1 w-full'>
