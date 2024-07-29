@@ -136,7 +136,7 @@ const TakingCourse = () => {
                 {isLesson?.type === 'text' &&
                     <div className='border-b-2 mb-5 lg:w-[95%] lg:border-b-tremor-content'>
                         <p className='text-xl text-secundary-text'>{isLesson?.title}</p>
-                        <p className='text-md my-5 ml-5'>{isLesson?.text}</p>
+                        <div className='text-md my-5 ml-5 overflow-hidden text-ellipsis'>{isLesson?.text}</div>
                     </div>
                 }
                 {isLesson?.type === 'video' &&

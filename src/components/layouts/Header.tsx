@@ -122,11 +122,11 @@ const Header = () => {
                   </div>
                   <p>Carrito</p>
                 </Link>
-                <Link to={"/my-courses"} onClick={() => setOpen(false)} className='flex items-center hover:bg-[#473D55] rounded-md hover:text-details px-3 py-3 cursor-pointer gap-2'>
+                <Link to={"/my-courses/wishlist"} onClick={() => setOpen(false)} className='flex items-center hover:bg-[#473D55] rounded-md hover:text-details px-3 py-3 cursor-pointer gap-2'>
                   <RiHeart3Line />
                   <p>Lista de deseos</p>
                 </Link>
-                <Link to={"/my-courses"} onClick={() => setOpen(false)} className='flex items-center hover:bg-[#473D55] rounded-md hover:text-details px-3 py-3 cursor-pointer gap-2'>
+                <Link to={"/my-courses/in-process"} onClick={() => setOpen(false)} className='flex items-center hover:bg-[#473D55] rounded-md hover:text-details px-3 py-3 cursor-pointer gap-2'>
                   <RiBook3Line />
                   <p>Mis cursos</p>
                 </Link>
