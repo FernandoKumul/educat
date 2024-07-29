@@ -2,7 +2,8 @@ import { FormEvent, useRef, useState } from "react";
 import FileService from "../../services/FileService";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { RiLoader4Line, RiVideoAddFill } from "@remixicon/react";
+import { RiVideoAddFill } from "@remixicon/react";
+import LoaderCat from "../common/LoaderCat";
 
 type IProps = {
   onUploadedVideo: (url: string, duration: number) => void
@@ -45,7 +46,7 @@ const UploadVideo = ({onUploadedVideo, className = '', classNameUpload = ''} : I
     <article className={className}>
       <div className={"border aspect-video rounded-md mb-1 relative border-secundary-text flex items-center justify-center " + classNameUpload}>
         {isLoadingVideo
-          ? <RiLoader4Line size={48} className="animate-spin" />
+          ? <LoaderCat/>
           :
           <>
             <RiVideoAddFill size={48} />

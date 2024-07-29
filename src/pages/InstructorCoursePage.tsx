@@ -1,4 +1,4 @@
-import { RiAddBoxLine, RiLoader4Line } from "@remixicon/react";
+import { RiAddBoxLine } from "@remixicon/react";
 import CourseInstructorCard from "../components/course/CourseInstructorCard";
 import { useEffect, useState } from "react";
 import CourseService from "../services/CourseService";
@@ -6,6 +6,7 @@ import { ICourseInstructor } from "../interfaces/ICourseInstructor";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { Button, Dialog, DialogPanel, TextInput } from "@tremor/react";
+import LoaderCat from "../components/common/LoaderCat";
 
 const InstructorCoursePage = () => {
 	const [isCourses, setCourses] = useState<ICourseInstructor[]>([])
@@ -109,7 +110,7 @@ const InstructorCoursePage = () => {
 			{isLoading
 				?
 				<div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2">
-					<RiLoader4Line size={48} className="animate-spin" />
+					<LoaderCat/>
 				</div>
 				:
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-4 gap-x-8">
