@@ -3,7 +3,7 @@ import { AxiosError } from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import WishlistService from "../services/WishlistService";
-import { RiCheckFill, RiHeart3Line, RiLoader4Line, RiLoopLeftFill } from "@remixicon/react";
+import { RiCheckFill, RiHeart3Line, RiLoopLeftFill } from "@remixicon/react";
 import CardCourse from "../components/common/CardCourse";
 import CourseService from "../services/CourseService";
 import { ICourseSearch } from "../interfaces/ICourseSearch";
