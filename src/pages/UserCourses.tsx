@@ -13,7 +13,7 @@ const UserCourses = () => {
     const navigate = useNavigate();
     const [tabValue, setTabValue] = useState<string>(tab || 'in-process');
     const [courses, setCourses] = useState<ICourseSearch[]>([])
-    const [isLoading, setLoading] = useState<boolean>(true)
+    const [isLoading, setLoading] = useState<boolean>(false)
 
     const tabHandler = (tab: string) => {
         setTabValue(tab);
@@ -23,8 +23,9 @@ const UserCourses = () => {
 
     const getWishlist = async () => {
         try {
+            toast.dismiss();
+            setLoading(true);
             const response = await WishlistService.getUserWishlist();
-            console.log(response)
             setCourses(response);
         } catch (error) {
             console.log(error)
@@ -42,8 +43,9 @@ const UserCourses = () => {
 
     const getInProcessCourses = async () => {
         try {
+            toast.dismiss();
+            setLoading(true);
             const response = await CourseService.getInProcessCourses();
-            console.log(response)
             setCourses(response);
         } catch (error) {
             console.log(error)
@@ -61,8 +63,9 @@ const UserCourses = () => {
 
     const getDoneCourses = async () => {
         try {
+            toast.dismiss();
+            setLoading(true);
             const response = await CourseService.getDoneCourses();
-            console.log(response)
             setCourses(response);
         } catch (error) {
             console.log(error)
@@ -135,7 +138,6 @@ const UserCourses = () => {
                 <div className="flex flex-grow justify-center items-center flex-col">
                     <h1>Oops!</h1>
                     <p className="mb-2">{"No se tienes ningún curso adquirido (っ °Д °;)っ, compra uno y sigue aprendiendo!"}</p>
-                    <img className="rounded-md w-3/4 md:w-1/2 lg:w-1/3" src="https://cataas.com/cat?tags=scared,nice&width=400" alt="cataas-img" />
                 </div>
             }
             {
@@ -151,7 +153,6 @@ const UserCourses = () => {
                 <div className="flex flex-grow justify-center items-center flex-col">
                     <h1>Oops!</h1>
                     <p className="mb-2">{"No se tienes ningún curso completado aún. (っ °Д °;)っ"}</p>
-                    <img className="rounded-md w-3/4 md:w-1/2 lg:w-1/3" src="https://cataas.com/cat?tags=scared,nice&width=400" alt="cataas-img" />
                 </div>
             }
             {
@@ -168,7 +169,6 @@ const UserCourses = () => {
                 <div className="flex flex-grow justify-center items-center flex-col">
                     <h1>Oops!</h1>
                     <p className="mb-2">{"No se tienes ningún curso en tu lista de deseos (っ °Д °;)っ, agrega algunos que te llamen la atención!"}</p>
-                    <img className="rounded-md w-3/4 md:w-1/2 lg:w-1/3" src="https://cataas.com/cat?tags=scared,nice&width=400" alt="cataas-img" />
                 </div>
             }
         </div >
