@@ -10,13 +10,12 @@ import { ICourseSearch } from "../interfaces/ICourseSearch";
 
 const UserCourses = () => {
     const { tab } = useParams();
-    const tabInt = parseInt(tab ?? '1');
     const navigate = useNavigate();
-    const [tabValue, setTabValue] = useState(tabInt);
+    const [tabValue, setTabValue] = useState<string>(tab || 'in-process');
     const [courses, setCourses] = useState<ICourseSearch[]>([])
     const [isLoading, setLoading] = useState<boolean>(true)
 
-    const tabHandler = (tab: number) => {
+    const tabHandler = (tab: string) => {
         setTabValue(tab);
         const tabString = tab.toString();
         navigate(`/my-courses/${tabString}`);
@@ -80,35 +79,39 @@ const UserCourses = () => {
     }
 
     useEffect(() => {
-        if (tabValue === 1) {
+        if (tabValue === 'in-process') {
             getInProcessCourses();
         }
-        if (tabValue === 2) {
+        if (tabValue === 'done') {
             getDoneCourses();
         }
-        if (tabValue === 3) {
+        if (tabValue === 'wishlist') {
             getWishlist();
         }
+        
         console.log(tabValue)
     }, [tabValue])
 
     useEffect(() => {
-        tabHandler(tabInt);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        tabHandler(tab || 'in-process');
+        if (tabValue !== 'in-process' && tabValue !== 'done' && tabValue !== 'wishlist') {
+            navigate('/my-courses/in-process');
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tab])
 
     return (
         <div className="flex flex-col items-center p-10">
             <div className="flex lg:justify-center w-full md:w-[50%] overflow-auto select-none">
-                <div className={`flex-grow flex items-center justify-center text-center p-2 cursor-pointer whitespace-nowrap border-b-2 ${tabValue === 1 ? 'border-tremor-brand text-tremor-brand' : 'text-gray-500 border-gray-500 hover:text-secundary-text hover:border-secundary-text'}`} onClick={() => tabHandler(1)}>
+                <div className={`flex-grow flex items-center justify-center text-center p-2 cursor-pointer whitespace-nowrap border-b-2 ${tabValue === 'in-process' ? 'border-tremor-brand text-tremor-brand' : 'text-gray-500 border-gray-500 hover:text-secundary-text hover:border-secundary-text'}`} onClick={() => tabHandler('in-process')}>
                     <RiLoopLeftFill />
                     <span className="ml-2">En proceso</span>
                 </div>
-                <div className={`flex-grow flex items-center justify-center text-center p-2 cursor-pointer whitespace-nowrap border-b-2 ${tabValue === 2 ? 'border-tremor-brand text-tremor-brand' : 'text-gray-500 border-gray-500 hover:text-secundary-text hover:border-secundary-text'}`} onClick={() => tabHandler(2)}>
+                <div className={`flex-grow flex items-center justify-center text-center p-2 cursor-pointer whitespace-nowrap border-b-2 ${tabValue === 'done' ? 'border-tremor-brand text-tremor-brand' : 'text-gray-500 border-gray-500 hover:text-secundary-text hover:border-secundary-text'}`} onClick={() => tabHandler('done')}>
                     <RiCheckFill />
                     <span className="ml-2">Terminados</span>
                 </div>
-                <div className={`flex-grow flex items-center justify-center text-center p-2 cursor-pointer whitespace-nowrap border-b-2 ${tabValue === 3 ? 'border-tremor-brand text-tremor-brand' : 'text-gray-500 border-gray-500 hover:text-secundary-text hover:border-secundary-text'}`} onClick={() => tabHandler(3)}>
+                <div className={`flex-grow flex items-center justify-center text-center p-2 cursor-pointer whitespace-nowrap border-b-2 ${tabValue === 'wishlist' ? 'border-tremor-brand text-tremor-brand' : 'text-gray-500 border-gray-500 hover:text-secundary-text hover:border-secundary-text'}`} onClick={() => tabHandler('wishlist')}>
                     <RiHeart3Line />
                     <span className="ml-2">Lista de deseos</span>
                 </div>
@@ -120,7 +123,7 @@ const UserCourses = () => {
                 </div>
             }
             {
-                tabValue === 1 &&
+                tabValue === 'in-process' &&
                 <div className="mt-10 w-4/5 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                     {courses.map((course) => (
                         <CardCourse key={course.pkCourse} id={course.pkCourse} title={course.title} instructor={course.instructorName + ' ' + course.instructorLastName} price={course.price ?? 0} image={course.cover} score={course.rating} />
@@ -128,7 +131,7 @@ const UserCourses = () => {
                 </div>
             }
             {
-                tabValue === 2 &&
+                tabValue === 'done' &&
                 <div className="mt-10 w-4/5 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                     {courses.map((course) => (
                         <CardCourse key={course.pkCourse} id={course.pkCourse} title={course.title} instructor={course.instructorName + ' ' + course.instructorLastName} price={course.price ?? 0} image={course.cover} score={course.rating} />
@@ -136,7 +139,7 @@ const UserCourses = () => {
                 </div>
             }
             {
-                tabValue === 3 &&
+                tabValue === 'wishlist' &&
                 <div className="mt-10 w-4/5 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                     {courses.map((item) => (
                         <CardCourse key={item.pkCourse} id={item.pkCourse} title={item.title} instructor={item.instructorName + ' ' + item.instructorLastName} price={item.price ?? 0} image={item.cover} score={item.rating} />
