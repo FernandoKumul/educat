@@ -54,7 +54,7 @@ const Header = () => {
     const formData = new FormData(e.currentTarget);
     const query = formData.get('s') as string;
     setOpen(false)
-    navigate(`/search?q=${query}`);
+    navigate(`/search?q=${query.trim()}`);
   }
 
   return (
