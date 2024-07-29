@@ -3,7 +3,7 @@ import { IUserAuth } from "../interfaces/IUserAuth";
 import { AxiosError } from "axios";
 import userDefault from '../assets/userDefault.svg'
 import { Button, TextInput } from "@tremor/react";
-import { RiBriefcaseLine, RiImageEditLine, RiLoader4Line } from "@remixicon/react";
+import { RiImageEditLine, RiLoader4Line } from "@remixicon/react";
 import AuthService from "../services/AuthService";
 import { SubmitHandler, useForm } from "react-hook-form";
 import UserEditService from "../services/UserEditService";
@@ -78,10 +78,11 @@ const UserProfile = () => {
 
     const onSubmit: SubmitHandler<IUserAuth> = async (data) => {
         try {
+            setLoading(true)
             data.avatarUrl = imgUrl
             await UserEditService.updateUser(data);
             toast.dismiss()
-            setLoading(true)
+            toast.success('Datos actualizados correctamente');
             getData()
         }
         catch (error) {
@@ -99,40 +100,39 @@ const UserProfile = () => {
 
     useEffect(() => {
         getData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return(
-        <div className="flex max-sm:flex-col justify-center items-center gap-y-4 sm:gap-10 my-10 sm:mt-20">
+        <div className="flex max-sm:flex-col justify-center items-start gap-y-12 p-10 mt-10 sm:gap-10 lg:gap-20 sm:mt-20 lg:w-[70%] xl:max-w-[900px] mx-auto">
 
             {/* Sección de vista de perfil de usuario */}
-            <div className=" select-none p-10 flex flex-col h-full items-center justify-center gap-y-5 max-sm:mt-14 xl:flex-row xl:justify-around">
-                <section className="relative bg-black-auth p-5 rounded-md gap-y-5  max-w-sm text-center flex flex-col items-center max-sm:w-full sm:p-10">
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                        <img
-                            className="size-28 sm:size-44 rounded-full object-cover"
-                            src={user?.avatarUrl || userDefault} 
-                            alt="user image"
-                        />
+            <section className="relative bg-black-auth p-5 rounded-md gap-y-5 text-center flex flex-col w-full items-center sm:p-10">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                    <img
+                        className="size-28 sm:size-44 rounded-full object-cover"
+                        src={user?.avatarUrl || userDefault} 
+                        alt="user image"
+                    />
+                </div>
+                <div className="mt-14">
+                    <p className="text-2xl text-white">{user?.name + ' ' + user?.lastName}</p>
+                    <p className="font-extralight text-base">Estudiante</p>
+                </div>
+                <div className="grid grid-cols-2 justify-items-center gap-10 text-white border-t border-white w-full pb-5 pt-7">
+                    <div>
+                        <p className="text-xl text-details font-bold">22</p>
+                        <p className="text-sm text-gray-400">Cursos completados</p>
                     </div>
-                    <div className="mt-14">
-                        <p className="text-2xl text-white">{user?.name + ' ' + user?.lastName}</p>
-                        <p className="font-extralight text-base">Estudiante</p>
+                    <div className="">
+                        <p className="text-xl text-details font-bold">3</p>
+                        <p className="text-sm text-gray-400">Cursos en proceso</p>
                     </div>
-                    <div className="grid grid-cols-2 justify-items-center gap-10 text-white border-t border-white w-full pb-5 pt-7">
-                        <div>
-                            <p className="text-xl text-details font-bold">22</p>
-                            <p className="text-sm text-gray-400">Cursos completados</p>
-                        </div>
-                        <div className="">
-                            <p className="text-xl text-details font-bold">3</p>
-                            <p className="text-sm text-gray-400">Cursos en proceso</p>
-                        </div>
-                    </div>
-                </section>
-            </div>
+                </div>
+            </section>
 
             {/* Sección de editar perfil */}
-            <section className="w-full sm:w-auto select-none flex flex-col h-full justify-center gap-y-5 xl:justify-around px-14">
+            <section className="w-full select-none flex flex-col h-full justify-center gap-y-5 xl:pl-10 xl:justify-around">
 
                 {/* formulario */}
                     <p className="text-2xl text-white sm:-mt-16"> Editar mi perfil</p>
@@ -140,11 +140,13 @@ const UserProfile = () => {
 
                     <div className="">
                         <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-                            <div className="flex justify-center ">
-                                <div className=" rounded-full cursor-pointer flex justify-center gap-8 items-center" onClick={() => inputImgRef.current?.click()}>
-                                    {isLoadingImg ? <RiLoader4Line size={52} className=" animate-spin" /> : <RiImageEditLine size={80} />}
+                            <div className="">
+                                <div className="rounded-full cursor-pointer w-fit mx-auto gap-8 items-center relative" onClick={() => inputImgRef.current?.click()}>
+                                    <div className="absolute w-full h-full z-[2] flex justify-center items-center">
+                                        {isLoadingImg ? <RiLoader4Line size={52} className="animate-spin" /> : <RiImageEditLine className="size-16 lg:size-20" />}
+                                    </div>
                                     <img
-                                        className="size-28 sm:size-36 lg:w-full rounded-full object-cover brightness-50"
+                                        className="size-28 sm:size-36 rounded-full object-cover brightness-50"
                                         src={imgUrl || userDefault}
                                         alt="user image"
                                     />
@@ -172,7 +174,6 @@ const UserProfile = () => {
                                 </div>
 
                                 <Button type="submit" loading={loading}>Guardar</Button>
-
                         </form>                
                     </div>
 
