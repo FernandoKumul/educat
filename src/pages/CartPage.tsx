@@ -4,11 +4,11 @@ import CartService from "../services/CartService";
 import { ICartItemCourse } from "../interfaces/ICartItemCourse";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
-import { RiLoader4Line } from "@remixicon/react";
 import CartRow from "../components/cart/CartRow";
 import { CurrencyFormat } from "../utils/CurrencyUtils";
 import { Button } from "@tremor/react";
 import { Link } from "react-router-dom";
+import LoaderCat from "../components/common/LoaderCat";
 
 const CartPage = () => {
   const { setItems } = useContext(CartContext);
@@ -75,7 +75,7 @@ const CartPage = () => {
       {isLoading
       ?
         <div className="flex justify-center mt-12">
-          <RiLoader4Line size={48} className="animate-spin" />
+          <LoaderCat/>
         </div>
       :
         isCartItems.length === 0 

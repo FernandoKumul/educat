@@ -111,6 +111,7 @@ const HomePage = () => {
             .
           </span></h1>
           <p className='my-3 text-sm md:text-base'>Habilidades para tú presente (y tú futuro). Da tus primeros pasos con nosotros.</p>
+          <LoaderCat size={260}/>
         </div>
 
         <img src={computersImg} alt="computers" className="m-auto absolute bottom-0 right-0 lg:top-0 opacity-10 lg:opacity-85 lg:w-1/2"/>

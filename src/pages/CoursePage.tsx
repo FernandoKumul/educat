@@ -3,7 +3,7 @@ import { AccordionList, Button } from "@tremor/react";
 import { useContext, useEffect, useRef, useState } from "react";
 import {
   RiCheckboxCircleLine, RiGlobalLine, RiGraduationCapFill,
-  RiGroupFill, RiHeartFill, RiHeartLine, RiLoader4Line, RiTimeLine, RiVideoLine
+  RiGroupFill, RiHeartFill, RiHeartLine, RiTimeLine, RiVideoLine
 } from "@remixicon/react";
 import CourseService from "../services/CourseService";
 import { AxiosError } from "axios";
@@ -26,6 +26,7 @@ import CartService from "../services/CartService";
 import WishlistService from "../services/WishlistService";
 import CartContext from "../contexts/CartContext";
 import ProgressBar from "../components/common/ProgressBar";
+import LoaderCat from "../components/common/LoaderCat";
 
 const CoursePage = () => {
   const { courseId } = useParams()
@@ -121,7 +122,7 @@ const CoursePage = () => {
   if (isLoading) {
     return (
       <div className="flex-grow flex items-center justify-center">
-        <RiLoader4Line size={48} className="animate-spin" />
+        <LoaderCat/>      
       </div>
     )
   }

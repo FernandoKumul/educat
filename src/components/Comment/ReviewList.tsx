@@ -2,11 +2,11 @@ import { Button } from "@tremor/react";
 import { ICommentUser } from "../../interfaces/ICommentUser";
 import {useEffect, useState } from "react";
 import CommentService from "../../services/CommentService";
-import { RiLoader4Line } from "@remixicon/react";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import UserReviewEditor from "./UserReviewEditor";
 import ReviewCard from "./ReviewCard";
+import LoaderCat from "../common/LoaderCat";
 
 type IProps = {
   initReviews: ICommentUser[]
@@ -126,7 +126,7 @@ const ReviewList = ({ initReviews, total, courseId, rating, purchased, onRefresh
   if(isLoading) {
     return (
       <div className="min-h-[50vh] flex-grow flex items-center justify-center">
-        <RiLoader4Line size={48} className="animate-spin" />
+        <LoaderCat/>
         <h1>Cargando reseñas...</h1>
       </div>
     )
