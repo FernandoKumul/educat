@@ -97,7 +97,7 @@ const Header = () => {
                     <p className='text-slate-300'>{isUser.isInstructor ? 'Instructor' : 'Estudiante'}</p>
                   </div>
                 </article>
-                <Link to={"/"} onClick={() => setOpen(false)} className='flex items-center hover:bg-[#473D55] rounded-md hover:text-details px-3 py-3 cursor-pointer gap-2'>
+                <Link to={"/user-profile"} onClick={() => setOpen(false)} className='flex items-center hover:bg-[#473D55] rounded-md hover:text-details px-3 py-3 cursor-pointer gap-2'>
                   <RiUserLine />
                   <p>Perfil</p>
                 </Link>
@@ -186,10 +186,10 @@ const Header = () => {
                     <p className='px-3 py-1'>{isUser.name}</p>
                   </MenuItem>
                   <MenuItem>
-                    <div className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
+                    <Link to={isUser.isInstructor ? '/instructor/profile' : '/user-profile'} className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
                       <RiUserLine/>
-                        <a className="bloc px-3 py-1" href="/">Perfil</a>
-                    </div>
+                        <p className="block px-3 py-1">Perfil</p>
+                    </Link>
                   </MenuItem>
                   <MenuItem>
                     <Link to={'/my-courses'} className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
