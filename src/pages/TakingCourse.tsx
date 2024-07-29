@@ -164,7 +164,7 @@ const TakingCourse = () => {
             <div className='lg:w-[30%] min-w-0'>
                 <ProgressBar value={getNumbersLessonsCompleted() * 100 / getNumbersLessons()} className='mb-2' />
                 <div className="flex mb-4 justify-between text-secundary-text">
-                    <h2>Tareas completadas</h2>
+                    <h2>Lecciones completadas</h2>
                     <span>{getNumbersLessonsCompleted()}/{getNumbersLessons()}</span>
                 </div>
                 <AccordionList className='overflow-auto max-h-[500px] custom-scroll-1 w-full'>
