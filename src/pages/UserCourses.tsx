@@ -121,56 +121,59 @@ const UserCourses = () => {
                 </div>
             </div>
 
-            {isLoading &&
+            {isLoading ?
                 <div className="flex-grow flex items-center justify-center">
-                    <LoaderCat/>
+                    <LoaderCat />
                 </div>
-            }
-            {
-                tabValue === 'in-process' &&
-                <div className="mt-10 w-4/5 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-                    {courses.map((course) => (
-                        <CardCourse key={course.pkCourse} id={course.pkCourse} title={course.title} instructor={course.instructorName + ' ' + course.instructorLastName} price={course.price ?? 0} image={course.cover} score={course.rating} />
-                    ))}
-                </div>
-            }
-            {
-                tabValue === 'in-process' && courses.length === 0 &&
-                <div className="flex flex-grow justify-center items-center flex-col">
-                    <h1>Oops!</h1>
-                    <p className="mb-2">{"No se tienes ningún curso adquirido (っ °Д °;)っ, compra uno y sigue aprendiendo!"}</p>
-                </div>
-            }
-            {
-                tabValue === 'done' &&
-                <div className="mt-10 w-4/5 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-                    {courses.map((course) => (
-                        <CardCourse key={course.pkCourse} id={course.pkCourse} title={course.title} instructor={course.instructorName + ' ' + course.instructorLastName} price={course.price ?? 0} image={course.cover} score={course.rating} />
-                    ))}
-                </div>
-            }
-            {
-                tabValue === 'done' && courses.length === 0 &&
-                <div className="flex flex-grow justify-center items-center flex-col">
-                    <h1>Oops!</h1>
-                    <p className="mb-2">{"No se tienes ningún curso completado aún. (っ °Д °;)っ"}</p>
-                </div>
-            }
-            {
-                tabValue === 'wishlist' &&
-                <div className="mt-10 w-4/5 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-                    {courses.map((item) => (
-                        <CardCourse key={item.pkCourse} id={item.pkCourse} title={item.title} instructor={item.instructorName + ' ' + item.instructorLastName} price={item.price ?? 0} image={item.cover} score={item.rating} />
-                    ))}
-                </div>
+                :
+                <>
+                    {
+                        tabValue === 'in-process' &&
+                        <div className="mt-10 w-4/5 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                            {courses.map((course) => (
+                                <CardCourse key={course.pkCourse} id={course.pkCourse} title={course.title} instructor={course.instructorName + ' ' + course.instructorLastName} price={course.price ?? 0} image={course.cover} score={course.rating} />
+                            ))}
+                        </div>
+                    }
+                    {
+                        tabValue === 'in-process' && courses.length === 0 &&
+                        <div className="flex flex-grow justify-center items-center flex-col">
+                            <h1>Oops!</h1>
+                            <p className="mb-2">{"No se tienes ningún curso adquirido (っ °Д °;)っ, compra uno y sigue aprendiendo!"}</p>
+                        </div>
+                    }
+                    {
+                        tabValue === 'done' &&
+                        <div className="mt-10 w-4/5 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                            {courses.map((course) => (
+                                <CardCourse key={course.pkCourse} id={course.pkCourse} title={course.title} instructor={course.instructorName + ' ' + course.instructorLastName} price={course.price ?? 0} image={course.cover} score={course.rating} />
+                            ))}
+                        </div>
+                    }
+                    {
+                        tabValue === 'done' && courses.length === 0 &&
+                        <div className="flex flex-grow justify-center items-center flex-col">
+                            <h1>Oops!</h1>
+                            <p className="mb-2">{"No se tienes ningún curso completado aún. (っ °Д °;)っ"}</p>
+                        </div>
+                    }
+                    {
+                        tabValue === 'wishlist' &&
+                        <div className="mt-10 w-4/5 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+                            {courses.map((item) => (
+                                <CardCourse key={item.pkCourse} id={item.pkCourse} title={item.title} instructor={item.instructorName + ' ' + item.instructorLastName} price={item.price ?? 0} image={item.cover} score={item.rating} />
+                            ))}
+                        </div>
 
-            }
-            {
-                tabValue === 'wishlist' && courses.length === 0 &&
-                <div className="flex flex-grow justify-center items-center flex-col">
-                    <h1>Oops!</h1>
-                    <p className="mb-2">{"No se tienes ningún curso en tu lista de deseos (っ °Д °;)っ, agrega algunos que te llamen la atención!"}</p>
-                </div>
+                    }
+                    {
+                        tabValue === 'wishlist' && courses.length === 0 &&
+                        <div className="flex flex-grow justify-center items-center flex-col">
+                            <h1>Oops!</h1>
+                            <p className="mb-2">{"No se tienes ningún curso en tu lista de deseos (っ °Д °;)っ, agrega algunos que te llamen la atención!"}</p>
+                        </div>
+                    }
+                </>
             }
         </div >
     );
