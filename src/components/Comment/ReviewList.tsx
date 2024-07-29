@@ -125,9 +125,9 @@ const ReviewList = ({ initReviews, total, courseId, rating, purchased, onRefresh
 
   if(isLoading) {
     return (
-      <div className="min-h-[50vh] flex-grow flex items-center justify-center">
+      <div className="min-h-[50vh] flex-grow flex flex-col items-center justify-center">
         <LoaderCat/>
-        <h1>Cargando reseñas...</h1>
+        <h1 className="mt-1">Cargando reseñas...</h1>
       </div>
     )
   }
