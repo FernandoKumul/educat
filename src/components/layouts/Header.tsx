@@ -186,10 +186,10 @@ const Header = () => {
                     <p className='px-3 py-1'>{isUser.name}</p>
                   </MenuItem>
                   <MenuItem>
-                    <div className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
+                    <Link to={isUser.isInstructor ? '/instructor/profile' : '/user-profile'} className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
                       <RiUserLine/>
-                        <a className="bloc px-3 py-1" href="/user-profile">Perfil</a>
-                    </div>
+                        <p className="block px-3 py-1">Perfil</p>
+                    </Link>
                   </MenuItem>
                   <MenuItem>
                     <Link to={'/my-courses'} className='flex items-center data-[focus]:bg-zinc-800 data-[focus]:text-details px-3 py-1 cursor-pointer gap-2'>
