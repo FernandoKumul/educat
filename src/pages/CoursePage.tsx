@@ -317,7 +317,7 @@ const CoursePage = () => {
               </div>
               <ProgressBar className="mb-2" value={getNumbersLessonsCompleted() * 100 / getNumbersLessons()} />
               <div className="flex mb-4 justify-between text-secundary-text">
-                <h2>Tareas completadas</h2>
+                <h2>Lecciones completadas</h2>
                 <span>{getNumbersLessonsCompleted()}/{getNumbersLessons()}</span>
               </div>
             </article>

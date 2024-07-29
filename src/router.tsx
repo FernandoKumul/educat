@@ -173,7 +173,7 @@ const router = createBrowserRouter([
 
           // Usuario
           {
-            path: "my-courses",
+            path: "my-courses/:tab",
             element: <ProtectedRoute />,
             children: [{
               path: '',
