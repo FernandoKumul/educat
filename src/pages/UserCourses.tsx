@@ -88,7 +88,7 @@ const UserCourses = () => {
         if (tabValue === 'wishlist') {
             getWishlist();
         }
-        
+
         console.log(tabValue)
     }, [tabValue])
 
@@ -131,6 +131,14 @@ const UserCourses = () => {
                 </div>
             }
             {
+                tabValue === 'in-process' && courses.length === 0 &&
+                <div className="flex flex-grow justify-center items-center flex-col">
+                    <h1>Oops!</h1>
+                    <p className="mb-2">{"No se tienes ningún curso adquirido (っ °Д °;)っ, compra uno y sigue aprendiendo!"}</p>
+                    <img className="rounded-md w-3/4 md:w-1/2 lg:w-1/3" src="https://cataas.com/cat?tags=scared,nice&width=400" alt="cataas-img" />
+                </div>
+            }
+            {
                 tabValue === 'done' &&
                 <div className="mt-10 w-4/5 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                     {courses.map((course) => (
@@ -139,11 +147,28 @@ const UserCourses = () => {
                 </div>
             }
             {
+                tabValue === 'done' && courses.length === 0 &&
+                <div className="flex flex-grow justify-center items-center flex-col">
+                    <h1>Oops!</h1>
+                    <p className="mb-2">{"No se tienes ningún curso completado aún. (っ °Д °;)っ"}</p>
+                    <img className="rounded-md w-3/4 md:w-1/2 lg:w-1/3" src="https://cataas.com/cat?tags=scared,nice&width=400" alt="cataas-img" />
+                </div>
+            }
+            {
                 tabValue === 'wishlist' &&
                 <div className="mt-10 w-4/5 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                     {courses.map((item) => (
                         <CardCourse key={item.pkCourse} id={item.pkCourse} title={item.title} instructor={item.instructorName + ' ' + item.instructorLastName} price={item.price ?? 0} image={item.cover} score={item.rating} />
                     ))}
+                </div>
+
+            }
+            {
+                tabValue === 'wishlist' && courses.length === 0 &&
+                <div className="flex flex-grow justify-center items-center flex-col">
+                    <h1>Oops!</h1>
+                    <p className="mb-2">{"No se tienes ningún curso en tu lista de deseos (っ °Д °;)っ, agrega algunos que te llamen la atención!"}</p>
+                    <img className="rounded-md w-3/4 md:w-1/2 lg:w-1/3" src="https://cataas.com/cat?tags=scared,nice&width=400" alt="cataas-img" />
                 </div>
             }
         </div >
