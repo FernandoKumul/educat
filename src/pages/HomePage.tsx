@@ -96,7 +96,7 @@ const HomePage = () => {
   return (
     <section>
 
-      <div className="bg-[rgb(49,43,57)] flex flex-col py-20 px-12 lg:h-[70vh] relative overflow-hidden">
+      <div className="bg-[rgb(49,43,57)] flex flex-col pt-20 pb-6 px-12 lg:h-[70vh] relative overflow-hidden">
         <div className="my-auto lg:ml-9 lg:w-1/3">
           <h1 className='
           text-3xl 
@@ -114,7 +114,7 @@ const HomePage = () => {
           <LoaderCat size={260}/>
         </div>
 
-        <img src={computersImg} alt="computers" className="m-auto absolute bottom-0 right-0 lg:top-0 opacity-10 lg:opacity-85 lg:w-1/2"/>
+        <img src={computersImg} alt="computers" className="m-auto absolute top-4 right-0 lg:top-0 opacity-10 lg:opacity-85 lg:w-1/2"/>
       </div>
       
 
