@@ -1,4 +1,4 @@
-import { RemixiconComponentType, RiBarChart2Fill, RiBookReadLine, RiCameraFill, RiCpuLine, RiGroup2Line, RiLoader4Line, RiMacLine, RiMarkupFill, RiMusic2Fill, RiPencilRulerLine, RiScissorsFill, RiSparklingLine, RiUser5Line, RiUserFill } from "@remixicon/react";
+import { RemixiconComponentType, RiBarChart2Fill, RiBookReadLine, RiCameraFill, RiCpuLine, RiGroup2Line, RiMacLine, RiMarkupFill, RiMusic2Fill, RiPencilRulerLine, RiScissorsFill, RiSparklingLine, RiUser5Line, RiUserFill } from "@remixicon/react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider, { Settings } from "react-slick";
@@ -9,6 +9,7 @@ import CourseService from "../services/CourseService";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import computersImg from '../assets/computers.png';
+import LoaderCat from "../components/common/LoaderCat";
 
 interface ICategory {
   name: string,
@@ -157,7 +158,7 @@ const HomePage = () => {
           {isLoadingPopular
           ?
           <div className="flex-grow flex items-center justify-center h-48">
-            <RiLoader4Line size={48} className="animate-spin" />
+            <LoaderCat/>
           </div>
           :
             isPopularCourses.length === 0
