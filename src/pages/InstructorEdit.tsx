@@ -6,8 +6,9 @@ import { toast } from 'react-toastify';
 import InstructorService from "../services/instructorService";
 import FileService from "../services/FileService";
 import { IInstructorInfo } from "../interfaces/IInstructorInfo";
-import { RiImageEditLine, RiLoader4Line } from "@remixicon/react";
+import { RiImageEditLine } from "@remixicon/react";
 import userDefault from '../assets/userDefault.svg';
+import LoaderCat from "../components/common/LoaderCat";
 
 const InstructorEdit = () => {
     const [loading, setLoading] = useState(false)
@@ -131,7 +132,10 @@ const InstructorEdit = () => {
                     <div className="relative">
                         <div className="max-sm:flex max-sm:justify-center xl:absolute xl:-bottom-28 xl:-right-36 xl:-translate-x-1/2 xl:-translate-y-1/2">
                             <div className=" z-10 absolute max-sm:size-28 xl:size-52 rounded-full -translate-x-1/2 left-1/2 cursor-pointer flex justify-center items-center" onClick={() => inputImgRef.current?.click()}>
-                                {isLoadingImg ? <RiLoader4Line size={52} className="animate-spin" /> : <RiImageEditLine size={52} />}
+                                {isLoadingImg ? 
+                                <LoaderCat/>
+                                : 
+                                <RiImageEditLine size={52} />}
                             </div>
                             <img
                                 className="size-28 sm:size-52 rounded-full object-cover brightness-75"

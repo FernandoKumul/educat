@@ -7,12 +7,13 @@ import CourseService from '../services/CourseService';
 import CategoriesData from '../data/CategoriesData';
 import { ICoursePublic, ILessonOut } from '../interfaces/ICoursePublic';
 import { AccordionList } from '@tremor/react';
-import { RiGroupFill, RiLoader4Line } from '@remixicon/react';
+import { RiGroupFill } from '@remixicon/react';
 import UnitCard from '../components/course/UnitCard';
 import Avatar from '../components/common/Avatar';
 import BadgeDifficulty from '../components/course/BadgeDifficulty';
 import ProgressService from '../services/ProgressService';
 import ProgressBar from '../components/common/ProgressBar';
+import LoaderCat from '../components/common/LoaderCat';
 
 const TakingCourse = () => {
     const { courseId } = useParams();
@@ -89,7 +90,7 @@ const TakingCourse = () => {
     if (isLoading) {
         return (
             <div className="flex-grow flex items-center justify-center">
-                <RiLoader4Line size={48} className="animate-spin" />
+                <LoaderCat/>
             </div>
         )
     }

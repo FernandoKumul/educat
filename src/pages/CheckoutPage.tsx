@@ -6,9 +6,9 @@ import { toast } from "react-toastify";
 import CartContext from "../contexts/CartContext";
 import { ICartItemCourse } from "../interfaces/ICartItemCourse";
 import CartService from "../services/CartService";
-import { RiLoader4Line } from "@remixicon/react";
 import { useNavigate } from "react-router-dom";
 import { CurrencyFormat } from "../utils/CurrencyUtils";
+import LoaderCat from "../components/common/LoaderCat";
 
 
 const CheckoutPage = () => {
@@ -133,7 +133,7 @@ const CheckoutPage = () => {
   if (isLoading) {
     return (
       <div className="flex-grow flex items-center justify-center">
-        <RiLoader4Line size={48} className="animate-spin" />
+        <LoaderCat/>
       </div>
     )
   }
