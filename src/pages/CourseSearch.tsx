@@ -7,27 +7,53 @@ import CategoriesData from "../data/CategoriesData";
 import ReactPaginate from 'react-paginate';
 import { Select, SelectItem, Button } from '@tremor/react';
 import Cards from "../components/common/CardCourse";
+import { toast } from "react-toastify";
+import { AxiosError } from "axios";
+import LoaderCat from "../components/common/LoaderCat";
 
 const CourseSearch = () => {
     const [courses, setCourses] = useState<ICourseSearch[]>([]);
     const [count, setCount] = useState(0);
     const [category, setCategory] = useState('all');
+    const [isLoading, setLoading] = useState(true);
 
-    const [params] = useSearchParams()
+    const [params, setParams] = useSearchParams()
 
     const pages = Math.ceil(count / 12)
 
     async function search(pageNumber: number, query: string, category: string) {
-        const results = await service(pageNumber, query, category)
-        console.log(results)
-        setCount(results.count)
-        setCourses(results.courses)
+        try {
+            setLoading(true)
+            const results = await service(pageNumber, query, category)
+            setCount(results.count)
+            setCourses(results.courses)
+        } catch (error) {
+            console.log(error)
+            if (error instanceof AxiosError) {
+                if (error.response?.data.message) {
+                    return toast.error(error.response?.data.message);
+                }
+
+                return toast.error('Oops... Ocurrió un error, Inténtelo más tarde');
+            }
+        } finally {
+            setLoading(false)
+        }
     }
 
     useEffect(() => {
         search(1, params.get('q') || '', category)
     }, [category, params]);
-    
+
+    if (isLoading) {
+        return (
+            <div className="flex flex-grow justify-center flex-col items-center">
+                <LoaderCat />
+                <h1 className="text-center mt-2">Cargando cursos...</h1>
+            </div>
+        )
+    }
+
     if (courses.length === 0) {
         if (category !== 'all') {
             return (
@@ -44,6 +70,7 @@ const CourseSearch = () => {
                 <h1 className=" text-3xl text-center my-5">No se encontraron resultados</h1>
                 <Button onClick={() => {
                     search(1, '', 'all')
+                    setParams({ q: '' })
                 }}>Ver todos los cursos</Button>
             </div>
         )
@@ -63,9 +90,9 @@ const CourseSearch = () => {
             </div>
             <section className="mt-5 w-5/6 inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                 {courses.map((course) => (
-                    <Cards key={course.pkCourse} id={course.pkCourse} 
-                    title={course.title} instructor={course.instructorName + ' ' + course.instructorLastName} 
-                    price={course.price} image={course.cover} score={course.rating} />
+                    <Cards key={course.pkCourse} id={course.pkCourse}
+                        title={course.title} instructor={course.instructorName + ' ' + course.instructorLastName}
+                        price={course.price} image={course.cover} score={course.rating} />
                 ))}
             </section>
             <ReactPaginate
