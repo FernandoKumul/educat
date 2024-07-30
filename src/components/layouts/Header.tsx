@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, TextInput } from '@tremor/react';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
@@ -16,6 +16,7 @@ const Header = () => {
   const { isUser, logout, reloadUser } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const { isCartItems } = useContext(CartContext);
+  const [params] = useSearchParams()
 
   const navigate = useNavigate();
 
@@ -45,9 +46,8 @@ const Header = () => {
   }
 
   useEffect(() => {
-    const search = new URLSearchParams(window.location.search).get('q') || '';
-    setValue(search);
-  }, []);
+    setValue(params.get('q') || '');
+  }, [params]);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
